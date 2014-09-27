@@ -6,6 +6,14 @@
 //**********************
 */
 
+// setup canvas and gl
+var canvas = document.getElementById("canvas");
+var gl = canvas.getContext("experimental-webgl");
+setupGL();
+setupInputKeys();
+
+
+var theta = 1.0;
 
 // Clock variables
 var lastFrameTime = 0.0;
@@ -13,29 +21,26 @@ var currentFrameTime = 0.0;
 var deltaTime = 0.0;
 var lag = 0.0;
 
-lastFrameTime = Date.now();
-
-
-
-var targetFrameRate = 1.0/60.0;
 
 // To Calculate FPS
 var timeAtNextSecond = Date.now();
 var fps = 0;
+//*****************
+// Game Loop Begin
+//*****************
+
+// Setup loop variables
+lastFrameTime = Date.now();
+var targetFrameRate = 1.0/60.0;
 
 
-initializeScene();
-initializeGame();
-setupInputKeys();
+// Call Game Loop
 gameLoop();
-
-
 
 function gameLoop()
 {
 	if(escapePressed == false)
 	{
-	
 		currentFrameTime = Date.now();
 		deltaTime = (currentFrameTime - lastFrameTime) / 1000 ;		// number of seconds since last frame
 		
@@ -46,7 +51,6 @@ function gameLoop()
 			processEvents();
 			updateGame();
 			lag -= targetFrameRate;
-			
 		}
 		
 		render();
@@ -61,8 +65,6 @@ function gameLoop()
 	}
 }
 
-
-
 function calculateFPS()
 {
 		fps++;
@@ -71,10 +73,6 @@ function calculateFPS()
 			console.log("Frames Per Second = " + fps );		// ... print the number of frames passed to the console
 			fps = 0;																// reset the FPS counter
 			timeAtNextSecond = Date.now();						// reset the time at the next second
-			
 		}
 
 }
-
-
-
