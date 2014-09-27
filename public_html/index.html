@@ -30,38 +30,18 @@ and open the template in the editor.
 		
     </head>
     <body>
-        <div class="centered">
-        <canvas id="canvas" width="800" height="600">
+        <div class="centered" id="WebGLCanvas">
+        
+            <canvas id="canvas" width="500" height="600">
             Your browser does not support WebGl!!
         </canvas> 
-		<script id="vShader" type="vshader">
-			attribute vec2 pos;
-			uniform float theta;
-			void main()
-			{
-				
-				gl_Position.x = pos.x; //-sin(theta) * pos.x + cos(theta) * pos.y;
-				gl_Position.y = pos.y; //sin(theta) * pos.y + cos(theta) * pos.x;
-				gl_Position.z = 0.0;
-				gl_Position.w = 1.0;
-			}
-		
-		</script>
-		<script id="fShader" type="fshader">
-			precision mediump float;
-			
-			void main()
-			{
-				gl_FragColor = vec4(1.0, 0.4, 0.1, 1.0);
-			}
-		
-		
-		</script>
-		
-		<script src="game.js"></script>
-		<script src="events.js"></script>
-		<script src="render.js"></script>
-		<script src="main.js"></script>
+        
+	<script src="three.min.js"></script>
+	
+	<script src="render.js"></script>
+	<script src="events.js"></script>
+	<script src="game.js"></script>
+	<script src="main.js"></script>
            <!-- <table class="footer">
                 <tr> 
                 <a href="about.html">About</a>
