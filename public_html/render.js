@@ -21,7 +21,7 @@ function initializeScene()
 	document.getElementById("WebGLCanvas").appendChild(renderer.domElement);
 	
 	
-	var viewSize = canvas.width;
+	var viewSize = canvas.height;
 	aspectRatio = canvas.width/canvas.height;
 	camera = new THREE.OrthographicCamera( -aspectRatio*viewSize /2, aspectRatio*viewSize/2,
 																			viewSize/2, -viewSize/2, 
