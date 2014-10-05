@@ -1,7 +1,7 @@
 /*********************
 //		main.js
 //
-// 		Main script that setups up the WebGL context, game loop, and input processing.
+// 		Main script that sets up the WebGL context, game loop, and input processing.
 // 
 //**********************
 */
@@ -23,21 +23,26 @@ var targetFrameRate = 1.0/60.0;
 var timeAtNextSecond = Date.now();
 var fps = 0;
 
-
+// initializers
 initializeScene();
+initFormationV()
+initFormationDiamond();
 initializeGame();
-setupInputKeys();
-gameLoop();
 
+// setup key inputs
+setupInputKeys();
+
+// Game Loop
+gameLoop();
 
 
 function gameLoop()
 {
 	if(escapePressed == false)
 	{
-	
+		
 		currentFrameTime = Date.now();
-		deltaTime = (currentFrameTime - lastFrameTime) / 1000 ;		// number of seconds since last frame
+		deltaTime = (currentFrameTime/ 1000 - lastFrameTime/ 1000)  ;		// number of seconds since last frame
 		
 		lag += deltaTime;
 		
@@ -50,7 +55,7 @@ function gameLoop()
 		}
 		
 		render();
-		
+		fps++;
 		//Calculate Frames per Second
 		calculateFPS()
 		
@@ -65,13 +70,13 @@ function gameLoop()
 
 function calculateFPS()
 {
-		fps++;
+		
 		if(Date.now() - timeAtNextSecond >= 1000)			// every one second....
 		{
 			console.log("Frames Per Second = " + fps );		// ... print the number of frames passed to the console
 			fps = 0;																// reset the FPS counter
 			timeAtNextSecond = Date.now();						// reset the time at the next second
-			
+
 		}
 
 }

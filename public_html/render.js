@@ -9,6 +9,7 @@ var triangleGeometry;
 var triangleMaterial;
 var triangleMesh;
 
+var testBoxGeometry, testBoxMaterial, testBox;
 var canvas;
 
 function initializeScene()
@@ -51,25 +52,24 @@ function initializeScene()
 	{
 		shipArray[i] = new THREE.Mesh(triangleGeometry, triangleMaterial);
 		scene.add(shipArray[i]);
-		if(i > 0)
-		{
-			shipArray[0].add(shipArray[i]);
-		}
 	
 	}
 	
 	// Set each position
-	shipArray[0].position.set( 0, 0, 0 );
-	shipArray[1].position.set(60,  100, 0);
-	shipArray[2].position.set(-60, 100, 0);
+	shipArray[0].position.set( -100, 300, 0 );
+	shipArray[1].position.set( -100, 300, 0 );
+	shipArray[2].position.set( -100, 300, 0 );
 	
 	
-	console.log("Done");
+	testBoxGeometry = new THREE.BoxGeometry( 10, 10, 10 );
+	testBoxMaterial = new THREE.MeshBasicMaterial( {color: "white"} );
+	testBox = new THREE.Mesh( testBoxGeometry, testBoxMaterial );
+	//scene.add(testBox);
+	testBox.position.set(0, 0, 0);
+	
 }
 
 function render()
 {
-	
-	
 	renderer.render(scene, camera);
 }	
