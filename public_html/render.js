@@ -35,22 +35,16 @@ function initializeScene()
 	
 	
 	
-	triangleGeometry = new THREE.Geometry();
-	triangleGeometry.vertices.push( new THREE.Vector3( -20.0, 75.0, 0.0) );
-	triangleGeometry.vertices.push( new THREE.Vector3( 20.0, 75.0, 0.0) );
-	triangleGeometry.vertices.push( new THREE.Vector3( 0.0, 0.0, 0.0) );
-	triangleGeometry.faces.push( new THREE.Face3( 0,1, 2));
+	triangleGeometry = [-20, 75.0, 0.0,
+                        20.0, 75.0, 0.0,
+                        0.0, 0.0, 0.0];
 	
-	triangleMaterial = new THREE.MeshBasicMaterial( 
-																						{
-																							color: "red",
-																							side: THREE.DoubleSide
-																						} );
+	triangleMaterial = new THREE.MeshBasicMaterial( {color: "red",side: THREE.DoubleSide} );
 																	
 	// Make three ships
 	for(var i = 0; i < 3; i++)
 	{
-		shipArray[i] = new THREE.Mesh(triangleGeometry, triangleMaterial);
+		shipArray[i] = _Ship.prototype.makeShip(triangleGeometry, triangleMaterial);
 		scene.add(shipArray[i]);
 	
 	}

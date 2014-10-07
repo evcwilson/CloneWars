@@ -25,10 +25,11 @@ var fps = 0;
 
 // initializers
 initializeScene();
-initFormationV()
+initFormationV();
 initFormationDiamond();
 initializeGame();
-
+initPlayer(); 
+drawBackground(); 
 // setup key inputs
 setupInputKeys();
 
@@ -38,6 +39,7 @@ gameLoop();
 
 function gameLoop()
 {
+    //alert(canvas.width);
 	if(escapePressed == false)
 	{
 		
@@ -49,6 +51,7 @@ function gameLoop()
 		while(lag >= targetFrameRate)
 		{
 			processEvents();
+                        //movePlayer(velocity);
 			updateGame();
 			lag -= targetFrameRate;
 			

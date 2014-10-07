@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            canvas{background-color: black;}
+            
+            body{background-color: grey}
+            
+            .centered {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+            
+            .footer{
+                border: black;
+                
+            }
+            a{color:white;}
+            </style> 
+    </head>
+    <body>
+        <div class="centered">
+        <canvas width="800" height="600">
+            Your browser does not support WebGl!!
+        </canvas> 
+           <!-- <table class="footer">
+                <tr> 
+                <a href="about.html">About</a>
+                <a href=""></a>                
+                </tr>
+            </table> -->
+        </div>
+    </body>
+</html>

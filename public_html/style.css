@@ -7,11 +7,21 @@ and open the template in the editor.
     Created on : Sep 23, 2014, 2:19:19 PM
     Author     : fordgt150
 */
+body{
+    background-color: grey; 
+}
 
 canvas{
     background-color: black;
 }
 
+.title{
+    color: red;
+    font-family: serif;
+    font-size: 20px;
+    font-weight: bold;
+    
+}
 .centered{
     position:fixed; 
     top: 50%;

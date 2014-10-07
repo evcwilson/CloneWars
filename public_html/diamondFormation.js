@@ -16,15 +16,19 @@ var testBox0, testBox1, testBox2, testBox3;
 function initFormationDiamond()
 {
 	// initialize the bossShipMesh and add to scene
-	bossShipGeometry = new THREE.Geometry();
-	bossShipGeometry.vertices.push( new THREE.Vector3( -20.0, 75.0, 0.0) );
-	bossShipGeometry.vertices.push( new THREE.Vector3( 20.0, 75.0, 0.0) );
-	bossShipGeometry.vertices.push( new THREE.Vector3( 0.0, 0.0, 0.0) );
-	bossShipGeometry.faces.push( new THREE.Face3( 0,1, 2));
-	
+//	bossShipGeometry = new THREE.Geometry();
+//	bossShipGeometry.vertices.push( new THREE.Vector3( -20.0, 75.0, 0.0) );
+//	bossShipGeometry.vertices.push( new THREE.Vector3( 20.0, 75.0, 0.0) );
+//	bossShipGeometry.vertices.push( new THREE.Vector3( 0.0, 0.0, 0.0) );
+//	bossShipGeometry.faces.push( new THREE.Face3( 0,1, 2));
+        
+        bossShipGeometry = [-20, 75.0, 0.0,
+                        20.0, 75.0, 0.0,
+                        0.0, 0.0, 0.0];
+        
 	bossShipMaterial = new THREE.MeshBasicMaterial(  	{ color: "red", side : THREE.DoubleSide } );
 	
-	bossShipMesh = new THREE.Mesh(bossShipGeometry, bossShipMaterial);
+	bossShipMesh = _Ship.prototype.makeShip(bossShipGeometry, bossShipMaterial);
 	bossShipMesh.position.set(0, 0, 0);
 	scene.add(bossShipMesh);
 
@@ -58,18 +62,22 @@ function initFormationDiamond()
 	
 	
 	// initialize pawnShip meshes
-	pawnShipGeometry = new THREE.Geometry();
-	pawnShipGeometry.vertices.push( new THREE.Vector3( -20.0, 75.0, 0.0) );
-	pawnShipGeometry.vertices.push( new THREE.Vector3( 20.0, 75.0, 0.0) );
-	pawnShipGeometry.vertices.push( new THREE.Vector3( 0.0, 0.0, 0.0) );
-	pawnShipGeometry.faces.push( new THREE.Face3( 0,1, 2));
+//	pawnShipGeometry = new THREE.Geometry();
+//	pawnShipGeometry.vertices.push( new THREE.Vector3( -20.0, 75.0, 0.0) );
+//	pawnShipGeometry.vertices.push( new THREE.Vector3( 20.0, 75.0, 0.0) );
+//	pawnShipGeometry.vertices.push( new THREE.Vector3( 0.0, 0.0, 0.0) );
+//	pawnShipGeometry.faces.push( new THREE.Face3( 0,1, 2));
 	
+        pawnShipGeometry = [-20, 75.0, 0.0,
+                        20.0, 75.0, 0.0,
+                        0.0, 0.0, 0.0];
+        
 	pawnShipMaterial = new THREE.MeshBasicMaterial( {color: "green", side: THREE.DoubleSide });
 	
 	// create pawn ship array and assign positions
 	for( var i = 0; i < 4; i++)
 	{
-		pawnShipArray[i] = new THREE.Mesh(pawnShipGeometry, pawnShipMaterial);
+		pawnShipArray[i] = _Ship.prototype.makeShip(pawnShipGeometry, pawnShipMaterial);
 		scene.add(pawnShipArray[i] );
 		pawnShipArray[i].position.copy(diamondPoints[i]);//50, -60 * (i + 1), 0);
 		

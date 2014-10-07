@@ -6,30 +6,15 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Clone Wars</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            canvas{background-color: black;}
-            
-            body{background-color: grey}
-            
-            .centered {
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            }
-            
-            .footer{
-                border: black;
-                
-            }
-            a{color:white;}
-            </style> 
-		
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+        <link rel="stylesheet" href="style.css" type="text/css">
     </head>
     <body>
+        <div class="title" id="Title" align="center">
+            <h1>Clone Wars</h1>
+        </div>
         <div class="centered" id="WebGLCanvas">
         
             <canvas id="canvas" width="500" height="600">
@@ -39,16 +24,13 @@ and open the template in the editor.
 	<script src="three.min.js"></script>
 	<script src="diamondFormation.js"></script>
 	<script src="vFormation.js"></script>
+        <script src="player.js"></script>
+        <script src="background.js"></script>
 	<script src="render.js"></script>
 	<script src="events.js"></script>
 	<script src="game.js"></script>
 	<script src="main.js"></script>
-           <!-- <table class="footer">
-                <tr> 
-                <a href="about.html">About</a>
-                <a href=""></a>                
-                </tr>
-            </table> -->
         </div>
+        
     </body>
 </html>

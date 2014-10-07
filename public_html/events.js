@@ -18,8 +18,9 @@ function setupInputKeys()
 			keyPressedLeft = true;
 		if(evt.keyCode == 38)
 			keyPressedUp = true;
-		if(evt.keyCode == 40)
+		if(evt.keyCode == 40){
 			keyPressedDown = true;
+                    }
 			
 		if(evt.keyCode == 27)
 		{
