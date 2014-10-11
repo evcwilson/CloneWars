@@ -47,7 +47,6 @@ function setupInputKeys()
 	// Add Resize Event function
 	window.addEventListener("resize", resizeCanvas);
 	
-	
 }
 	
 

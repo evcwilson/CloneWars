@@ -25,8 +25,6 @@ var fps = 0;
 
 // initializers
 initializeScene();
-initFormationV();
-initFormationDiamond();
 initializeGame();
 initPlayer(); 
 drawBackground(); 

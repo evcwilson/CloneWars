@@ -1,35 +1,54 @@
 // Level.js
-// Not yet used in game
+/*
+	The level class will contain the enemy waves for each level. The enemy waves are given in
+	through the function call. The enemy waves are defined using the enemyWave interface class.
+	
+	If the waves passed into the function is not an instance of 'enemyWave', it will not get
+	assigned to the level. This is because Javascript function arguments are dynamic, so it makes sure
+	the correct data types are being used.
 
-// Setup level structure
-var level = function(numShips, timer, waveOne, waveTwo, waveThree)
+*/
+
+function level(waveOne, waveTwo, waveThree)
 {
 	// Level Properties
-	this.numShips 	= numShips;
-	this.timer 		= timer;
+	this.enemyWaves = [];
+	this.numWaves = -1;
+	this.currentWave = -1;
 	
-	function enemyWaveOne() {};
-	function enemyWaveTwo() {};
-	function enemyWaveThree() {};
-	
-	// Check if each wave argument is a function and if so, assign it to the level's enemy wave functions
-	if(typeof waveOne == "function")
-		enemyWaveOne = waveOne;	
-		
-	if(typeof waveTwo == "function")
-		enemyWaveTwo = waveTwo;
-		
-	if(typeof waveThree == "function")
-		enemyWaveThree = waveThree;
-	
-	
-	// put functions in an array
-	this.enemyWaves = [  enemyWaveOne,	enemyWaveTwo, enemyWaveThree ];
+	// check to see if enemy waves that were passed into the function are of type enemyWave
+	if(waveOne instanceof enemyWave)
+	{
+		this.enemyWaves[++this.numWaves] = waveOne;
+	}
+	if(waveTwo instanceof enemyWave)
+	{
+		this.enemyWaves[++this.numWaves] = waveTwo;
+	}
+	if(waveThree instanceof enemyWave)
+	{
+		this.enemyWaves[++this.numWaves] = waveThree;
+	}
 	
 	
+	// function to initialize the next wave of enemies for the level
+	this.initNextEnemyWave = function()
+	{
+		if(this.currentWave != -1)
+		{
+			this.enemyWaves[this.currentWave].cleanup();
+			this.enemyWaves[++this.currentWave].init();
+			
+		}
+		else
+		{
+			this.enemyWaves[++this.currentWave].init();
+		}
+	}
 	
+	// function to run the current enemy wave in the level
+	this.runEnemyWave = function()
+	{
+		this.enemyWaves[this.currentWave].run();
+	}
 }
-
-
-
-

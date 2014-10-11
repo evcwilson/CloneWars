@@ -41,19 +41,6 @@ function initializeScene()
 	
 	triangleMaterial = new THREE.MeshBasicMaterial( {color: "red",side: THREE.DoubleSide} );
 																	
-	// Make three ships
-	for(var i = 0; i < 3; i++)
-	{
-		shipArray[i] = _Ship.prototype.makeShip(triangleGeometry, triangleMaterial);
-		scene.add(shipArray[i]);
-	
-	}
-	
-	// Set each position
-	shipArray[0].position.set( -100, 300, 0 );
-	shipArray[1].position.set( -100, 300, 0 );
-	shipArray[2].position.set( -100, 300, 0 );
-	
 	
 	testBoxGeometry = new THREE.BoxGeometry( 10, 10, 10 );
 	testBoxMaterial = new THREE.MeshBasicMaterial( {color: "white"} );

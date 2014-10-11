@@ -1,195 +1,206 @@
+/*
+	diamondFormation
+	
+	diamondFormation is a child class of the super class 'enemyWave', that contains properties that all future 
+	enemy waves will contain. This setup is done immediatly after this class is defined
+*/
 
-var bossShipGeometry;
-var bossShipMaterial;
-var bossShipMesh;
-
-var pawnShipGeometry;
-var pawnShipMaterial;
-var pawnShipMesh;
-
-var pawnShipArray = [];
-var diamondPoints = [];
-
-var testBox0, testBox1, testBox2, testBox3;
-
-
-function initFormationDiamond()
+function diamondFormation()
 {
-	// initialize the bossShipMesh and add to scene
-//	bossShipGeometry = new THREE.Geometry();
-//	bossShipGeometry.vertices.push( new THREE.Vector3( -20.0, 75.0, 0.0) );
-//	bossShipGeometry.vertices.push( new THREE.Vector3( 20.0, 75.0, 0.0) );
-//	bossShipGeometry.vertices.push( new THREE.Vector3( 0.0, 0.0, 0.0) );
-//	bossShipGeometry.faces.push( new THREE.Face3( 0,1, 2));
-        
-        bossShipGeometry = [-20, 75.0, 0.0,
-                        20.0, 75.0, 0.0,
-                        0.0, 0.0, 0.0];
-        
-	bossShipMaterial = new THREE.MeshBasicMaterial(  	{ color: "red", side : THREE.DoubleSide } );
-	
-	bossShipMesh = _Ship.prototype.makeShip(bossShipGeometry, bossShipMaterial);
-	bossShipMesh.position.set(0, 0, 0);
-	scene.add(bossShipMesh);
+	enemyWave.call(this);
+	this.bossShipGeometry ;
+	this.bossShipMaterial ;
+	this.bossShipMesh 	;
 
-	// initialize diamondPoint positions
-	for(var i = 0; i < 4; i++)
-	{
-		diamondPoints[i] = new THREE.Vector3();
-		diamondPoints[i].copy(bossShipMesh.position);
-	}
-	diamondPoints[0].setX(bossShipMesh.position.x + 150);
-	diamondPoints[1].setY(bossShipMesh.position.y - 150);
-	diamondPoints[2].setX(bossShipMesh.position.x - 150);
-	diamondPoints[3].setY(bossShipMesh.position.y + 150);
-	
-	testBox0 = new THREE.Mesh( testBoxGeometry, testBoxMaterial );
-	testBox1 = new THREE.Mesh( testBoxGeometry, testBoxMaterial );
-	testBox2 = new THREE.Mesh( testBoxGeometry, testBoxMaterial );
-	testBox3 = new THREE.Mesh( testBoxGeometry, testBoxMaterial );
-	
-	/*
-	scene.add(testBox0)
-	scene.add(testBox1)
-	scene.add(testBox2)
-	scene.add(testBox3)
-	*/
-	testBox0.position.copy(diamondPoints[0]);
-	testBox1.position.copy(diamondPoints[1]);
-	testBox2.position.copy(diamondPoints[2]);
-	testBox3.position.copy(diamondPoints[3]);
-	
-	
-	
-	// initialize pawnShip meshes
-//	pawnShipGeometry = new THREE.Geometry();
-//	pawnShipGeometry.vertices.push( new THREE.Vector3( -20.0, 75.0, 0.0) );
-//	pawnShipGeometry.vertices.push( new THREE.Vector3( 20.0, 75.0, 0.0) );
-//	pawnShipGeometry.vertices.push( new THREE.Vector3( 0.0, 0.0, 0.0) );
-//	pawnShipGeometry.faces.push( new THREE.Face3( 0,1, 2));
-	
-        pawnShipGeometry = [-20, 75.0, 0.0,
-                        20.0, 75.0, 0.0,
-                        0.0, 0.0, 0.0];
-        
-	pawnShipMaterial = new THREE.MeshBasicMaterial( {color: "green", side: THREE.DoubleSide });
-	
-	// create pawn ship array and assign positions
-	for( var i = 0; i < 4; i++)
-	{
-		pawnShipArray[i] = _Ship.prototype.makeShip(pawnShipGeometry, pawnShipMaterial);
-		scene.add(pawnShipArray[i] );
-		pawnShipArray[i].position.copy(diamondPoints[i]);//50, -60 * (i + 1), 0);
-		
-	}
-	
-	
-	// assign source and lerp points for each pawn ship
-	for(var i = 0, lp = 3; i < 4; i++)
-	{
-	
-		pawnShipArray[i].sourceLerpPoint = 0;//lp;
-		pawnShipArray[i].destLerpPoint = (i + 1) % 4;//1;//((lp++) % 4);
-	}
-	
-	// assigns target direction for each pawn ship
-	for(var i = 0; i < 4; i++)
-	{
-		pawnShipArray[i].targetDirection = new THREE.Vector3();
-		pawnShipArray[i].targetDirection.subVectors(diamondPoints[pawnShipArray[i].destLerpPoint], diamondPoints[pawnShipArray[i].sourceLerpPoint]);//pawnShipArray[i].position);
-		pawnShipArray[i].targetDirection.normalize();
-		//bossShipMesh.add(pawnShipArray[i]);
-	}
-	
-	mainShip = bossShipMesh;
-}
+	this.pawnShipGeometry ;
+	this.pawnShipMaterial ;
+	this.pawnShipMesh 	;
 
+	this.pawnShipArray 	= [];
+	this.diamondPoints 	= [];
 
+	this.testBox0;
+	this.testBox1;
+	this.testBox2;
+	this.testBox3;
 
-
-function runFormationDiamond()
-{
-	// Set triangle's X and Y positions
-	mainShip.translateX(enemyShipSpeed);
-
-	
-	// Check if triangle is past the border
-	if(mainShip.position.x > borderWidth  - 50 || mainShip.position.x < -borderWidth + 50 )	
+	this.init = function()
 	{
-			enemyShipSpeed *= -1;
-			mainShip.translateX(enemyShipSpeed);
-	}
-	
-	// update diamond points
-	updateDiamondPointPositions();
-	
-	// update test box positions
-	updateTestBoxPostions();
-		
-	// update  movement for pawnShips
-	for(var i = 0; i < 4; i++)
-	{
-		pawnShipArray[i].targetDirection.subVectors(diamondPoints[pawnShipArray[i].destLerpPoint],  pawnShipArray[i].position);
-		pawnShipArray[i].targetDirection.normalize();	
+		// initialize the bossShipMesh and add to scene
+		this.bossShipGeometry = [-20, 75.0, 0.0,
+							20.0, 75.0, 0.0,
+							0.0, 0.0, 0.0];
 			
-		pawnShipArray[i].translateX(enemyShipSpeed);
-		pawnShipArray[i].translateOnAxis(pawnShipArray[i].targetDirection, 2);
+		this.bossShipMaterial = new THREE.MeshBasicMaterial(  	{ color: "red", side : THREE.DoubleSide } );
 		
-	}
-	
-	// test the distance to the diamond points with the first pawnShip
-	var len = diamondPoints[pawnShipArray[0].destLerpPoint].distanceTo(pawnShipArray[0].position);
-	len = Math.sqrt(Math.sqrt(len));
-	//console.log(len);
-	if(len < 1.2)
-	{
+		this.bossShipMesh = _Ship.prototype.makeShip(this.bossShipGeometry, this.bossShipMaterial);
+		this.bossShipMesh.position.set(0, 110, 0);
+		scene.add(this.bossShipMesh);
+		
+
+		// initialize diamondPoint positions
 		for(var i = 0; i < 4; i++)
 		{
-			targetNextLerpPoint(pawnShipArray[i]);
+			this.diamondPoints[i] = new THREE.Vector3();
+			this.diamondPoints[i].copy(this.bossShipMesh.position);
 		}
-	}	
+		this.diamondPoints[0].setX(this.bossShipMesh.position.x + 150);
+		this.diamondPoints[1].setY(this.bossShipMesh.position.y - 150);
+		this.diamondPoints[2].setX(this.bossShipMesh.position.x - 150);
+		this.diamondPoints[3].setY(this.bossShipMesh.position.y + 150);
+		
+		this.testBox0 = new THREE.Mesh( this.testBoxGeometry, this.testBoxMaterial );
+		this.testBox1 = new THREE.Mesh( this.testBoxGeometry, this.testBoxMaterial );
+		this.testBox2 = new THREE.Mesh( this.testBoxGeometry, this.testBoxMaterial );
+		this.testBox3 = new THREE.Mesh( this.testBoxGeometry, this.testBoxMaterial );
+		
+		/*
+		scene.add(testBox0)
+		scene.add(testBox1)
+		scene.add(testBox2)
+		scene.add(testBox3)
+		*/
+		this.testBox0.position.copy(this.diamondPoints[0]);
+		this.testBox1.position.copy(this.diamondPoints[1]);
+		this.testBox2.position.copy(this.diamondPoints[2]);
+		this.testBox3.position.copy(this.diamondPoints[3]);
+		
+		
+		
+		// initialize pawnShip meshes
+		
+		this.pawnShipGeometry = [-20, 75.0, 0.0,
+							20.0, 75.0, 0.0,
+							0.0, 0.0, 0.0];
+			
+		this.pawnShipMaterial = new THREE.MeshBasicMaterial( {color: "green", side: THREE.DoubleSide });
+		
+		// create pawn ship array and assign positions
+		for( var i = 0; i < 4; i++)
+		{
+			this.pawnShipArray[i] = _Ship.prototype.makeShip(this.pawnShipGeometry, this.pawnShipMaterial);
+			scene.add(this.pawnShipArray[i] );
+			this.pawnShipArray[i].position.copy(this.diamondPoints[i]);//50, -60 * (i + 1), 0);
+			
+		}
+		
+		
+		// assign source and lerp points for each pawn ship
+		for(var i = 0, lp = 3; i < 4; i++)
+		{
+		
+			this.pawnShipArray[i].sourceLerpPoint = 0;//lp;
+			this.pawnShipArray[i].destLerpPoint = (i + 1) % 4;//1;//((lp++) % 4);
+		}
+		
+		// assigns target direction for each pawn ship
+		for(var i = 0; i < 4; i++)
+		{
+			this.pawnShipArray[i].targetDirection = new THREE.Vector3();
+			this.pawnShipArray[i].targetDirection.subVectors(this.diamondPoints[this.pawnShipArray[i].destLerpPoint], this.diamondPoints[this.pawnShipArray[i].sourceLerpPoint]);//pawnShipArray[i].position);
+			this.pawnShipArray[i].targetDirection.normalize();
+			//bossShipMesh.add(pawnShipArray[i]);
+		}
+		
+		this.mainShip = this.bossShipMesh;
+	};
+
+	
+	this.run = function()
+	{
+		
+		// Set triangle's X and Y positions
+		this.mainShip.translateX(enemyShipSpeed);
+		
+		// Check if triangle is past the border
+		if(this.mainShip.position.x > borderWidth  - 50 || this.mainShip.position.x < -borderWidth + 50 )	
+		{
+				enemyShipSpeed *= -1;
+				this.mainShip.translateX(enemyShipSpeed);
+		}
+		
+		// update diamond points
+		this.updateDiamondPointPositions();
+		
+		// update test box positions
+		this.updateTestBoxPostions();
+			
+		// update  movement for pawnShips
+		for(var i = 0; i < 4; i++)
+		{
+			this.pawnShipArray[i].targetDirection.subVectors(this.diamondPoints[this.pawnShipArray[i].destLerpPoint],  this.pawnShipArray[i].position);
+			this.pawnShipArray[i].targetDirection.normalize();	
+				
+			this.pawnShipArray[i].translateX(enemyShipSpeed);
+			this.pawnShipArray[i].translateOnAxis(this.pawnShipArray[i].targetDirection, 2);
+			
+		}
+		
+		// test the distance to the diamond points with the first pawnShip
+		var len = this.diamondPoints[this.pawnShipArray[0].destLerpPoint].distanceTo(this.pawnShipArray[0].position);
+		len = Math.sqrt(Math.sqrt(len));
+		if(len < 1.2)
+		{
+			for(var i = 0; i < 4; i++)
+			{
+				this.targetNextLerpPoint(this.pawnShipArray[i]);
+			}
+		}	
+	};
+	
+
+	// the diamond point positions should update each frame as the mainship moves, redefining the position
+	// where the corners of the diamond path should be
+	this.updateDiamondPointPositions = function()
+	{
+		this.diamondPoints[0].setX(this.bossShipMesh.position.x+ 150);
+		this.diamondPoints[1].setX(this.bossShipMesh.position.x);
+		this.diamondPoints[2].setX(this.bossShipMesh.position.x - 150);
+		this.diamondPoints[3].setX(this.bossShipMesh.position.x);
+
+	};
+	
+	// the test boxes aren't currently in the scene, but I was using it to visually see where the 
+	// diamond corner points were
+	this.updateTestBoxPostions = function()
+	{
+		this.testBox0.position.copy(this.diamondPoints[0]);
+		this.testBox1.position.copy(this.diamondPoints[1]);
+		this.testBox2.position.copy(this.diamondPoints[2]);
+		this.testBox3.position.copy(this.diamondPoints[3]);
+
+	};
+
+	// when the ship reaches the diamond corner, set it's next destination
+	// point to the next diamondPoint in the array
+	this.targetNextLerpPoint = function(ship)
+	{
+		ship.sourceLerpPoint = ship.destLerpPoint;
+		ship.destLerpPoint = (ship.destLerpPoint + 1) % 4;
+
+	};
+
+	// clean up after one's self
+	this.cleanup = function()
+	{
+		scene.remove(this.bossShipMesh);
+		scene.remove(this.pawnShipArray[0] );
+		scene.remove(this.pawnShipArray[1] );
+		scene.remove(this.pawnShipArray[2] );
+		scene.remove(this.pawnShipArray[3] );
+		
+		// set ship meshes to null for garbage collection
+		this.bossShipMesh = null;
+		for(var i = 0; i < this.pawnShipArray.length; i++)
+		{
+			pawnShipArray[i] = null;
+		}
+	}
+
 }
 
-function updateDiamondPointPositions()
-{
-	diamondPoints[0].setX(bossShipMesh.position.x+ 150);
-	diamondPoints[1].setX(bossShipMesh.position.x);
-	diamondPoints[2].setX(bossShipMesh.position.x - 150);
-	diamondPoints[3].setX(bossShipMesh.position.x);
-
-}
-function updateTestBoxPostions()
-{
-	testBox0.position.copy(diamondPoints[0]);
-	testBox1.position.copy(diamondPoints[1]);
-	testBox2.position.copy(diamondPoints[2]);
-	testBox3.position.copy(diamondPoints[3]);
-
-}
-
-function targetNextLerpPoint(ship)
-{
-	ship.sourceLerpPoint = ship.destLerpPoint;
-	ship.destLerpPoint = (ship.destLerpPoint + 1) % 4;
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+diamondFormation.prototype = new enemyWave();
+diamondFormation.prototype.constructor = diamondFormation;
 
 
 

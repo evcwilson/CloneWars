@@ -1,83 +1,128 @@
-var startPosition;
-var targetPosition;
-var targetDirection = new THREE.Vector3();
-
-var targetPositions = [];
-var allShipsInPosition = false;
-var currentMovingShip = 0;
-
-function initFormationV()
+/*
+	vFormation
+	
+	vFormation is a child class of the super class 'enemyWave', that contains properties that all future 
+	enemy waves will contain. This setup is done immediatly after this class is defined
+*/
+function vFormation()
 {
-	startPosition = shipArray[0].position;
-	targetPosition = testBox.position;
+	// call super class's constructor
+	enemyWave.call(this);
 	
-	var numShips = shipArray.length;
-	var xFlip = 1;
-	targetPositions[0] = new THREE.Vector3();
-	targetPositions[0].copy(testBox.position);
-	for(var i = 1; i < numShips; i++)
-	{
-		targetPositions[i] = new THREE.Vector3();
-		targetPositions[i].copy(testBox.position);
-		targetPositions[i].setX((testBox.position.x + 125) * xFlip);
-		
-		if(i > 0)
-			targetPositions[i].setY(targetPositions[i].y + 50);
-		xFlip = xFlip * -1.25;
-	}
-	
-	targetDirection.subVectors(targetPositions[currentMovingShip], shipArray[currentMovingShip].position);
-	targetDirection.normalize();
-}
+	// function variables
+	this.startPosition;
+	this.targetPosition;
+	this.targetDirection = new THREE.Vector3();
 
+	this.targetPositions = [];
+	this.allShipsInPosition = false;
+	this.currentMovingShip = 0;
 
-function runFormationV()
-{	
-	var numShips = shipArray.length;
-	if(allShipsInPosition == false)
+	// function methods
+	this.init = function()
 	{
-		var distance = shipArray[currentMovingShip].position.distanceTo(targetPositions[currentMovingShip]);
-		if(distance > 2)
+
+		// Make three ships
+		for(var i = 0; i < 3; i++)
 		{
-			shipArray[currentMovingShip].translateOnAxis(targetDirection, 3);
-			
+			this.shipArray[i] = _Ship.prototype.makeShip(triangleGeometry, triangleMaterial);
+			scene.add(this.shipArray[i]);
+			this.shipArray[i].position.set( -100, 300, 0 );
 		}
-		else
+		
+		
+		this.numShips = this.shipArray.length;
+		
+		
+		this.startPosition = this.shipArray[0].position;
+		this.targetPosition = testBox.position;
+		
+		var xFlip = 1;
+		this.targetPositions[0] = new THREE.Vector3();
+		this.targetPositions[0].copy(testBox.position);
+		
+		// set position of targetPositions with the position of test boxes (test boxes may not be visible in scene)
+		for(var i = 1; i < this.numShips; i++)
 		{
-			currentMovingShip++;
-			if(currentMovingShip == numShips)
+			this.targetPositions[i] = new THREE.Vector3();
+			this.targetPositions[i].copy(testBox.position);
+			this.targetPositions[i].setX((testBox.position.x + 125) * xFlip);
+			
+			if(i > 0)
+				this.targetPositions[i].setY(this.targetPositions[i].y + 50);
+			xFlip = xFlip * -1.25;
+		}
+		
+		this.targetDirection.subVectors(this.targetPositions[this.currentMovingShip], this.shipArray[this.currentMovingShip].position);
+		this.targetDirection.normalize();
+		
+		this.mainShip = this.shipArray[0];
+	};
+
+	this.run = function()
+	{	
+		// if all the ships are not in position....
+		if(this.allShipsInPosition == false)
+		{
+			// get the distance of the ships...
+			var distance = this.shipArray[this.currentMovingShip].position.distanceTo(this.targetPositions[this.currentMovingShip]);
+			if(distance > 2)
 			{
-				allShipsInPosition = true;
-				for(var i =  1; i < numShips; i++)
-				{
-					shipArray[0].add(shipArray[i]);
-				}
+				this.shipArray[this.currentMovingShip].translateOnAxis(this.targetDirection, 3);
+				
 			}
 			else
 			{
-					targetDirection.subVectors(targetPositions[currentMovingShip], shipArray[currentMovingShip].position);
-					targetDirection.normalize();	
+				this.currentMovingShip++;
+				if(this.currentMovingShip == this.numShips)
+				{
+					this.allShipsInPosition = true;
+					for(var i =  1; i < this.numShips; i++)
+					{
+						this.shipArray[0].add(this.shipArray[i]);
+					}
+				}
+				else
+				{
+						this.targetDirection.subVectors(this.targetPositions[this.currentMovingShip], this.shipArray[this.currentMovingShip].position);
+						this.targetDirection.normalize();	
+				}
 			}
 		}
-	}
-	else
-	{
-		var numShips = shipArray.length;
-		var speedModifier = -2 ;
-
-		var currentPosition = mainShip.position;
-			
-		// Set triangle's X and Y positions
-		mainShip.translateX(enemyShipSpeed);
-
-		
-		// Check if triangle is past the border
-		if(mainShip.position.x > borderWidth  - 50 || mainShip.position.x < -borderWidth + 50 )	
+		// if all the ships are in position
+		else
 		{
-				enemyShipSpeed *= -1;
-				mainShip.translateX(enemyShipSpeed);
+			var speedModifier = -2 ;
+
+			var currentPosition = this.mainShip.position;
+				
+			// Translate mainship along X axis (other ships follow main ship's pattern
+			this.mainShip.translateX(enemyShipSpeed);
+
+			
+			// Check if triangle is past the border
+			if(this.mainShip.position.x > borderWidth  - 50 || this.mainShip.position.x < -borderWidth + 50 )	
+			{
+					enemyShipSpeed *= -1;
+					this.mainShip.translateX(enemyShipSpeed);
+			}
+		
 		}
-	
+
+	};
+
+	// cleanup all enemies from memory that this enemy wave created
+	this.cleanup = function()
+	{
+		for(var i = 0; i < this.numShips; i++)
+		{
+			scene.remove(this.shipArray[i]);
+			this.shipArray[i] = null;				// sets shipArray elements to null for garbage collection
+		};
 	}
 
 }
+
+vFormation.prototype = new enemyWave();
+vFormation.prototype.constructor = vFormation;
+
