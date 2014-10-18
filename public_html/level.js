@@ -16,24 +16,12 @@ function level(waveOne, waveTwo, waveThree)
 	this.numWaves = -1;
 	this.currentWave = -1;
 	
-	// check to see if enemy waves that were passed into the function are of type enemyWave
-	if(waveOne instanceof enemyWave)
-	{
-		this.enemyWaves[++this.numWaves] = waveOne;
-	}
-	if(waveTwo instanceof enemyWave)
-	{
-		this.enemyWaves[++this.numWaves] = waveTwo;
-	}
-	if(waveThree instanceof enemyWave)
-	{
-		this.enemyWaves[++this.numWaves] = waveThree;
-	}
-	
+	// Level Methods
 	
 	// function to initialize the next wave of enemies for the level
 	this.initNextEnemyWave = function()
 	{
+		
 		if(this.currentWave != -1)
 		{
 			this.enemyWaves[this.currentWave].cleanup();
@@ -51,4 +39,56 @@ function level(waveOne, waveTwo, waveThree)
 	{
 		this.enemyWaves[this.currentWave].run();
 	}
+	
+	// function to add waves to level
+	this.addWavesToLevel = function()
+	{
+		// check to see if enemy waves that were passed into the function are of type enemyWave
+		if(waveOne instanceof enemyWave)
+		{
+			this.enemyWaves[++this.numWaves] = waveOne;
+		} 
+		else 
+		{ 
+			if(waveOne) 
+				console.log( "LEVEL ERROR: '" + waveOne.constructor.name + "' is not of type 'enemyWave'" ); 
+		}
+		
+		if(waveTwo instanceof enemyWave)
+		{
+			this.enemyWaves[++this.numWaves] = waveTwo;
+		}
+		else 
+		{ 
+			if(waveTwo) 
+				console.log( "LEVEL ERROR: '" + waveTwo.constructor.name + " is not of type 'enemyWave'" ); 
+		}
+		
+		if(waveThree instanceof enemyWave)
+		{
+			this.enemyWaves[++this.numWaves] = waveThree;
+		}
+		else 
+		{ 
+			if(waveThree) 
+				console.log( "LEVEL ERROR: '" + waveThree.constructor.name + " is not of type 'enemyWave'" ); 
+		}
+	}
+	
+	this.checkLastWave = function()
+	{
+		return this.currentWave == this.numWaves;
+	}
+	
+	this.cleanup = function()
+	{
+		this.enemyWaves[this.currentWave].cleanup();
+		this.currentWave = 0;
+	}
+	
+	
+	
+	
+	// class body
+	this.addWavesToLevel();
 }

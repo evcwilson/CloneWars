@@ -74,7 +74,7 @@ function calculateFPS()
 		
 		if(Date.now() - timeAtNextSecond >= 1000)			// every one second....
 		{
-			console.log("Frames Per Second = " + fps );		// ... print the number of frames passed to the console
+			//console.log("Frames Per Second = " + fps );		// ... print the number of frames passed to the console
 			fps = 0;																// reset the FPS counter
 			timeAtNextSecond = Date.now();						// reset the time at the next second
 
