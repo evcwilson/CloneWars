@@ -30,10 +30,10 @@ function setupInputKeys()
 	
 	document.onkeyup = function(evt)
 	{
-		if(evt.keyCode == 39)
+		if(evt.keyCode == 39 || evt.keyCode == 68)
 			keyPressedRight = false;
 		
-		if(evt.keyCode == 37)
+		if(evt.keyCode == 37 || evt.keyCode == 65)
 			keyPressedLeft = false;
 		
 		if(evt.keyCode == 38)
