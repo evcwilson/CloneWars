@@ -21,7 +21,17 @@ var player = [ 0, -225, 0,
 playerMesh = _Ship.prototype.makeShip(player, new THREE.MeshBasicMaterial({color:"green"}));
 
 scene.add(playerMesh);
-    
+   
+}
+
+//Updates player movement with each game loop
+function playerUpdate(){
+    //Prevents passing the left border
+    if(playerMesh.position.x < -250){playerMesh.position.x += 1}
+    //Prevents passing the right border
+    else if (playerMesh.position.x > 250){playerMesh.position.x -=1}
+    else if (keyPressedRight){ playerMesh.position.x+=1.5;}
+    else if (keyPressedLeft) { playerMesh.position.x-=1.5;}
 }
 
 _Ship.prototype ={

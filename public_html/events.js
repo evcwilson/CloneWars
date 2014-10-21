@@ -12,13 +12,13 @@ function setupInputKeys()
 	// Check for Key Presses
 	document.onkeydown = function(evt) 
 	{
-		if(evt.keyCode == 39)
+		if(evt.keyCode == 39 || evt.keyCode == 68)
 			keyPressedRight = true;
-		if(evt.keyCode == 37)
+		if(evt.keyCode == 37 || evt.keyCode == 65)
 			keyPressedLeft = true;
-		if(evt.keyCode == 38)
+		if(evt.keyCode == 38 || evt.keyCode == 87)
 			keyPressedUp = true;
-		if(evt.keyCode == 40){
+		if(evt.keyCode == 40 || evt.keyCode == 83){
 			keyPressedDown = true;
                     }
 			
@@ -49,7 +49,7 @@ function setupInputKeys()
 	
 }
 	
-
+//Not used at the moment. 
 function processEvents()
 {
 	if( !document.hasFocus() )
