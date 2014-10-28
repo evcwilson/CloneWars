@@ -6,6 +6,7 @@ var keyPressedRight = false;
 var keyPressedLeft = false;
 var keyPressedDown = false;
 var keyPressedUp = false;
+var keyPressedSpace = false; 
 
 function setupInputKeys()
 {
@@ -21,6 +22,9 @@ function setupInputKeys()
 		if(evt.keyCode == 40 || evt.keyCode == 83){
 			keyPressedDown = true;
                     }
+                if(evt.keyCode == 32){
+                        keyPressedSpace = true; 
+                }
 			
 		if(evt.keyCode == 27)
 		{
@@ -35,6 +39,9 @@ function setupInputKeys()
 		
 		if(evt.keyCode == 37 || evt.keyCode == 65)
 			keyPressedLeft = false;
+                    
+                if (evt.keyCode == 32)
+                        keyPressedSpace = false; 
 		
 		if(evt.keyCode == 38)
 			keyPressedUp = false;

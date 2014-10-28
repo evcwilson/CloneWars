@@ -8,18 +8,23 @@ var playerMaterial;
 var playerMesh; 
 var playerImage;
 
+var projGeo,
+    projMaterial,
+    projectile,
+    projPresent = false;
+
 function _Ship(id){
     return this; 
 }
 
 function initPlayer(){
     
-var player = [ 0, -225, 0,
-                -35, -275, 0,
-                35, -275, 0];
+var player = [ 0, 0, 0,
+                -35, -50, 0,
+                35, -50, 0];
 
 playerMesh = _Ship.prototype.makeShip(player, new THREE.MeshBasicMaterial({color:"green"}));
-
+playerMesh.position.set(0,-250,0);
 scene.add(playerMesh);
    
 }
@@ -32,6 +37,11 @@ function playerUpdate(){
     else if (playerMesh.position.x > 250){playerMesh.position.x -=1}
     else if (keyPressedRight){ playerMesh.position.x+=1.5;}
     else if (keyPressedLeft) { playerMesh.position.x-=1.5;}
+     
+    if(keyPressedSpace && projPresent == false){_Ship.prototype.fireProjectile(playerMesh.position.x,
+        playerMesh.position.y, new THREE.MeshBasicMaterial({color:0xffffff}));}
+    
+
 }
 
 _Ship.prototype ={
@@ -64,10 +74,28 @@ _Ship.prototype ={
     destoryShip: function(ship){
        scene.remove(ship);
     },
+    
+   fireProjectile: function(x,y,mat){
+       projPresent = true; 
        
-    moveShip: function(ship, x, y, z){
-        ship.position.setX;
-        ship.position.setY; 
-        ship.position.setZ; 
-    } 
+       projGeo = new THREE.CircleGeometry(10,32);
+       this.projMaterial = mat; 
+       
+       projectile = new THREE.Mesh(projGeo, projMaterial);
+       projectile.position.set(x, y+5, 1);
+       scene.add(projectile);
+      
+      
+
+    },
+    
+    moveProjectile: function(){
+        
+           projectile.position.y += 2;
+        if (projectile.position.y > 285){
+           scene.remove(projectile);
+           projPresent = false; 
+       }
+    }
+       
 };
