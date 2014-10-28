@@ -19,11 +19,9 @@ function _Ship(id){
 
 function initPlayer(){
     
-var player = [ 0, 0, 0,
-                -35, -50, 0,
-                35, -50, 0];
-
-playerMesh = _Ship.prototype.makeShip(player, new THREE.MeshBasicMaterial({color:"green"}));
+var player = [50,50];
+var playerTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.jpg');
+playerMesh = _Ship.prototype.test(player, new THREE.MeshBasicMaterial({transparent: true, map: playerTexture}));
 playerMesh.position.set(0,-250,0);
 scene.add(playerMesh);
    
@@ -38,14 +36,23 @@ function playerUpdate(){
     else if (keyPressedRight){ playerMesh.position.x+=1.5;}
     else if (keyPressedLeft) { playerMesh.position.x-=1.5;}
      
-    if(keyPressedSpace && projPresent == false){_Ship.prototype.fireProjectile(playerMesh.position.x,
-        playerMesh.position.y, new THREE.MeshBasicMaterial({color:0xffffff}));}
+    if(keyPressedSpace && projPresent == false){
+        projPresent = true; 
+        _Ship.prototype.fireProjectile(playerMesh.position.x,
+        playerMesh.position.y, new THREE.MeshBasicMaterial({color:'white'}));
+    }
     
 
 }
 
 _Ship.prototype ={
     
+    
+    test: function(array, material){
+      geometry = new THREE.PlaneGeometry(array[0],array[1],32);
+      var plane = new THREE.Mesh(geometry, material);
+      return plane; 
+    },
     //Creates A new Ship with a basic triangle
     //Mesh is added from the function call, for use of different sprites. 
     makeShip: function(array , material){
@@ -76,12 +83,11 @@ _Ship.prototype ={
     },
     
    fireProjectile: function(x,y,mat){
-       projPresent = true; 
        
-       projGeo = new THREE.CircleGeometry(10,32);
+       projGeo = new THREE.CircleGeometry(5,32);
        this.projMaterial = mat; 
        
-       projectile = new THREE.Mesh(projGeo, projMaterial);
+       projectile = new THREE.Mesh(projGeo, mat);
        projectile.position.set(x, y+5, 1);
        scene.add(projectile);
       
