@@ -71,7 +71,7 @@ function gameLoop()
                         playerUpdate(); //Moves player, will add projectile firing call to this function 
                         //movePlayer(velocity);
 			updateGame();
-                        if (projPresent){
+                        if (projPresent || powerup){
                             _Ship.prototype.moveProjectile();
                         }
 			lag -= targetFrameRate;
