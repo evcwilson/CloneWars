@@ -26,7 +26,7 @@ function _Ship(id){
 function initPlayer(){
     
 var player = [50,50];
-var playerTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.jpg');
+var playerTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.gif');
 playerMesh = _Ship.prototype.makeShipSprite(player, new THREE.MeshBasicMaterial({transparent: true, map: playerTexture}));
 playerMesh.position.set(0,-250,0);
 scene.add(playerMesh);
