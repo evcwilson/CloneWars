@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 var width, height;
-
+var particleSystem;
 function _Screen(width, height){
     this.width = canvas.width;
     this.height = canvas.width; 
@@ -34,11 +34,11 @@ function drawBackground(){
             particles.vertices.push(new THREE.Vector3(pX, pY, pZ));
         }
         //alert("here");
-        var particleSystem = new THREE.ParticleSystem(particles, pMaterial);
+        particleSystem = new THREE.ParticleSystem(particles, pMaterial);
         
         particleSystem.sortParticles = true; 
         
         
-        scene.add(particleSystem);
+        scene.add(particleSystem); 
 }
 

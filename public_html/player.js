@@ -16,8 +16,10 @@ var projGeo,
     
 var enemyProjectGeo,
     enemyProjectMaterial,
-    enemyProject,
+    enemyProject = [],
     enemyProjectCount=0; 
+	
+var enemyProjectLimit = 3;
 
 function _Ship(id){
     return this; 
@@ -29,7 +31,7 @@ var player = [50,50];
 var playerTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.gif');
 playerMesh = _Ship.prototype.makeShipSprite(player, new THREE.MeshBasicMaterial({transparent: true, map: playerTexture}));
 playerMesh.position.set(0,-250,0);
-scene.add(playerMesh);
+//scene.add(playerMesh);
    
 }
 
@@ -121,7 +123,7 @@ _Ship.prototype ={
              
     moveProjectile: function(){
         
-           projectile.position.y += 2;
+           projectile.position.y += 9;
         if (projectile.position.y > 285){
            scene.remove(projectile);
            projPresent = false; 

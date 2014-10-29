@@ -9,7 +9,7 @@ var triangleGeometry;
 var triangleMaterial;
 var triangleMesh;
 
-var testBoxGeometry, testBoxMaterial, testBox;
+
 var canvas;
 
 function initializeScene()
@@ -42,11 +42,7 @@ function initializeScene()
 	triangleMaterial = new THREE.MeshBasicMaterial( {color: "red",side: THREE.DoubleSide} );
 																	
 	
-	testBoxGeometry = new THREE.BoxGeometry( 10, 10, 10 );
-	testBoxMaterial = new THREE.MeshBasicMaterial( {color: "white"} );
-	testBox = new THREE.Mesh( testBoxGeometry, testBoxMaterial );
-	//scene.add(testBox);
-	testBox.position.set(0, 0, 0);
+
 	
 }
 

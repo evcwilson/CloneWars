@@ -17,7 +17,18 @@ function vFormation()
 	this.targetPositions = [];
 	this.allShipsInPosition = false;
 	this.currentMovingShip = 0;
-	this.enemyMovementSpeed = 2;
+	this.enemyMovementSpeed = 1.5;
+	
+	var vFormGeometry = [ 75, 75 ];
+	var vFormMaterial = new THREE.MeshBasicMaterial( {map: pawnShipSprite, side : THREE.DoubleSide, transparent: true});
+	
+	var testBoxGeometry = new THREE.BoxGeometry( 10, 10, 10 );
+	var testBoxMaterial = new THREE.MeshBasicMaterial( {color: "white"} );
+	var testBox = new THREE.Mesh( testBoxGeometry, testBoxMaterial );
+	testBox.position.set(0, 80, 1);
+	
+	var shootTimer = 0;
+	
 	// function methods
 	this.init = function()
 	{
@@ -25,9 +36,9 @@ function vFormation()
 		// Make three ships
 		for(var i = 0; i < 3; i++)
 		{
-			this.shipArray[i] = _Ship.prototype.makeShip(triangleGeometry, triangleMaterial);
+			this.shipArray[i] = _Ship.prototype.makeShipSprite(vFormGeometry, vFormMaterial);
 			scene.add(this.shipArray[i]);
-			this.shipArray[i].position.set( -100, 300, 0 );
+			this.shipArray[i].position.set( -100, 400, 1 );
 		}
 		
 		
@@ -61,6 +72,7 @@ function vFormation()
 
 	this.run = function()
 	{	
+		
 		// if all the ships are not in position....
 		if(this.allShipsInPosition == false)
 		{
@@ -79,8 +91,9 @@ function vFormation()
 					this.allShipsInPosition = true;
 					for(var i =  1; i < this.numShips; i++)
 					{
-						this.shipArray[0].add(this.shipArray[i]);
+						//this.shipArray[0].add(this.shipArray[i]);
 					}
+					this.waveReady = true;
 				}
 				else
 				{
@@ -95,18 +108,43 @@ function vFormation()
 			var speedModifier = -2 ;
 
 			var currentPosition = this.mainShip.position;
-				
-			// Translate mainship along X axis (other ships follow main ship's pattern
-			this.mainShip.translateX(this.enemyMovementSpeed);
-
 			
-			// Check if triangle is past the border
-			if(this.mainShip.position.x > borderWidth  - 115 || this.mainShip.position.x < -borderWidth + 140 )	
+			// move the ships initially....
+			this.bouncePoint.translateX(this.enemyMovementSpeed);
+			
+			// but, if bouncePoint is past limit...
+			if(this.bouncePoint.position.x > 85 || this.bouncePoint.position.x < -55)
 			{
-					this.enemyMovementSpeed *= -1;
-					this.mainShip.translateX(this.enemyMovementSpeed);
+				//reverse movement speed and move bouncePoint back...
+				this.enemyMovementSpeed *= -1;
+				this.bouncePoint.translateX(this.enemyMovementSpeed);
 			}
-		
+			
+			// ...then move the ships
+			for(var j = 0; j < this.shipArray.length; j++)
+			{
+				this.shipArray[j].translateX(this.enemyMovementSpeed);
+			}
+			
+			// fire projectiles
+			shootTimer += deltaTime;
+			if(shootTimer >= 1.6)
+			{
+				var randomNumber = Math.floor(Math.random() * this.shipArray.length);
+				var shootingShip = 	this.shipArray[randomNumber];
+				var globalPos = new THREE.Vector3();
+				globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
+				_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
+				shootTimer = 0;
+			}
+			
+			if(enemyProject.length > 0)
+			{
+				for(var i = 0; i < enemyProject.length; i++)
+				{
+					_Ship.prototype.moveEneProjectile(i);
+				}
+			}
 		}
 
 	};
@@ -119,6 +157,14 @@ function vFormation()
 			scene.remove(this.shipArray[i]);
 			this.shipArray[i] = null;				// sets shipArray elements to null for garbage collection
 		};
+		
+		// remove projectiles from scene
+		for(var i = 0; i < enemyProject.length; i++)
+		{
+			scene.remove(enemyProject[i]);
+		}
+		enemyProject = [];
+		enemyProjectCount = 0;
 	}
 
 }

@@ -7,6 +7,7 @@ var keyPressedLeft = false;
 var keyPressedDown = false;
 var keyPressedUp = false;
 var keyPressedSpace = false; 
+var keyPressedEnter = false;
 
 function setupInputKeys()
 {
@@ -30,6 +31,11 @@ function setupInputKeys()
 		{
 			escapePressed = true;
 		}
+		
+		if(evt.keyCode == 13)
+		{
+			keyPressedEnter = true;
+		}
 	};
 	
 	document.onkeyup = function(evt)
@@ -48,6 +54,11 @@ function setupInputKeys()
 			
 		if(evt.keyCode == 40)
 			keyPressedDown = false;
+			
+		if(evt.keyCode == 13)
+		{
+			keyPressedEnter = false;
+		}
 	
 	}
 

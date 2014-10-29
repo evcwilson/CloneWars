@@ -27,18 +27,19 @@ function diamondFormation()
 	
 	this.enemyShipSpeed = 1.2;
 
+	var shootTimer = 0;
+	
 	this.init = function()
 	{
 		// initialize the bossShipMesh and add to scene
-		this.bossShipGeometry = [-20, 75.0, 0.0,
-							20.0, 75.0, 0.0,
-							0.0, 0.0, 0.0];
+		this.bossShipGeometry = [75, 75];
 			
-		this.bossShipMaterial = new THREE.MeshBasicMaterial(  	{ color: "red", side : THREE.DoubleSide } );
+		this.bossShipMaterial = new THREE.MeshBasicMaterial( { map: pawnShipSprite, transparent: true, side : THREE.DoubleSide } );
 		
-		this.bossShipMesh = _Ship.prototype.makeShip(this.bossShipGeometry, this.bossShipMaterial);
-		this.bossShipMesh.position.set(0, 110, 0);
+		this.bossShipMesh = _Ship.prototype.makeShipSprite(this.bossShipGeometry, this.bossShipMaterial);
+		this.bossShipMesh.position.set(0, 110, 1);
 		scene.add(this.bossShipMesh);
+		this.shipArray[this.numShips++] = this.bossShipMesh;
 		
 
 		// initialize diamondPoint positions
@@ -72,17 +73,18 @@ function diamondFormation()
 		
 		// initialize pawnShip meshes
 		
-		this.pawnShipGeometry = [-20, 75.0, 0.0,
-							20.0, 75.0, 0.0,
-							0.0, 0.0, 0.0];
-			
-		this.pawnShipMaterial = new THREE.MeshBasicMaterial( {color: "green", side: THREE.DoubleSide });
+		this.pawnShipGeometry = [50, 50];
+		this.pawnShipMaterial = new THREE.MeshBasicMaterial( { 
+															map: pawnShipSprite, 
+															side: THREE.DoubleSide,
+															transparent: true });
 		
 		// create pawn ship array and assign positions
 		for( var i = 0; i < 4; i++)
 		{
-			this.pawnShipArray[i] = _Ship.prototype.makeShip(this.pawnShipGeometry, this.pawnShipMaterial);
+			this.pawnShipArray[i] = _Ship.prototype.makeShipSprite(this.pawnShipGeometry, this.pawnShipMaterial);
 			scene.add(this.pawnShipArray[i] );
+			this.shipArray[this.numShips++] = this.pawnShipArray[i];
 			this.pawnShipArray[i].position.copy(this.diamondPoints[i]);//50, -60 * (i + 1), 0);
 			
 		}
@@ -106,6 +108,7 @@ function diamondFormation()
 		}
 		
 		this.mainShip = this.bossShipMesh;
+		this.waveReady = true;
 	};
 
 	
@@ -113,7 +116,8 @@ function diamondFormation()
 	{
 		
 		// Set triangle's X and Y positions
-		this.mainShip.translateX(this.enemyShipSpeed);
+		if(this.bossShipMesh)
+			this.mainShip.translateX(this.enemyShipSpeed);
 		
 		// Check if triangle is past the border
 		if(this.mainShip.position.x > borderWidth  - 105 || this.mainShip.position.x < -borderWidth + 105 )	
@@ -148,7 +152,28 @@ function diamondFormation()
 			{
 				this.targetNextLerpPoint(this.pawnShipArray[i]);
 			}
-		}	
+		}
+		// shoot projectiles
+		
+		shootTimer += deltaTime;
+			if(shootTimer >= 1.6)
+			{
+				var randomNumber = Math.floor(Math.random() * this.shipArray.length);
+				var shootingShip = 	this.shipArray[randomNumber];
+				var globalPos = new THREE.Vector3();
+				globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
+				_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
+				shootTimer = 0;
+			}
+			
+			if(enemyProject.length > 0)
+			{
+				for(var i = 0; i < enemyProject.length; i++)
+				{
+					_Ship.prototype.moveEneProjectile(i);
+				}
+			}
+	
 	};
 	
 
@@ -198,6 +223,14 @@ function diamondFormation()
 		{
 			this.pawnShipArray[i] = null;
 		}
+		
+		// remove projectiles from scene
+		for(var i = 0; i < enemyProject.length; i++)
+		{
+			scene.remove(enemyProject[i]);
+		}
+		enemyProject = [];
+		enemyProjectCount = 0;
 	}
 
 }

@@ -37,7 +37,12 @@ function level(waveOne, waveTwo, waveThree)
 	// function to run the current enemy wave in the level
 	this.runEnemyWave = function()
 	{
-		this.enemyWaves[this.currentWave].run();
+			this.enemyWaves[this.currentWave].run()
+	}
+	
+	this.checkEnemiesDefeated = function()
+	{
+		return this.enemyWaves[this.currentWave].checkEnemiesDefeated();
 	}
 	
 	// function to add waves to level
@@ -85,6 +90,12 @@ function level(waveOne, waveTwo, waveThree)
 		this.enemyWaves[this.currentWave].cleanup();
 		this.currentWave = 0;
 	}
+	
+	this.checkCollision = function()
+	{
+		this.enemyWaves[this.currentWave].checkCollision();
+	}
+	
 	
 	
 	

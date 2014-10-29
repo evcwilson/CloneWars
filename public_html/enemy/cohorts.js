@@ -14,23 +14,28 @@ function cohort(num)
 {
 	
 	enemyWave.call(this);
+	
 	this.numShips = num;
 	this.enemyMovementSpeed = 1.5;
 	
 									
 	this.allShipsInPosition = false;
 	
-	this.targetPosition = new THREE.Vector3(0, 60, 0);
-	
-	
-	
-	var smallShipGeometry = 	[	
-									-18.0, 30.0, 0.0,
-									 18.0, 30.0, 0.0,
-									 0.0,	0.0, 0.0
-								];
+	this.targetPosition = new THREE.Vector3(0, 60, 1);
 
-	var smallShipMaterial = new THREE.MeshBasicMaterial( { color: "yellow", side : THREE.DoubleSide } );
+	// ship and projectile geometry and material
+	var smallShipGeometry = [50,50];
+	var smallShipMaterial = new THREE.MeshBasicMaterial( 
+														{ 
+															map: pawnShipSprite, 
+															side : THREE.DoubleSide, 
+															transparent: true 
+														} 
+														);
+	
+	var shootTimer = 0;
+	
+	
 	
 	this.init = function()
 	{
@@ -44,12 +49,12 @@ function cohort(num)
 		// create numShips number of ships and add them to the scene
 		for(var i = 0; i < this.numShips; i++)
 		{
-			this.shipArray[i] = _Ship.prototype.makeShip( smallShipGeometry, smallShipMaterial );
+			this.shipArray[i] = _Ship.prototype.makeShipSprite( smallShipGeometry, smallShipMaterial );
 			scene.add(this.shipArray[i]);
 		}
 		
 		// set the position of the first ship
-		this.shipArray[0].position.set(xInitPos, yInitPos, 0);
+		this.shipArray[0].position.set(xInitPos, yInitPos, 1);
 		
 		for(var i = 1; i < this.numShips; i++)
 		{
@@ -60,7 +65,7 @@ function cohort(num)
 			}
 			
 			// set each ship relative to the position of the mainship
-			this.shipArray[i].position.set(xDelta, yDelta, 0);
+			this.shipArray[i].position.set(xDelta, yDelta, 1);
 			xDelta += 70;
 			
 			// add the ships as a child of the first ship
@@ -71,6 +76,7 @@ function cohort(num)
 		// update class variables
 		this.mainShip = this.shipArray[0];
 		this.targetPosition.setX(xInitPos)
+		
 	}
 	
 	this.run = function()
@@ -91,33 +97,83 @@ function cohort(num)
 			else
 			{
 				this.allShipsInPosition = true;
+				for(var i = 1; i < this.shipArray.length; i++)
+				{
+					//this.shipArray[0].remove(this.shipArray[i]);
+					var globalPos = new THREE.Vector3();
+					globalPos.setFromMatrixPosition( this.shipArray[i].matrixWorld );
+					this.shipArray[i].position.copy(globalPos);
+					scene.add(this.shipArray[i]);
+				}
+				this.waveReady = true;
 			}
 			
 		}
 		// ...then move the ships horizontally
 		else
 		{
-			// moveShip left and right
-			this.mainShip.translateX(this.enemyMovementSpeed);
-
-			if(this.mainShip.position.x > -50 || this.mainShip.position.x < -borderWidth  )	
+			// move the ships initially....
+			this.bouncePoint.translateX(this.enemyMovementSpeed);
+			
+			//this.mainShip.translateX(this.enemyMovementSpeed);
+			
+			// but, if bouncePoint is past limit...
+			if(this.bouncePoint.position.x > 125 || this.bouncePoint.position.x < -30)
 			{
-					this.enemyMovementSpeed *= -1;
-					this.mainShip.translateX(this.enemyMovementSpeed);
-					
+				//reverse movement speed and move bouncePoint back...
+				this.enemyMovementSpeed *= -1;
+				this.bouncePoint.translateX(this.enemyMovementSpeed);
+			}
+			
+			// ...then move the ships
+			for(var j = 0; j < this.shipArray.length; j++)
+			{
+				this.shipArray[j].translateX(this.enemyMovementSpeed);
+			}
+
+			shootTimer += deltaTime;
+			if(shootTimer >= 1.6)
+			{
+				var randomNumber = Math.floor(Math.random() * this.shipArray.length);
+				var shootingShip = 	this.shipArray[randomNumber];
+				var globalPos = new THREE.Vector3();
+				globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
+				_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
+				shootTimer = 0;
+			}
+			
+			if(enemyProject.length > 0)
+			{
+				for(var i = 0; i < enemyProject.length; i++)
+				{
+					_Ship.prototype.moveEneProjectile(i);
+				}
 			}
 		}
+		
 		
 	}
 	
 	this.cleanup = function()
 	{
+		// remove ships from scene
 		for(var i = 0; i < this.numShips; i++)
 		{
 			scene.remove(this.shipArray[i]);
 			this.shipArray[i] = null;
 		}
+		
+		// remove projectiles from scene
+		for(var i = 0; i < enemyProject.length; i++)
+		{
+			scene.remove(enemyProject[i]);
+		}
+		enemyProject = [];
+		enemyProjectCount = 0;
 	
+		scene.remove(projectile);
+		projPresent = false; 
+		projectile = null;
 	}
 }
 

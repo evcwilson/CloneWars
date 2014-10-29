@@ -17,7 +17,7 @@ var lag = 0.0;
 
 lastFrameTime = Date.now();
 
-
+var exitGame = false;
 
 var targetFrameRate = 1.0/60.0;
 
@@ -44,11 +44,13 @@ $(document).ready(function(){
 function init(){
 // initializers
 initializeScene();
+drawBackground();			// drawBackground() is now called in each state (startState and gameModeState) 
 initializeGame();
 initPlayer(); 
-drawBackground(); 
+
 // setup key inputs
 setupInputKeys();
+
 }
 // Game Loop
 //gameLoop();
@@ -57,7 +59,7 @@ setupInputKeys();
 function gameLoop()
 {
     //alert(canvas.width);
-	if(escapePressed == false)
+	if(exitGame == false)
 	{
 		
 		currentFrameTime = Date.now();
@@ -97,7 +99,7 @@ function calculateFPS()
 		
 		if(Date.now() - timeAtNextSecond >= 1000)			// every one second....
 		{
-			//console.log("Frames Per Second = " + fps );		// ... print the number of frames passed to the console
+			console.log("Frames Per Second = " + fps );		// ... print the number of frames passed to the console
 			fps = 0;																// reset the FPS counter
 			timeAtNextSecond = Date.now();						// reset the time at the next second
 
