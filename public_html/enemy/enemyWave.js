@@ -19,7 +19,17 @@ function enemyWave()
 	this.numShips = 0;
 	this.shipArray = [];
 	this.mainShip; 
+	
+	this.enemyShipSpeed = 0;
+	
 	this.waveReady = false;
+	this.shootTimer = 0;
+	
+	this.xMax = 0;
+	this.xMin = 0;
+	
+	// how frequently to fire shots in seconds
+	this.secondsToShoot = 1.6;
 	
 	this.projectileMaterial = new THREE.MeshBasicMaterial( { color: "green", side : THREE.DoubleSide } );
 
@@ -30,21 +40,71 @@ function enemyWave()
 	this.init = function() { console.log("If you are getting this message in the console, " + 
 										 "that means you did not override the 'run' function in your child " + 
 										 "class '" + this.constructor.name + "'."); };
+				
+	this.run = function() 
+	{
+		// move the ships initially....
+		this.bouncePoint.translateX(this.enemyShipSpeed);
+		
+		// but, if bouncePoint is past limit...
+		if(this.bouncePoint.position.x > this.xMax || this.bouncePoint.position.x < this.xMin)
+		{
+			//reverse movement speed and move bouncePoint back...
+			this.enemyShipSpeed *= -1;
+			this.bouncePoint.translateX(this.enemyShipSpeed);
+		}
+		
+		// ...then move the ships
+		for(var j = 0; j < this.shipArray.length; j++)
+		{
+			this.shipArray[j].translateX(this.enemyShipSpeed);
+		}
+		
+		// fire projectiles randomly
+		this.shootTimer += deltaTime;
+		if(this.shootTimer >= this.secondsToShoot)
+		{
+			var randomNumber = Math.floor(Math.random() * this.shipArray.length);
+			var shootingShip = 	this.shipArray[randomNumber];
+			var globalPos = new THREE.Vector3();
+			globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
+			_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
+			this.shootTimer = 0;
+		}
+
+		// move the projectiles, if any
+		this.moveProjectiles();
+	}
 										 
-	this.run = function() { console.log("If you are getting this message in the console, " + 
-										 "that means you did not override the 'run' function in your child " + 
-										 "class '" + this.constructor.name + "'."); };
-										 
-	this.cleanup = function() { console.log("If you are getting this message in the console, " + 
-										 "that means you did not override the 'cleanup' function in your child " + 
-										 "class '" + this.constructor.name + "'."); };
+	this.cleanup = function() 
+	{ 
+		// remove ships from scene
+		for(var i = 0; i < this.numShips; i++)
+		{
+			scene.remove(this.shipArray[i]);
+			this.shipArray[i] = null;
+		}
+		
+		// remove projectiles from scene
+		for(var i = 0; i < enemyProject.length; i++)
+		{
+			scene.remove(enemyProject[i]);
+		}
+		enemyProject = [];
+		enemyProjectCount = 0;
+		
+		// remove player's projectile from scene
+		scene.remove(projectile);
+		projPresent = false; 
+		projectile = null;
+	}
+	
 	
 	this.checkEnemiesDefeated = function()
 	{
 		return this.numShips == 0;
 	}
-										 
-										 
+	
 	this.checkCollision = function()
 	{	
 		// if a projectile exists
@@ -72,5 +132,17 @@ function enemyWave()
 		}
 		
 	}
+	
+	this.moveProjectiles = function()
+	{
+		if(enemyProject.length > 0)
+		{
+			for(var i = 0; i < enemyProject.length; i++)
+			{
+				_Ship.prototype.moveEneProjectile(i);
+			}
+		}
+	}
 
 }
+

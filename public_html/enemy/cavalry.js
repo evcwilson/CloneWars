@@ -29,7 +29,10 @@ function cavalry(numShipsCavalry, numShipsCohort)
 	var maxShipsPerRow;
 	var allShipsInPosition = false;
 	var stoppingPoint = 0;
-	var shootTimer = 0;
+	
+	this.xMax = 45;
+	this.xMin = -45;
+	
 	this.init = function()
 	{
 	
@@ -163,88 +166,15 @@ function cavalry(numShipsCavalry, numShipsCohort)
 		}
 		else
 		{
-			// move the ships initially....
-			this.bouncePoint.translateX(this.enemyShipSpeed);
+			// run the default enemyWave run() function. add more after function call if necessary
+			cavalry.prototype.run.call(this);
 			
-			//this.mainShip.translateX(this.enemyMovementSpeed);
-			
-			// but, if bouncePoint is past limit...
-			if(this.bouncePoint.position.x > 45 || this.bouncePoint.position.x < -45)
-			{
-				//reverse movement speed and move bouncePoint back...
-				this.enemyShipSpeed *= -1;
-				this.bouncePoint.translateX(this.enemyShipSpeed);
-			}
-			
-			// ...then move the ships
-			for(var j = 0; j < this.shipArray.length; j++)
-			{
-				//if(this.shipArray[j] != null)
-					this.shipArray[j].translateX(this.enemyShipSpeed);
-			}
-			/*
-			// move ships 
-			for(var i = 0; i < this.numShips; i++)
-			{
-				this.shipArray[i].translateX(this.enemyShipSpeed * 0.5);
-				if(maxShipsPerRow == 5)
-				{
-					if( this.mainShip.position.x > 50   || this.mainShip.position.x < -50)
-					{
-						this.enemyShipSpeed *= -1;
-						this.shipArray[i].translateX(this.enemyShipSpeed );
-					}
-				}
-				else if(maxShipsPerRow == 4)
-				{
-					if( this.mainShip.position.x > 70   || this.mainShip.position.x < -10)
-					{
-						this.enemyShipSpeed *= -1;
-						this.shipArray[i].translateX(this.enemyShipSpeed);
-					}
-				}
-				
-			} */
-			
-			// fire projectiles
-			shootTimer += deltaTime;
-			if(shootTimer >= 1.6)
-			{
-				var randomNumber = Math.floor(Math.random() * this.shipArray.length);
-				var shootingShip = 	this.shipArray[randomNumber];
-				var globalPos = new THREE.Vector3();
-				globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
-				_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
-				shootTimer = 0;
-			}
-			
-			if(enemyProject.length > 0)
-			{
-				for(var i = 0; i < enemyProject.length; i++)
-				{
-					_Ship.prototype.moveEneProjectile(i);
-				}
-			}
 		}
 	}
 	
-	this.cleanup = function()
-	{
-		for(var i = 0; i < this.numShips; i++)
-		{
-			scene.remove(this.shipArray[i]);
-			this.shipArray[i] = null;
-		}
-		
-		// remove projectiles from scene
-		for(var i = 0; i < enemyProject.length; i++)
-		{
-			scene.remove(enemyProject[i]);
-		}
-		enemyProject = [];
-		enemyProjectCount = 0;
-	
-	}
+	// uncomment and add to body if additional cleanup is necessary besides what is in the default enemyWave's cleanup function
+	//this.cleanup = function() { this.parent.cleanup.call(this); 
+
 
 
 }

@@ -32,6 +32,7 @@ function level(waveOne, waveTwo, waveThree)
 		{
 			this.enemyWaves[++this.currentWave].init();
 		}
+		
 	}
 	
 	// function to run the current enemy wave in the level

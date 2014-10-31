@@ -17,7 +17,7 @@ function vFormation()
 	this.targetPositions = [];
 	this.allShipsInPosition = false;
 	this.currentMovingShip = 0;
-	this.enemyMovementSpeed = 1.5;
+	this.enemyShipSpeed = 1.5;
 	
 	var vFormGeometry = [ 75, 75 ];
 	var vFormMaterial = new THREE.MeshBasicMaterial( {map: pawnShipSprite, side : THREE.DoubleSide, transparent: true});
@@ -27,7 +27,8 @@ function vFormation()
 	var testBox = new THREE.Mesh( testBoxGeometry, testBoxMaterial );
 	testBox.position.set(0, 80, 1);
 	
-	var shootTimer = 0;
+	this.xMax = 85;
+	this.xMin = -55;
 	
 	// function methods
 	this.init = function()
@@ -105,70 +106,18 @@ function vFormation()
 		// if all the ships are in position
 		else
 		{
-			var speedModifier = -2 ;
-
-			var currentPosition = this.mainShip.position;
+			// run the default enemyWave run() function. add more after function call if necessary
+			vFormation.prototype.run.call(this);
 			
-			// move the ships initially....
-			this.bouncePoint.translateX(this.enemyMovementSpeed);
-			
-			// but, if bouncePoint is past limit...
-			if(this.bouncePoint.position.x > 85 || this.bouncePoint.position.x < -55)
-			{
-				//reverse movement speed and move bouncePoint back...
-				this.enemyMovementSpeed *= -1;
-				this.bouncePoint.translateX(this.enemyMovementSpeed);
-			}
-			
-			// ...then move the ships
-			for(var j = 0; j < this.shipArray.length; j++)
-			{
-				this.shipArray[j].translateX(this.enemyMovementSpeed);
-			}
-			
-			// fire projectiles
-			shootTimer += deltaTime;
-			if(shootTimer >= 1.6)
-			{
-				var randomNumber = Math.floor(Math.random() * this.shipArray.length);
-				var shootingShip = 	this.shipArray[randomNumber];
-				var globalPos = new THREE.Vector3();
-				globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
-				_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
-				shootTimer = 0;
-			}
-			
-			if(enemyProject.length > 0)
-			{
-				for(var i = 0; i < enemyProject.length; i++)
-				{
-					_Ship.prototype.moveEneProjectile(i);
-				}
-			}
 		}
 
 	};
 
-	// cleanup all enemies from memory that this enemy wave created
-	this.cleanup = function()
-	{
-		for(var i = 0; i < this.numShips; i++)
-		{
-			scene.remove(this.shipArray[i]);
-			this.shipArray[i] = null;				// sets shipArray elements to null for garbage collection
-		};
-		
-		// remove projectiles from scene
-		for(var i = 0; i < enemyProject.length; i++)
-		{
-			scene.remove(enemyProject[i]);
-		}
-		enemyProject = [];
-		enemyProjectCount = 0;
-	}
+	// uncomment and add to body if additional cleanup is necessary besides what is in the default enemyWave's cleanup function
+	//this.cleanup = function() { this.parent.cleanup.call(this); 
+
 
 }
 
 vFormation.prototype = new enemyWave();
 vFormation.prototype.constructor = vFormation;
-

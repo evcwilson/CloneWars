@@ -41,6 +41,7 @@ function initializeGame()
 	
 function updateGame()
 {
+	// run the current state of the game
 	stateStack[currentState].run();
 	
 	
@@ -51,15 +52,24 @@ function updateGame()
 	}
 }
 
-function registerState(state)
+function registerState(newState)
 {
-	stateStack[numStates++] = state;
+	// make sure the argument passed into this function is of type 'state'
+	if(newState instanceof state)
+		stateStack[numStates++] = newState;
+	else
+	{
+		console.log(newState.constructor.name + " is not an instance of state");
+	}
 }
 
 
 function nextState()
 {
+	// increment currentState but loop back to 0 if number equals the number of states...
 	currentState = (currentState + 1) % numStates;
+	
+	// then initialize it
 	stateStack[currentState].init();
 }
 

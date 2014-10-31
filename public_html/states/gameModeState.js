@@ -1,4 +1,4 @@
-// GameMode.js
+// GameModeState.js
 /*	
 
 	GameMode is the mode where the player is actively fighting enemy ships. This mode is
@@ -21,6 +21,8 @@
 
 function gameMode()
 {
+	state.call(this);
+	
 	// Variable Declarations
 	var levels = [];
 	var currentLevel = 0;
@@ -28,32 +30,24 @@ function gameMode()
 	
 	var gameOver = false;
 	
-	// camera and scene stuff
-	var viewSize = canvas.height;
-	aspectRatio = canvas.width/canvas.height;
-	this.camera = new THREE.OrthographicCamera( -aspectRatio*viewSize /2, aspectRatio*viewSize/2,viewSize/2, -viewSize/2, -1000, 1000);
-	this.camera.position.set(0,0,0);
-	
-	this.scene = new THREE.Scene();
-	this.scene.add(this.camera);
-	
-	
-	
 	// functions Declarations/Definitions
 	
 	this.init = function()
 	{
-		// Add one level to the game with two enemy waves and initialize the first level's first enemy wave
+		// Add levels to the game
 		addLevel(new cohort(5), new cavalry(2,6), new cohort(10));
 		addLevel(new cavalry(4, 10), new cohort(15), new vFormation());
 		addLevel(new cavalry(6, 16), new diamondFormation(), new cohort(20) );
 		
 		scene = this.scene;
 		camera = this.camera;
+		
 		scene.add(playerMesh);
+		playerMesh.position.set(0,-250,0);
+		
 		levels[currentLevel].initNextEnemyWave();
 		drawBackground();
-		playerMesh.position.set(0,-250,0);
+		
 	}
 
 	this.run = function()
@@ -104,7 +98,7 @@ function gameMode()
 		
 	}
 
-	function cleanupState()
+	this.cleanupState = function()
 	{
 		// cleanup and reset everything to clear memory used in this state
 		levels[currentLevel].cleanup();
@@ -120,14 +114,14 @@ function gameMode()
 		// check if something occured to end the game
 		if(gameOver == true)
 		{
-			cleanupState();		
+			this.cleanupState();		
 			return true;
 		}
 		
 		// check if escape was pressed. If so, cleanup the state and return true
 		if(escapePressed == true)
 		{
-			cleanupState();
+			this.cleanupState();
 			escapePressed = false;
 			return true;
 		}
@@ -152,3 +146,6 @@ function gameMode()
 		numLevels++;
 	}
 }
+
+gameMode.prototype = new state();
+gameMode.prototype.constructor = gameMode;

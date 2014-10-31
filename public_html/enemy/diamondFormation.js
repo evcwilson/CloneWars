@@ -27,7 +27,8 @@ function diamondFormation()
 	
 	this.enemyShipSpeed = 1.2;
 
-	var shootTimer = 0;
+	this.xMax = 80;
+	this.xMin = -80;
 	
 	this.init = function()
 	{
@@ -114,13 +115,13 @@ function diamondFormation()
 	
 	this.run = function()
 	{
-		
+			
 		// Set triangle's X and Y positions
 		if(this.bossShipMesh)
 			this.mainShip.translateX(this.enemyShipSpeed);
 		
 		// Check if triangle is past the border
-		if(this.mainShip.position.x > borderWidth  - 105 || this.mainShip.position.x < -borderWidth + 105 )	
+		if(this.mainShip.position.x > this.xMax || this.mainShip.position.x < this.xMin )	
 		{
 				this.enemyShipSpeed *= -1;
 				this.mainShip.translateX(this.enemyShipSpeed);
@@ -153,27 +154,21 @@ function diamondFormation()
 				this.targetNextLerpPoint(this.pawnShipArray[i]);
 			}
 		}
-		// shoot projectiles
 		
-		shootTimer += deltaTime;
-			if(shootTimer >= 1.6)
-			{
-				var randomNumber = Math.floor(Math.random() * this.shipArray.length);
-				var shootingShip = 	this.shipArray[randomNumber];
-				var globalPos = new THREE.Vector3();
-				globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
-				_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
-				shootTimer = 0;
-			}
+		// shoot projectiles
+		this.shootTimer += deltaTime;
+		if(this.shootTimer >= 1.6)
+		{
+			var randomNumber = Math.floor(Math.random() * this.shipArray.length);
+			var shootingShip = 	this.shipArray[randomNumber];
+			var globalPos = new THREE.Vector3();
+			globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
+			_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
+			this.shootTimer = 0;
+		}
+		
+		this.moveProjectiles(this);
 			
-			if(enemyProject.length > 0)
-			{
-				for(var i = 0; i < enemyProject.length; i++)
-				{
-					_Ship.prototype.moveEneProjectile(i);
-				}
-			}
-	
 	};
 	
 
@@ -231,6 +226,8 @@ function diamondFormation()
 		}
 		enemyProject = [];
 		enemyProjectCount = 0;
+		
+		
 	}
 
 }

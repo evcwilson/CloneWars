@@ -5,18 +5,19 @@
 	enemy waves will contain. This setup is done immediately after this class is defined
 	
 	Cohorts is the basic block formation, placing enemies in rows of 5 each, so it's best to
-	declare 'num' to be a multiple of 5 when create a new cohort() enemy wave.
+	declare 'num' to be a multiple of 5 when creating a new cohort() enemy wave.
 	
 */
 
 
 function cohort(num)
 {
-	
+	// call parent class's constructor
 	enemyWave.call(this);
 	
+	
 	this.numShips = num;
-	this.enemyMovementSpeed = 1.5;
+	this.enemyShipSpeed = 1.5;
 	
 									
 	this.allShipsInPosition = false;
@@ -33,9 +34,8 @@ function cohort(num)
 														} 
 														);
 	
-	var shootTimer = 0;
-	
-	
+	this.xMax = 125;
+	this.xMin = -30;
 	
 	this.init = function()
 	{
@@ -112,69 +112,15 @@ function cohort(num)
 		// ...then move the ships horizontally
 		else
 		{
-			// move the ships initially....
-			this.bouncePoint.translateX(this.enemyMovementSpeed);
-			
-			//this.mainShip.translateX(this.enemyMovementSpeed);
-			
-			// but, if bouncePoint is past limit...
-			if(this.bouncePoint.position.x > 125 || this.bouncePoint.position.x < -30)
-			{
-				//reverse movement speed and move bouncePoint back...
-				this.enemyMovementSpeed *= -1;
-				this.bouncePoint.translateX(this.enemyMovementSpeed);
-			}
-			
-			// ...then move the ships
-			for(var j = 0; j < this.shipArray.length; j++)
-			{
-				this.shipArray[j].translateX(this.enemyMovementSpeed);
-			}
-
-			shootTimer += deltaTime;
-			if(shootTimer >= 1.6)
-			{
-				var randomNumber = Math.floor(Math.random() * this.shipArray.length);
-				var shootingShip = 	this.shipArray[randomNumber];
-				var globalPos = new THREE.Vector3();
-				globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
-				_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
-				shootTimer = 0;
-			}
-			
-			if(enemyProject.length > 0)
-			{
-				for(var i = 0; i < enemyProject.length; i++)
-				{
-					_Ship.prototype.moveEneProjectile(i);
-				}
-			}
+			// run the default enemyWave run() function. add more after function call if necessary
+			cohort.prototype.run.call(this);
 		}
+		
 		
 		
 	}
-	
-	this.cleanup = function()
-	{
-		// remove ships from scene
-		for(var i = 0; i < this.numShips; i++)
-		{
-			scene.remove(this.shipArray[i]);
-			this.shipArray[i] = null;
-		}
-		
-		// remove projectiles from scene
-		for(var i = 0; i < enemyProject.length; i++)
-		{
-			scene.remove(enemyProject[i]);
-		}
-		enemyProject = [];
-		enemyProjectCount = 0;
-	
-		scene.remove(projectile);
-		projPresent = false; 
-		projectile = null;
-	}
+	// uncomment and add to body if additional cleanup is necessary besides what is in the default enemyWave's cleanup function
+	//this.cleanup = function() { this.parent.cleanup.call(this); 
 }
 
 cohort.prototype = new enemyWave();
