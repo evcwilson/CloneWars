@@ -9,6 +9,19 @@
 		1.) init() - this setups up the wave, initializes the array of ships, sets main ship, etc
 		2.) run()  - this processes the behavior of the ships in the enemy wave, whatever it may be.
 		3.) cleanup() - sets leftover ships and important variable to null for garbage collection
+		
+	Additional notes:
+	---------------------------
+	Collision checking - the function to check collisions is checkCollision(). It will only check for
+		collisions if there is a player projectile present AND if the waveReady variable equals true
+		(waveReady is usually false until all the enemy ships are in position to avoid being shot while
+		the enemy ships are flying in the scene. Enable this variable in the derived objects so collision
+		detection will work.)
+		
+	Speeding up - if this.speedUp equals true, the ships' enemyShipSpeed will increase every time an
+		enemy ship is destroyed. This variable is false by default.
+	
+	
 
 */
 
@@ -20,6 +33,7 @@ function enemyWave()
 	this.shipArray = [];
 	this.mainShip; 
 	
+	// 
 	this.enemyShipSpeed = 0;
 	
 	this.waveReady = false;
@@ -28,7 +42,9 @@ function enemyWave()
 	this.xMax = 0;
 	this.xMin = 0;
 	
-	// how frequently to fire shots in seconds
+	this.speedUp = false;
+	
+	// how frequent to fire shots in seconds
 	this.secondsToShoot = 1.6;
 	
 	this.projectileMaterial = new THREE.MeshBasicMaterial( { color: "green", side : THREE.DoubleSide } );
@@ -43,6 +59,7 @@ function enemyWave()
 				
 	this.run = function() 
 	{
+		/*
 		// move the ships initially....
 		this.bouncePoint.translateX(this.enemyShipSpeed);
 		
@@ -53,11 +70,31 @@ function enemyWave()
 			this.enemyShipSpeed *= -1;
 			this.bouncePoint.translateX(this.enemyShipSpeed);
 		}
-		
+		*/
 		// ...then move the ships
 		for(var j = 0; j < this.shipArray.length; j++)
 		{
 			this.shipArray[j].translateX(this.enemyShipSpeed);
+		}
+		
+		// ...check if any ship reached any border
+		var passedBorder = false;
+		for(var j = 0; j < this.shipArray.length; j++)
+		{
+			if(this.shipArray[j].position.x > 225 || this.shipArray[j].position.x < -225)
+			{
+				passedBorder = true;
+			}
+		}
+		
+		if(passedBorder == true)
+		{
+			this.enemyShipSpeed *= -1;
+			// ...then move the ships
+			for(var j = 0; j < this.shipArray.length; j++)
+			{
+				this.shipArray[j].translateX(this.enemyShipSpeed);
+			}
 		}
 		
 		// fire projectiles randomly
@@ -117,20 +154,30 @@ function enemyWave()
 				if(Math.abs(ship.position.y - projectile.position.y) < 20
 					&& Math.abs(ship.position.x - projectile.position.x) < 20)
 				{
+					// remove ship from scene and shipArray
 					scene.remove(this.shipArray[i]);
 					this.shipArray.splice(i,1);
 					this.numShips--;
 					
-					
+					// remove projectile from scene and set projectile flag to false
 					scene.remove(projectile);
 					projPresent = false; 
 					projectile = null;
+					
+					// increase enemyShipSpeed, if speedUp is true
+					if(this.speedUp == true)
+					{
+						if(this.enemyShipSpeed > 0)
+							this.enemyShipSpeed += this.deltaShipSpeed;
+						else
+							this.enemyShipSPeed -= this.deltaShipSpeed;
+					}
+					
+					hud.updateScore(30);
 					break;
 				}
 			}
-		
 		}
-		
 	}
 	
 	this.moveProjectiles = function()

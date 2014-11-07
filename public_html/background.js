@@ -11,7 +11,7 @@ function _Screen(width, height){
     return this; 
 }
 
-function drawBackground(){
+function drawBackground(_scene){
     
     var particleCount = 700,
         particles = new THREE.Geometry(),
@@ -37,8 +37,9 @@ function drawBackground(){
         particleSystem = new THREE.ParticleSystem(particles, pMaterial);
         
         particleSystem.sortParticles = true; 
-        
-        
-        scene.add(particleSystem); 
+
+		_scene.add(particleSystem); 
+		//scene.add(particleSystem);
+			
 }
 

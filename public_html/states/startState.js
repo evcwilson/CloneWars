@@ -12,34 +12,42 @@ function startMode()
 	state.call(this);
 	
 	this.scene.add(this.logoMesh);
-	
+	drawBackground(this.scene);
 	this.init = function()
 	{
 		scene = this.scene;
 		camera = this.camera;
-		drawBackground();
 	}
 	
 	this.run = function()
 	{
 		
 		
-		
 	}
 	
 	this.exit = function()
 	{
-		if(keyPressedEnter == true)
-		{
-			keyPressedEnter = false;
-			scene.remove(particleSystem);
-			return true;
-		}
 		if(escapePressed == true)
 		{
 			escapePressed = false;
 			exitGame = true;
 		}
+	}
+	
+	this.nextState = function()
+	{
+		if(keyPressedEnter == true)
+		{
+			keyPressedEnter = false;
+			//scene.remove(particleSystem);
+			//hud.removeFromScene();
+			return true;
+		}
+		if(keyPressedLeft == true)
+		{
+			
+		}
+	
 	}
 
 

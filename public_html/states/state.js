@@ -18,6 +18,8 @@ function state()
 	var logoGeometry = new THREE.PlaneGeometry(600, 380);
 	var logoMaterial = new THREE.MeshBasicMaterial( {map: logoSprite, transparent: true});
 	this.logoMesh = new THREE.Mesh(logoGeometry,logoMaterial);
+	
+	
 
 	// camera and scene stuff
 	var viewSize = canvas.height;
@@ -42,6 +44,19 @@ function state()
 		console.log("If you are seeing this message in the console, that means " +
 		"you did not override the 'run' function in your child class " + 
 		this.constructor.name + ".");
+	
+	}
+	
+	this.nextState = function()
+	{
+	
+	
+	}
+	
+	this.paused = function()
+	{
+		
+	
 	
 	}
 	

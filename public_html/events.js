@@ -8,6 +8,7 @@ var keyPressedDown = false;
 var keyPressedUp = false;
 var keyPressedSpace = false; 
 var keyPressedEnter = false;
+var keyPressedBackspace = false;
 
 function setupInputKeys()
 {
@@ -36,6 +37,10 @@ function setupInputKeys()
 		{
 			keyPressedEnter = true;
 		}
+		if(evt.keyCode == 8)
+		{
+			keyPressedBackspace = true;
+		}
 	};
 	
 	document.onkeyup = function(evt)
@@ -59,6 +64,11 @@ function setupInputKeys()
 		{
 			keyPressedEnter = false;
 		}
+		
+		if(evt.keyCode == 8)
+		{
+			escapePressed = false;
+		}
 	
 	}
 
@@ -72,41 +82,6 @@ function processEvents()
 {
 	if( !document.hasFocus() )
 		releaseAllKeys();
-		
-	var velocity = new THREE.Vector2(0,0);
-	
-	// check for single key presses
-	if(keyPressedRight == true)
-	{ 
-		velocity.set(+1, 0);
-	}
-	else if(keyPressedUp == true)
-	{
-		velocity.set(0, 1);
-	}
-	else if(keyPressedLeft == true)
-	{
-		velocity.set(-1, 0);
-	}
-	else if(keyPressedDown == true)
-	{
-		velocity.set(0, -1);
-	}
-	
-	// check for double-axes key presses
-	if(keyPressedLeft && keyPressedUp)
-		velocity.set(-.707, +.707);
-	else if(keyPressedLeft && keyPressedDown)
-		velocity.set(-.707, -.707);
-	else if(keyPressedRight && keyPressedUp)
-		velocity.set(.707, +.707);
-	else if(keyPressedRight && keyPressedDown)
-		velocity.set(.707, -.707);
-	
-	shipVelocity = velocity;
-		
-	// finally call moveShip()
-	//moveShip(velocity);
 }
 
 
@@ -117,6 +92,7 @@ function releaseAllKeys()
     keyPressedLeft = false;
     keyPressedDown = false;
     keyPressedUp = false;
+	
 }
 
 function resizeCanvas()

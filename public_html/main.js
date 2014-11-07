@@ -44,8 +44,9 @@ $(document).ready(function(){
 function init(){
 // initializers
 initializeScene();
-drawBackground();			// drawBackground() is now called in each state (startState and gameModeState) 
 initializeGame();
+//drawBackground();			// drawBackground() is now called in each state (startState and gameModeState) 
+
 initPlayer(); 
 
 // setup key inputs

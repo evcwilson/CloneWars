@@ -1,31 +1,36 @@
 /*
-	cohorts
+	chargingCohort.js
 	
-	cohorts is a child class of the super class 'enemyWave', that contains properties that all future 
-	enemy waves will contain. This setup is done immediately after this class is defined
+	chargingCohort is a child class of the super class 'enemyWave', that contains properties that all future 
+	enemy waves will contain. This setup is done immediately after this class is defined.
 	
-	Cohorts is the basic block formation, placing enemies in rows of 5 each, so it's best to
-	declare 'num' to be a multiple of 5 when creating a new cohort() enemy wave.
+	chargingCohort is similar to the enemy wave 'cohort', with the following modifications:
+	1.) enemy ship size is smaller and closer together
+	2.) ships are closer together, number of enemies is recommended to be a multiple of 8
+	3.) the ships will speed up when one enemy ship is destroyed
+	4.) the ships will slowly descend closer to the player ship
+	
 	
 */
 
 
-function cohort(num)
+function chargingCohort(num)
 {
 	// call parent class's constructor
 	enemyWave.call(this);
 	
 	
 	this.numShips = num;
-	this.enemyShipSpeed = 1.5;
-	
+	this.enemyShipSpeed = 1.0;
+	this.deltaShipSpeed = 25/(100-this.numShips);
+	this.speedUp = true;
 									
 	this.allShipsInPosition = false;
 	
-	this.targetPosition = new THREE.Vector3(-15, 60, 1);
+	this.targetPosition = new THREE.Vector3(0, 60, 1);
 
 	// ship and projectile geometry and material
-	var smallShipGeometry = [50,50];
+	var smallShipGeometry = [40,40];
 	var smallShipMaterial = new THREE.MeshBasicMaterial( 
 														{ 
 															map: pawnShipSprite, 
@@ -34,14 +39,14 @@ function cohort(num)
 														} 
 														);
 	
-	this.xMax = 125;
+	this.xMax = 65;
 	this.xMin = -30;
 	
 	this.init = function()
 	{
 		var xInitPos = -190;
 		var yInitPos = 600;
-		var xDelta = 70;
+		var xDelta = 50;
 		var yDelta = 0;
 		
 			
@@ -58,15 +63,15 @@ function cohort(num)
 		
 		for(var i = 1; i < this.numShips; i++)
 		{
-			if( (i % 5) == 0)
+			if( (i % 8) == 0)
 			{
 				xDelta = 0;
-				yDelta += 50;
+				yDelta += 40;
 			}
 			
 			// set each ship relative to the position of the mainship
 			this.shipArray[i].position.set(xDelta, yDelta, 1);
-			xDelta += 70;
+			xDelta += 50;
 			
 			// add the ships as a child of the first ship
 			this.shipArray[0].add(this.shipArray[i]);
@@ -112,8 +117,22 @@ function cohort(num)
 		// ...then move the ships horizontally
 		else
 		{
+			var oldSpeed = this.enemyShipSpeed;
+			
 			// run the default enemyWave run() function. add more after function call if necessary
-			cohort.prototype.run.call(this);
+			cohort.prototype.run.call(this, true);
+			
+			// check if the enemyShipSpeed changed. If so, move ships downward
+			if(this.enemyShipSpeed != oldSpeed)
+			{
+				for(var i = 0; i < this.shipArray.length; i++)
+				{
+					this.shipArray[i].translateY(-7);
+					if(this.shipArray[i].position.y < -250)
+						stateStack[currentState].gameOver = true;
+				}
+			}
+			
 		}
 		
 		
@@ -123,5 +142,6 @@ function cohort(num)
 	//this.cleanup = function() { this.parent.cleanup.call(this); 
 }
 
-cohort.prototype = new enemyWave();
-cohort.prototype.constructor = cohort;
+chargingCohort.prototype = new enemyWave();
+chargingCohort.prototype.constructor = chargingCohort;
+

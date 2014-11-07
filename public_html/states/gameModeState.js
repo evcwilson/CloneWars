@@ -28,26 +28,30 @@ function gameMode()
 	var currentLevel = 0;
 	var numLevels = 0;
 	
-	var gameOver = false;
+	
+	this.gameOver = false;
 	
 	// functions Declarations/Definitions
+	
 	
 	this.init = function()
 	{
 		// Add levels to the game
-		addLevel(new cohort(5), new cavalry(2,6), new cohort(10));
-		addLevel(new cavalry(4, 10), new cohort(15), new vFormation());
-		addLevel(new cavalry(6, 16), new diamondFormation(), new cohort(20) );
+		addLevel(new cohort(5), 		new cavalry(2,6), 		new chargingCohort(8));
+		addLevel(new cohort(10), 		new cavalry(2,8), 		new chargingCohort(16));
+		addLevel(new cavalry(4, 10), 	new cohort(15), 		new vFormation());
+		addLevel(new cavalry(6, 16), 	new diamondFormation(), new cohort(20) );
+		addLevel(new cavalry(8, 25), 	new cohort(25), 		new chargingCohort(40) );
+		
 		
 		scene = this.scene;
 		camera = this.camera;
-		
+		drawBackground(this.scene);
 		scene.add(playerMesh);
 		playerMesh.position.set(0,-250,0);
 		
 		levels[currentLevel].initNextEnemyWave();
-		drawBackground();
-		
+		hud.addToScene(scene);
 	}
 
 	this.run = function()
@@ -72,7 +76,7 @@ function gameMode()
 				if(checkLastLevel() == true)
 				{
 					//if not, game is over and go to the next state
-					gameOver = true;
+					this.gameOver = true;
 					return;
 				}
 				else
@@ -105,24 +109,28 @@ function gameMode()
 		levels.length = 0;
 		currentLevel = 0;
 		numLevels = 0;
-		gameOver = false;
+		this.gameOver = false;
 		scene.remove(particleSystem);
+	}
+	
+	this.paused = function()
+	{
+		if(escapePressed == true)
+		{
+			escapePressed = false;
+			return true;
+		}
+	
+	
 	}
 	
 	this.exit = function()
 	{
 		// check if something occured to end the game
-		if(gameOver == true)
+		if(this.gameOver == true)
 		{
-			this.cleanupState();		
-			return true;
-		}
-		
-		// check if escape was pressed. If so, cleanup the state and return true
-		if(escapePressed == true)
-		{
-			this.cleanupState();
-			escapePressed = false;
+			this.cleanupState();	
+			hud.reset();
 			return true;
 		}
 	}

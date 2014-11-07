@@ -21,9 +21,23 @@
 var borderWidth= 0.0;
 var borderHeight = 0.0;
 
-var currentState = 0;
-var stateStack = [];
+// STATE REGISTER
+var stateRegister = []; // keeps list of states the game will ever use.
+var statePointer = 0;	// points to the currently active State in the list of registered states
+
+// STATE STACK
+var stateStack = [];	// keeps list of ACTIVE states
+var currentState;		// will point to the last state in the list of ACTIVE states
+
 var numStates = 0;
+
+var gamePaused = false;
+var gameRestart = false;
+
+// SCORE STUFF
+var hud = new hudObject();
+var playerScore = "000000";
+var hiScore = "5000";
 
 function initializeGame()
 {
@@ -32,45 +46,122 @@ function initializeGame()
 	
 	registerState(new startMode());
 	registerState(new gameMode());
-	// registerState(new pausedState() ); 		// for future use
+	registerState(new pausedMode() );
 	// registerState(new creditsState() );		// for future use
 	
-	stateStack[currentState].init();
+	pushState(stateRegister[0]);
+	
+	stateStack[statePointer].init();
+	
 }
 
 	
 function updateGame()
 {
+	currentState = stateStack.length - 1;
+	
 	// run the current state of the game
 	stateStack[currentState].run();
 	
+	// if something triggers the game to proceed to the next State
+	if( stateStack[currentState].nextState() == true)
+	{
+		nextState();
+		return;
+	}
+	
+	// check if something made the game pause
+	if(stateStack[currentState].paused() == true)
+	{
+		// if so, push the next registered state in the list
+		pushState(stateRegister[++statePointer]);
+		stateStack[stateStack.length - 1].init();
+		gamePaused = true;
+		return;
+	}
 	
 	// if something triggers the game to exit the current state
 	if( stateStack[currentState].exit() == true)
-	{
-		nextState();
+	{	
+		// if player exits the game from Paused menu
+		if(gameRestart == true)
+		{
+			restartGame();			
+		}
+		else
+		{
+			// remove the state from the stateStack
+			popState();
+
+			// check if the statePointer points to the very first state in the register already
+			if(statePointer == 0)
+			{
+				exitGame = true;
+			}
+			else	// if not...
+			{	
+				// ...check if the game is paused...
+				if(gamePaused == true)
+				{
+					// ...push state pointer to the previous state in the registered state list
+					statePointer--;
+					gamePaused = false;
+				}
+				else
+				{
+					// ...or push the previous state into the list of active states
+					pushState(stateRegister[--statePointer]);
+				}
+			}
+		}
 	}
+	
+	
 }
 
 function registerState(newState)
 {
 	// make sure the argument passed into this function is of type 'state'
 	if(newState instanceof state)
-		stateStack[numStates++] = newState;
+		stateRegister[stateRegister.length] = newState;
 	else
 	{
 		console.log(newState.constructor.name + " is not an instance of state");
 	}
 }
 
+function pushState(_state)
+{
+	var cur = stateStack.length;
+	stateStack[cur] = _state;
+	numStates++;
+}
+
+function popState()
+{
+	var stackLength = stateStack.length - 1;
+	stateStack.splice(stackLength, 1);
+	numStates--;
+}
 
 function nextState()
 {
-	// increment currentState but loop back to 0 if number equals the number of states...
-	currentState = (currentState + 1) % numStates;
-	
-	// then initialize it
-	stateStack[currentState].init();
+	var stackLength = stateStack.length - 1;
+	popState();
+	pushState(stateRegister[++statePointer]);
+	stateStack[stackLength].init();
+}
+
+function restartGame()
+{
+	stateStack[0].cleanupState();
+	stateStack.length = [];
+	statePointer = 0;
+	numStates = 0;
+	pushState(stateRegister[0]);
+	stateStack[0].init();
+	gameRestart = false;
+	gamePaused = false;
 }
 
 

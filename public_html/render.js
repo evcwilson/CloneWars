@@ -24,14 +24,14 @@ function initializeScene()
 	
 	var viewSize = canvas.height;
 	aspectRatio = canvas.width/canvas.height;
-	camera = new THREE.OrthographicCamera( -aspectRatio*viewSize /2, aspectRatio*viewSize/2,
+	/*camera = new THREE.OrthographicCamera( -aspectRatio*viewSize /2, aspectRatio*viewSize/2,
 																			viewSize/2, -viewSize/2, 
-																			-1000, 1000);
-	camera.position.set(0,00,0);
+																			-1000, 1000);*/
+	//camera.position.set(0,00,0);
 	
 	
-	scene = new THREE.Scene();
-	scene.add(camera);
+	//scene = new THREE.Scene();
+	//scene.add(camera);
 	
 	
 	
@@ -48,5 +48,10 @@ function initializeScene()
 
 function render()
 {
-	renderer.render(scene, camera);
+	for(var i = 0; i < numStates; i ++)
+	{
+		camera = stateStack[i].camera;
+		scene = stateStack[i].scene;
+		renderer.render(scene, camera);
+	}
 }	
