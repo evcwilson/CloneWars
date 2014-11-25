@@ -9,7 +9,8 @@ var file = 'audio/Sounds/pacman_beginning.wav',
         player_fire_file = 'audio/Sounds/PlayerFire.wav',
         bufferLoader,
         context, 
-        request;
+        request,
+        BufferL = [];
 
 var menuMusic,
         player_fire;
@@ -37,12 +38,13 @@ function initSound(){
 function finishedLoading(bufferList){
    
     menuMusic = context.createBufferSource(); 
-    player_fire = context.createBufferSource(); 
+    
+    
     menuMusic.buffer = bufferList[0];
-    player_fire.buffer = bufferList[1];
+    BufferL["player_fire"] = bufferList[1];
      
     menuMusic.connect(context.destination);
-    player_fire.connect(context.destination);
+    
     
     startMenuMusic();
     
@@ -50,7 +52,7 @@ function finishedLoading(bufferList){
         
 function startMenuMusic(){
                     
-        menuMusic.loop = true;
+        menuMusic.loop = true; 
         menuMusic.start(0);
 }
 
@@ -59,6 +61,9 @@ function stopMenuMusic(){
 }
 
 function PlayerFire(){
+    player_fire = context.createBufferSource(); 
+    player_fire.buffer = BufferL["player_fire"];
+    player_fire.connect(context.destination);
     player_fire.loop = false; 
     player_fire.playbackRate.value = 1; 
         player_fire.start(0);

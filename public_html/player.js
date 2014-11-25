@@ -49,7 +49,7 @@ function playerUpdate(){
      
     if(keyPressedSpace && projPresent == false || powerup == true){
         projPresent = true; 
-        //PlayerFire();
+        PlayerFire();
         _Ship.prototype.playerProjectile(playerMesh.position.x,
         playerMesh.position.y + 10, new THREE.MeshBasicMaterial({color:'white'}));
     }
