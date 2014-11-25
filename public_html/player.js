@@ -8,7 +8,7 @@ var playerMaterial;
 var playerMesh; 
 var playerImage,
     playerHealth = 3,
-    speed = 2.0,
+    speed = 2.5,
     powerup = false; 
 
 var projGeo,
@@ -44,12 +44,12 @@ function playerUpdate(){
     if(playerMesh.position.x < -220){playerMesh.position.x += speed}
     //Prevents passing the right border
     else if (playerMesh.position.x > 220){playerMesh.position.x -=speed}
-    else if (keyPressedRight){ playerMesh.position.x+=2.5;}
-    else if (keyPressedLeft) { playerMesh.position.x-=2.5;}
+    else if (keyPressedRight){ playerMesh.position.x+=speed;}
+    else if (keyPressedLeft) { playerMesh.position.x-=speed;}
      
     if(keyPressedSpace && projPresent == false || powerup == true){
         projPresent = true; 
-        //PlayerFire();
+        PlayerFire();
         _Ship.prototype.playerProjectile(playerMesh.position.x,
         playerMesh.position.y + 10, new THREE.MeshBasicMaterial({color:'white'}));
     }
