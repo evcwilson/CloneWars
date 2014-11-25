@@ -24,9 +24,9 @@ function setupInputKeys()
 		if(evt.keyCode == 40 || evt.keyCode == 83){
 			keyPressedDown = true;
                     }
-                if(evt.keyCode == 32){
-                        keyPressedSpace = true; 
-                }
+		if(evt.keyCode == 32){
+			keyPressedSpace = true; 
+		}
 			
 		if(evt.keyCode == 27)
 		{
@@ -50,24 +50,30 @@ function setupInputKeys()
 		
 		if(evt.keyCode == 37 || evt.keyCode == 65)
 			keyPressedLeft = false;
-                    
-                if (evt.keyCode == 32)
-                        keyPressedSpace = false; 
+        
 		
-		if(evt.keyCode == 38)
+		if(evt.keyCode == 38 || evt.keyCode == 87)
 			keyPressedUp = false;
 			
-		if(evt.keyCode == 40)
+		if(evt.keyCode == 40 || evt.keyCode == 83)
 			keyPressedDown = false;
 			
 		if(evt.keyCode == 13)
 		{
 			keyPressedEnter = false;
 		}
+		             
+		if (evt.keyCode == 32 )
+			keyPressedSpace = false;
+		
+		if(evt.keyCode == 27)
+		{
+			escapePressed = false;
+		}
 		
 		if(evt.keyCode == 8)
 		{
-			escapePressed = false;
+			keyPressedBackspace = false;
 		}
 	
 	}
@@ -92,6 +98,7 @@ function releaseAllKeys()
     keyPressedLeft = false;
     keyPressedDown = false;
     keyPressedUp = false;
+	escapePressed = false;
 	
 }
 

@@ -9,7 +9,8 @@ var playerMesh;
 var playerImage,
     playerHealth = 3,
     speed = 2.5,
-    powerup = false; 
+    powerup = false,
+	playerLives = 1; 
 
 var projGeo,
     projMaterial,
@@ -40,12 +41,13 @@ playerMesh.position.set(0,-250,0);
 
 //Updates player movement with each game loop
 function playerUpdate(){
+	if (keyPressedRight){ playerMesh.position.x+=speed;}
+    else if (keyPressedLeft) { playerMesh.position.x-=speed;}
+	
     //Prevents passing the left border
     if(playerMesh.position.x < -220){playerMesh.position.x += speed}
     //Prevents passing the right border
     else if (playerMesh.position.x > 220){playerMesh.position.x -=speed}
-    else if (keyPressedRight){ playerMesh.position.x+=speed;}
-    else if (keyPressedLeft) { playerMesh.position.x-=speed;}
      
     if(keyPressedSpace && projPresent == false || powerup == true){
         projPresent = true; 

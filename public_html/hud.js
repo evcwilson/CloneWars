@@ -22,6 +22,11 @@ function hudObject()
 	var playerScoreTextGeometry = new THREE.TextGeometry( playerScoreText, { size: 10, height: 25, font: 'arkitech medium' });
 	var playerScoreTextMesh = new THREE.Mesh( playerScoreTextGeometry ,textMaterial);
 	
+	// player lives stuff
+	var playerLivesPosition = new THREE.Vector3();
+	playerLivesPosition.set(220, 280, 1);
+	var playerLivesArray = [];
+	var playerLivesNum = 0;
 	
 	// registered array of numbers to use for hud
 	var numberArray =
@@ -106,9 +111,9 @@ function hudObject()
 	}
 	
 	
-	this.updateScore = function(num)
+	this.updateScore = function(num)		// num is the value of points for killing certain ship. updateScore() is called from enemywave.checkCollision()
 	{
-		playerScore += num || 0;
+		playerScore += num || 0;			
 		var scoreString = playerScore.toString();
 		var stringLength = scoreString.length;
 		
@@ -344,5 +349,28 @@ function hudObject()
 	{
 		playerScore = 000000;
 		this.resetScore();
+	}
+	
+	this.displayPlayerLives = function()
+	{
+		var i;
+		var playerLivesMesh;
+		var playerGeometry = new THREE.PlaneGeometry(36,36,32);
+		var playerTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.gif');
+		
+		for(i = 0; i < playerLivesNum; i++)
+		{
+			playerLivesMesh = new THREE.Mesh( playerGeometry, new THREE.MeshBasicMaterial({transparent: true, map: playerTexture}) );
+			playerLivesArray[i] = playerLivesMesh;
+			scene.add(playerLivesArray[i]);
+			playerLivesArray[i].position.copy(playerLivesPosition);
+			playerLivesPosition.x -= 45;
+		}
+	}
+	
+	this.setPlayerLives = function(num)
+	{
+		playerLivesNum = num;
+		this.displayPlayerLives();
 	}
 }

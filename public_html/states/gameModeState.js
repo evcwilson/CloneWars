@@ -130,7 +130,7 @@ function gameMode()
 	
 	this.exit = function()
 	{
-		// check if something occured to end the game
+		// check if something occurred to end the game
 		if(this.gameOver == true)
 		{
 			this.cleanupState();	

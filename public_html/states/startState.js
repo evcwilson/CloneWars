@@ -27,11 +27,12 @@ function startMode()
 	
 	this.exit = function()
 	{
-		if(escapePressed == true)
+		// Commenting out this section - no need to make game exit on start state. Tim Matthews 11/25
+		/*if(escapePressed == true)
 		{
 			escapePressed = false;
 			exitGame = true;
-		}
+		}*/
 	}
 	
 	this.nextState = function()
