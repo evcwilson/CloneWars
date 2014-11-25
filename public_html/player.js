@@ -10,7 +10,7 @@ var playerImage,
     playerHealth = 3,
     speed = 2.5,
     powerup = false,
-	playerLives = 1; 
+	playerLives = 2; 
 
 var projGeo,
     projMaterial,

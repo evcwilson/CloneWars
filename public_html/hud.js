@@ -107,6 +107,7 @@ function hudObject()
 		
 		
 		this.updateHiScore();
+		this.setPlayerLives(playerLives);
 
 	}
 	
@@ -349,28 +350,39 @@ function hudObject()
 	{
 		playerScore = 000000;
 		this.resetScore();
+		
+		// remove player lives meshes from scene and empty the player lives array
+		for(var i = 0; i < playerLivesArray.length; i++)
+		{
+			scene.remove(playerLivesArray[i]);
+		}
+		playerLivesArray = [];
 	}
 	
-	this.displayPlayerLives = function()
-	{
-		var i;
-		var playerLivesMesh;
-		var playerGeometry = new THREE.PlaneGeometry(36,36,32);
-		var playerTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.gif');
-		
-		for(i = 0; i < playerLivesNum; i++)
-		{
-			playerLivesMesh = new THREE.Mesh( playerGeometry, new THREE.MeshBasicMaterial({transparent: true, map: playerTexture}) );
-			playerLivesArray[i] = playerLivesMesh;
-			scene.add(playerLivesArray[i]);
-			playerLivesArray[i].position.copy(playerLivesPosition);
-			playerLivesPosition.x -= 45;
-		}
-	}
 	
 	this.setPlayerLives = function(num)
 	{
+		// sets the number passed in to the number of player lives in this hud object
 		playerLivesNum = num;
-		this.displayPlayerLives();
+		
+		// prepares player lives variables
+		
+		var playerLivesMesh;
+		var playerLivesGeometry = new THREE.PlaneGeometry(36,36,32);
+		var playerLivesTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.gif');
+		
+		
+		// creates new player lives meshes 
+		var i;
+		for(i = 0; i < playerLivesNum; i++)
+		{
+			playerLivesMesh = new THREE.Mesh( playerLivesGeometry, new THREE.MeshBasicMaterial({transparent: true, map: playerLivesTexture}) );
+			playerLivesArray[i] = playerLivesMesh;
+			scene.add(playerLivesArray[i]);
+			playerLivesArray[i].position.copy(playerLivesPosition);
+			playerLivesArray[i].position.setX(playerLivesPosition.x - (45 * i) );
+			
+		}	
+		
 	}
 }
