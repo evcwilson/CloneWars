@@ -56,6 +56,7 @@ function gameMode()
 
 	this.run = function()
 	{	
+                
 		// check if all enemies are defeated in the current enemyWave
 		var enemiesDefeated = levels[currentLevel].checkEnemiesDefeated()
 		if( enemiesDefeated == false)
@@ -94,10 +95,13 @@ function gameMode()
 		}
 		
 		// update player data
-		// 
-		
+		 playerUpdate(); //Moves player, will add projectile firing call to this function 
+		  if (projPresent || powerup){
+                            _Ship.prototype.moveProjectile();
+                        }
 		// check for collision
 		checkPlayerProjectileCollision();
+                _Ship.prototype.checkEnemyCollision();
 		
 		
 	}

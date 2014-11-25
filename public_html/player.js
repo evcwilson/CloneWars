@@ -6,7 +6,9 @@
 var playerGeometry; 
 var playerMaterial; 
 var playerMesh; 
-var playerImage, 
+var playerImage,
+    playerHealth = 3,
+    speed = 2.0,
     powerup = false; 
 
 var projGeo,
@@ -15,6 +17,7 @@ var projGeo,
     projPresent = false;
     
 var enemyProjectGeo,
+    enemyHealth, 
     enemyProjectMaterial,
     enemyProject = [],
     enemyProjectCount=0; 
@@ -38,14 +41,15 @@ playerMesh.position.set(0,-250,0);
 //Updates player movement with each game loop
 function playerUpdate(){
     //Prevents passing the left border
-    if(playerMesh.position.x < -250){playerMesh.position.x += 1}
+    if(playerMesh.position.x < -250){playerMesh.position.x += speed}
     //Prevents passing the right border
-    else if (playerMesh.position.x > 250){playerMesh.position.x -=1}
+    else if (playerMesh.position.x > 250){playerMesh.position.x -=speed}
     else if (keyPressedRight){ playerMesh.position.x+=1.5;}
     else if (keyPressedLeft) { playerMesh.position.x-=1.5;}
      
     if(keyPressedSpace && projPresent == false || powerup == true){
         projPresent = true; 
+        //PlayerFire();
         _Ship.prototype.playerProjectile(playerMesh.position.x,
         playerMesh.position.y + 10, new THREE.MeshBasicMaterial({color:'white'}));
     }
@@ -76,11 +80,11 @@ _Ship.prototype ={
     },
     //does an action when the health drops
     //Function used when collisions and projectiles are inplace. 
-    health: function(health, damage, ship){
+    health: function(health, damage, Xship){
         health -= damage; 
 
         if (health <= 0){
-            _Ship.prototype.destoryShip(ship);
+            _Ship.prototype.destoryShip(Xship);
         }
         
         return health; 
@@ -97,6 +101,25 @@ _Ship.prototype ={
        projectile = new THREE.Mesh(projGeo, mat);
        projectile.position.set(x, y, 1);
        scene.add(projectile);
+    },
+    
+    checkEnemyCollision: function(damage){
+        if (enemyProjectCount > 0)
+        {
+            for(var x = 0; x < enemyProjectCount; x++)
+            {
+                if(Math.abs(playerMesh.position.y - enemyProject[x].position.y) < 20
+                    && Math.abs(playerMesh.position.x - enemyProject[x].position.x) < 35)
+                                {
+                                    //Subtracts the damage of the ship                                    
+                                   playerHealth = _Ship.prototype.health(playerHealth, 1, playerMesh);
+                                    //Removes the Enemy Projectile from the screen
+                                    scene.remove(enemyProject[x]);
+                                    enemyProjectCount--; 
+                                    enemyProject.splice(x,1);
+                                }
+            }
+        }
     },
     
     enemyProjectile: function(x,y,mat){
@@ -127,6 +150,7 @@ _Ship.prototype ={
         if (projectile.position.y > 285){
            scene.remove(projectile);
            projPresent = false; 
+          // PlayerFireStop();
        }
     }
        

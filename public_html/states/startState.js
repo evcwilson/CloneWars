@@ -39,6 +39,7 @@ function startMode()
 		if(keyPressedEnter == true)
 		{
 			keyPressedEnter = false;
+                        stopMenuMusic();
 			//scene.remove(particleSystem);
 			//hud.removeFromScene();
 			return true;

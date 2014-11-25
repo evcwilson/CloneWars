@@ -45,6 +45,8 @@ function init(){
 // initializers
 initializeScene();
 initializeGame();
+initSound();
+//startMenuMusic();
 //drawBackground();			// drawBackground() is now called in each state (startState and gameModeState) 
 
 initPlayer(); 
@@ -71,12 +73,10 @@ function gameLoop()
 		while(lag >= targetFrameRate)
 		{
 			processEvents();
-                        playerUpdate(); //Moves player, will add projectile firing call to this function 
+                       
                         //movePlayer(velocity);
 			updateGame();
-                        if (projPresent || powerup){
-                            _Ship.prototype.moveProjectile();
-                        }
+                      
 			lag -= targetFrameRate;
 			
 		}

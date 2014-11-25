@@ -18,7 +18,7 @@ function drawBackground(_scene){
         pMaterial = new THREE.ParticleBasicMaterial({
             color: 0xFFFFFF,
             size: 1,
-            map: THREE.ImageUtils.loadTexture("particle.png"),
+            map: THREE.ImageUtils.loadTexture("Sprites/particle.png"),
             blending: THREE.AdditiveBlending,
             transparent: true
         });
