@@ -41,11 +41,11 @@ playerMesh.position.set(0,-250,0);
 //Updates player movement with each game loop
 function playerUpdate(){
     //Prevents passing the left border
-    if(playerMesh.position.x < -225){playerMesh.position.x += speed}
+    if(playerMesh.position.x < -220){playerMesh.position.x += speed}
     //Prevents passing the right border
-    else if (playerMesh.position.x > 225){playerMesh.position.x -=speed}
-    else if (keyPressedRight){ playerMesh.position.x+=2.0;}
-    else if (keyPressedLeft) { playerMesh.position.x-=2.0;}
+    else if (playerMesh.position.x > 220){playerMesh.position.x -=speed}
+    else if (keyPressedRight){ playerMesh.position.x+=2.5;}
+    else if (keyPressedLeft) { playerMesh.position.x-=2.5;}
      
     if(keyPressedSpace && projPresent == false || powerup == true){
         projPresent = true; 
