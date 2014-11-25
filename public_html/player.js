@@ -41,15 +41,15 @@ playerMesh.position.set(0,-250,0);
 //Updates player movement with each game loop
 function playerUpdate(){
     //Prevents passing the left border
-    if(playerMesh.position.x < -250){playerMesh.position.x += speed}
+    if(playerMesh.position.x < -225){playerMesh.position.x += speed}
     //Prevents passing the right border
-    else if (playerMesh.position.x > 250){playerMesh.position.x -=speed}
-    else if (keyPressedRight){ playerMesh.position.x+=1.5;}
-    else if (keyPressedLeft) { playerMesh.position.x-=1.5;}
+    else if (playerMesh.position.x > 225){playerMesh.position.x -=speed}
+    else if (keyPressedRight){ playerMesh.position.x+=2.0;}
+    else if (keyPressedLeft) { playerMesh.position.x-=2.0;}
      
     if(keyPressedSpace && projPresent == false || powerup == true){
         projPresent = true; 
-        PlayerFire();
+        //PlayerFire();
         _Ship.prototype.playerProjectile(playerMesh.position.x,
         playerMesh.position.y + 10, new THREE.MeshBasicMaterial({color:'white'}));
     }
