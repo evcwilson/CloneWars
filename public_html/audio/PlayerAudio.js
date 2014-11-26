@@ -6,10 +6,14 @@
 
 
 var file = 'audio/Sounds/pacman_beginning.wav',
-        player_fire_file = 'audio/Sounds/PlayerFire.wav',
+        player_fire_file = 'audio/Sounds/scifi002.mp3',
         enemy_fire_file = null,
         enemy_explosion_file = null, 
-        bufferLoader,
+        background_music_file = 'audio/Sounds/ChandelierBackgroundAudio.mp3', 
+        game_over_file = null, 
+        victory_music_file = null; 
+        
+    var bufferLoader,
         context, 
         request,
         BufferL = [];
@@ -17,11 +21,14 @@ var file = 'audio/Sounds/pacman_beginning.wav',
 var menuMusic,
         player_fire,
         enemy_fire,
-        enemy_explosion;
+        enemy_explosion,
+         background_music, 
+        game_over,
+        victory_music;
 
 function initSound(){
     try{
-        context = new (AudioContext || webkitAudioContext)();
+        context = new (AudioContext || webkitAudioContext)()
         if(context){
             
             bufferLoader = new BufferLoader(context, 
@@ -30,11 +37,15 @@ function initSound(){
                 player_fire_file,
                 //enemy_fire_file,
                // enemy_explosion_file,
+                  background_music_file, 
+//                game_over,
+//                victory_music
             ],
             finishedLoading
                     );
           bufferLoader.load(); 
         }
+        context.createGain = context.createGainNode; 
     }
     catch(e){
         alert("Your Browser does not support Web Audio API");
@@ -46,10 +57,12 @@ function finishedLoading(bufferList){
    
     menuMusic.buffer = bufferList[0];
     BufferL["player_fire"] = bufferList[1];
-    BufferL["enemy_fire"] = bufferList[2];
-    BufferL["enemy_explosion"] = bufferList[3];
+    //BufferL["enemy_fire"] = bufferList[2];
+    //BufferL["enemy_explosion"] = bufferList[3];      
+    BufferL["background_music"] = bufferList[2];      
+    BufferL["game_over"] = bufferList[5];
+    BufferL["victory_music"] = bufferList[6];
     
-      
     menuMusic.connect(context.destination);
     
     
@@ -65,10 +78,6 @@ function startMenuMusic(){
 
 function stopMenuMusic(){
     menuMusic.stop();
-}
-
-function enemyFire(){
-    
 }
 
 function PlayerFire(){
@@ -99,4 +108,43 @@ function EnemyExplosion(){
     enemy_explosion.loop = false; 
     enemy_explosion.playbackRate.value = 1; 
         enemy_explosion.start(0);
+}
+
+function BackgroundMusic(){
+   // background_music.gainNode = null; 
+    
+   // this.gainNode = context.createGain(); 
+
+    
+    background_music = context.createBufferSource(); 
+    background_music.buffer = BufferL["background_music"];
+    
+   // background_music.connect(this.gainNode);
+    background_music.connect(context.destination);
+    background_music.loop = true; 
+   // background_music.gain.value = 0.5; 
+    background_music.playbackRate.value = 1; 
+    background_music.start(0);
+}
+
+function stopBackgroundMusic(){
+    background_music.stop(0);
+}
+
+function GameOverMusic(){
+    game_over = context.createBufferSource(); 
+    game_over.buffer = BufferL["game_over"];
+    game_over.connect(context.destination);
+    game_over.loop = false; 
+    game_over.playbackRate.value = 1; 
+        game_over.start(0);
+}
+
+function VictoryMusic(){
+    victory_music = context.createBufferSource(); 
+    victory_music.buffer = BufferL["victory_music"];
+    victory_music.connect(context.destination);
+    victory_music.loop = true; 
+    victory_music.playbackRate.value = 1; 
+        victory_music.start(0);
 }

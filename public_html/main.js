@@ -28,13 +28,13 @@ var fps = 0;
 //JQuery Function, waits for the game overlay to be clicked before moving to the next page. 
 //Very simple, will update later. 
 $(document).ready(function(){
-    $('body').append('<div id="intro">Click to Start</div>');
-    $('#intro').css({width: WIDTH, height: HEIGHT}).one('click', function(e) {
-		e.preventDefault();
-		$(this).fadeOut();
-		init();
+    $.ajax({
+        url:'audio/Sounds/ChandelierBackgroundAudio.mp3' ,
+        success: function(){
+            init();
 		//setInterval(drawRadar, 1000);
 		gameLoop();
+        }
 	});
 });
 
@@ -46,7 +46,6 @@ function init(){
 initializeScene();
 initializeGame();
 initSound();
-//startMenuMusic();
 //drawBackground();			// drawBackground() is now called in each state (startState and gameModeState) 
 
 initPlayer(); 

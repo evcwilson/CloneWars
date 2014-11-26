@@ -154,7 +154,6 @@ _Ship.prototype ={
         if (projectile.position.y > 285){
            scene.remove(projectile);
            projPresent = false; 
-          // PlayerFireStop();
        }
     },
 	
