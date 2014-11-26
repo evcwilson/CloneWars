@@ -105,8 +105,8 @@ _Ship.prototype ={
        projectile.position.set(x, y, 1);
        scene.add(projectile);
     },
-    
-    checkEnemyCollision: function(damage){
+    //Checks for collisions with the enemy ship. 
+    checkEnemyCollision: function(){
         if (enemyProjectCount > 0)
         {
             for(var x = 0; x < enemyProjectCount; x++)
@@ -120,12 +120,12 @@ _Ship.prototype ={
                                     scene.remove(enemyProject[x]);
                                     enemyProjectCount--; 
                                     enemyProject.splice(x,1);
-									hud.removePlayerLife();
+                                    hud.removePlayerLife();
                                 }
             }
         }
     },
-    
+    //Creates the enemy projectile
     enemyProjectile: function(x,y,mat){
       
       if (enemyProjectCount <= enemyProjectLimit ){
@@ -136,7 +136,7 @@ _Ship.prototype ={
        enemyProjectCount++; 
         }
     }, 
-    
+    //Moves the enemy projectile across the screen. 
     moveEneProjectile: function(i){
         
         enemyProject[i].position.y -=2; 
@@ -147,7 +147,7 @@ _Ship.prototype ={
         }
         
     },
-             
+    //Moves player Projectile. 
     moveProjectile: function(){
         
            projectile.position.y += 9;
