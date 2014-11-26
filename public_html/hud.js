@@ -107,7 +107,7 @@ function hudObject()
 		
 		
 		this.updateHiScore();
-		this.setPlayerLives(playerLives);
+		this.setPlayerLives(playerHealth - 1);
 
 	}
 	
@@ -384,5 +384,16 @@ function hudObject()
 			
 		}	
 		
+	}
+	
+	this.removePlayerLife = function()
+	{
+		var size = playerLivesArray.length - 1;
+		if(playerLivesNum > 0)
+		{
+			scene.remove(playerLivesArray[size] );
+			playerLivesArray.length = size;
+			playerLivesNum--;
+		}
 	}
 }

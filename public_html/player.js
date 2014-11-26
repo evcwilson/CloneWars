@@ -9,8 +9,9 @@ var playerMesh;
 var playerImage,
     playerHealth = 3,
     speed = 2.5,
-    powerup = false,
-	playerLives = 2; 
+    powerup = false; 
+	
+var resetPlayerHealthNum = 3;	
 
 var projGeo,
     projMaterial,
@@ -119,6 +120,7 @@ _Ship.prototype ={
                                     scene.remove(enemyProject[x]);
                                     enemyProjectCount--; 
                                     enemyProject.splice(x,1);
+									hud.removePlayerLife();
                                 }
             }
         }
@@ -154,6 +156,13 @@ _Ship.prototype ={
            projPresent = false; 
           // PlayerFireStop();
        }
-    }
+    },
+	
+	resetPlayerScore: function()
+	{
+		// resets the health back to the default resetPlayerHealthNum, 
+		// since playerHealth decreases after every damage
+		playerHealth = resetPlayerHealthNum;
+	}
        
 };

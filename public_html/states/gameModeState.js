@@ -49,6 +49,7 @@ function gameMode()
 		drawBackground(this.scene);
 		scene.add(playerMesh);
 		playerMesh.position.set(0,-250,0);
+		_Ship.prototype.resetPlayerScore();
 		
 		levels[currentLevel].initNextEnemyWave();
 		hud.addToScene(scene);
@@ -56,7 +57,12 @@ function gameMode()
 
 	this.run = function()
 	{	
-                
+		// check if player has health remaining
+        if(playerHealth <= 0)
+		{
+			this.gameOver = true;
+			return;
+		}
 		// check if all enemies are defeated in the current enemyWave
 		var enemiesDefeated = levels[currentLevel].checkEnemiesDefeated()
 		if( enemiesDefeated == false)
