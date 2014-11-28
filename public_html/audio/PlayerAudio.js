@@ -7,7 +7,8 @@
 
 var file = 'audio/Sounds/pacman_beginning.wav',
         player_fire_file = 'audio/Sounds/scifi002.mp3',
-        enemy_fire_file = null,
+        enemy_fire_file = 'audio/Sounds/science_fiction_laser_gun_or_beam_fire_version_3 (1).mp3',
+        enemy_fire_file2 = 'audio/Sounds/Photon1.mp3',
         enemy_explosion_file = null, 
         background_music_file = 'audio/Sounds/ChandelierBackgroundAudio.mp3', 
         game_over_file = null, 
@@ -35,7 +36,8 @@ function initSound(){
             [
                 file,
                 player_fire_file,
-                //enemy_fire_file,
+                enemy_fire_file,
+                enemy_fire_file2,
                // enemy_explosion_file,
                   background_music_file, 
 //                game_over,
@@ -57,9 +59,10 @@ function finishedLoading(bufferList){
    
     menuMusic.buffer = bufferList[0];
     BufferL["player_fire"] = bufferList[1];
-    //BufferL["enemy_fire"] = bufferList[2];
+    BufferL["enemy_fire"] = bufferList[2];
+    BufferL["enemy_fire2"] = bufferList[3];
     //BufferL["enemy_explosion"] = bufferList[3];      
-    BufferL["background_music"] = bufferList[2];      
+    BufferL["background_music"] = bufferList[4];      
     BufferL["game_over"] = bufferList[5];
     BufferL["victory_music"] = bufferList[6];
     
@@ -100,6 +103,15 @@ function EnemyFire(){
     enemy_fire.playbackRate.value = 1; 
         enemy_fire.start(0);
 }
+function EnemyFire2(){
+    enemy_fire2 = context.createBufferSource(); 
+    enemy_fire2.buffer = BufferL["enemy_fire2"];
+    enemy_fire2.connect(context.destination);
+    enemy_fire2.loop = false; 
+    enemy_fire2.playbackRate.value = 1; 
+        enemy_fire2.start(0);
+}
+
 
 function EnemyExplosion(){
     enemy_explosion = context.createBufferSource(); 

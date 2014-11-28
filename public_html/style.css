@@ -8,7 +8,11 @@ and open the template in the editor.
     Author     : fordgt150
 */
 body{
-    background-color: grey; 
+    background: linear-gradient(grey, black 100%);
+    background: -moz-linear-gradient(grey, black 100%);
+    height: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 canvas{
