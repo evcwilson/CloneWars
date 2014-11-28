@@ -25,7 +25,7 @@
 
 */
 
-var pawnShipSprite = new THREE.ImageUtils.loadTexture("Sprites/EnemyShip1.gif");
+
 
 function enemyWave()
 {
@@ -74,14 +74,14 @@ function enemyWave()
 		// ...then move the ships
 		for(var j = 0; j < this.shipArray.length; j++)
 		{
-			this.shipArray[j].translateX(this.enemyShipSpeed);
+			this.shipArray[j].mesh.translateX(this.enemyShipSpeed);
 		}
 		
 		// ...check if any ship reached any border
 		var passedBorder = false;
 		for(var j = 0; j < this.shipArray.length; j++)
 		{
-			if(this.shipArray[j].position.x > 225 || this.shipArray[j].position.x < -225)
+			if(this.shipArray[j].mesh.position.x > 225 || this.shipArray[j].mesh.position.x < -225)
 			{
 				passedBorder = true;
 			}
@@ -93,7 +93,7 @@ function enemyWave()
 			// ...then move the ships
 			for(var j = 0; j < this.shipArray.length; j++)
 			{
-				this.shipArray[j].translateX(this.enemyShipSpeed);
+				this.shipArray[j].mesh.translateX(this.enemyShipSpeed);
 			}
 		}
 		
@@ -102,7 +102,7 @@ function enemyWave()
 		if(this.shootTimer >= this.secondsToShoot)
 		{
 			var randomNumber = Math.floor(Math.random() * this.shipArray.length);
-			var shootingShip = 	this.shipArray[randomNumber];
+			var shootingShip = 	this.shipArray[randomNumber].mesh;
 			var globalPos = new THREE.Vector3();
 			globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
 			_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
@@ -118,7 +118,7 @@ function enemyWave()
 		// remove ships from scene
 		for(var i = 0; i < this.numShips; i++)
 		{
-			scene.remove(this.shipArray[i]);
+			scene.remove(this.shipArray[i].mesh);
 			this.shipArray[i] = null;
 		}
 		
@@ -151,30 +151,38 @@ function enemyWave()
 			for(var i = 0; i < this.shipArray.length; i++)
 			{
 				var ship = this.shipArray[i];
-				if(Math.abs(ship.position.y - projectile.position.y) < 20
-					&& Math.abs(ship.position.x - projectile.position.x) < 20)
+				if(Math.abs(ship.mesh.position.y - projectile.position.y) < 20
+					&& Math.abs(ship.mesh.position.x - projectile.position.x) < 20)
 				{
-					// remove ship from scene and shipArray
-					scene.remove(this.shipArray[i]);
-					this.shipArray.splice(i,1);
-					this.numShips--;
 					
-					// remove projectile from scene and set projectile flag to false
-					scene.remove(projectile);
-					projPresent = false; 
-					projectile = null;
+					ship.damage();
 					
-					// increase enemyShipSpeed, if speedUp is true
-					if(this.speedUp == true)
+					if(ship.getHealth() <= 0)
 					{
-						if(this.enemyShipSpeed > 0)
-							this.enemyShipSpeed += this.deltaShipSpeed;
-						else
-							this.enemyShipSPeed -= this.deltaShipSpeed;
+						// remove ship from scene and shipArray
+						scene.remove(ship.mesh);
+						hud.updateScore(ship.getKillPoints());
+						this.shipArray.splice(i,1);
+						this.numShips--;
+						
+						// increase enemyShipSpeed, if speedUp is true
+						if(this.speedUp == true)
+						{
+							if(this.enemyShipSpeed > 0)
+								this.enemyShipSpeed += this.deltaShipSpeed;
+							else
+								this.enemyShipSPeed -= this.deltaShipSpeed;
+						}
+						
 					}
+						// remove projectile from scene and set projectile flag to false
+						scene.remove(projectile);
+						projPresent = false; 
+						projectile = null;
+						
+						
+						break;
 					
-					hud.updateScore(30);
-					break;
 				}
 			}
 		}

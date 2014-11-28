@@ -51,11 +51,11 @@ function cavalry(numShipsCavalry, numShipsCohort)
 		
 		for(var i = 0; i < this.numShipsCavalry; i++)
 		{
-			this.shipArray[i] = _Ship.prototype.makeShipSprite(shipGeometryCavalry, shipMaterialCavalry);
-			scene.add(this.shipArray[i]);
+			this.shipArray[i] = new enemyShip(centurion);// _Ship.prototype.makeShipSprite(shipGeometryCavalry, shipMaterialCavalry);
+			scene.add(this.shipArray[i].mesh);
 			if( i > 0 && i % 2 == 0)
 				yInitPos -= 75;
-			this.shipArray[i].position.set(xFlip * xInitPos,yInitPos,1);
+			this.shipArray[i].mesh.position.set(xFlip * xInitPos,yInitPos,1);
 			xFlip *= -1;
 			
 		}
@@ -72,16 +72,16 @@ function cavalry(numShipsCavalry, numShipsCohort)
 		var counter = 0;
 		for(var i = this.numShipsCavalry, xFlip = -1; i < this.numShips; i++ )
 		{
-			this.shipArray[i] = _Ship.prototype.makeShipSprite(shipGeometryCohort, shipMaterialCohort);
-			scene.add(this.shipArray[i]);
+			this.shipArray[i] = new enemyShip(pawn);//_Ship.prototype.makeShipSprite(shipGeometryCohort, shipMaterialCohort);
+			scene.add(this.shipArray[i].mesh);
 			
 			// set the x-position of the first ship
 			if(counter == 0)
 			{
 				if(maxShipsPerRow == 5)
-					this.shipArray[i].position.set( 0, yInitPos, 1);
+					this.shipArray[i].mesh.position.set( 0, yInitPos, 1);
 				else
-					this.shipArray[i].position.set( xInitPos, yInitPos, 1);
+					this.shipArray[i].mesh.position.set( xInitPos, yInitPos, 1);
 			}
 			else if(counter % maxShipsPerRow == 0)		// if the number of maxShipsPerRow is reached
 			{
@@ -90,9 +90,9 @@ function cavalry(numShipsCavalry, numShipsCohort)
 				yInitPos -= 50;
 				xFlip = -1;
 				if(maxShipsPerRow == 5)
-					this.shipArray[i].position.set( 0, yInitPos, 1);
+					this.shipArray[i].mesh.position.set( 0, yInitPos, 1);
 				else
-					this.shipArray[i].position.set( xInitPos, yInitPos, 1);
+					this.shipArray[i].mesh.position.set( xInitPos, yInitPos, 1);
 			}
 			else
 			{
@@ -101,14 +101,14 @@ function cavalry(numShipsCavalry, numShipsCohort)
 					// for ships to the left of x = 0
 					if(xFlip < 0)
 					{
-						this.shipArray[i].position.set( xInitPos * xFlip, yInitPos, 1);
+						this.shipArray[i].mesh.position.set( xInitPos * xFlip, yInitPos, 1);
 						// decrease xFlip by one and multiple by small amount , 
 						//which flips to the other side of x = 0 and makes ships appear evenly spread
 						xFlip = (xFlip -1) * -1.5;
 					}
 					else // for ships to the right of x = 0
 					{
-						this.shipArray[i].position.set( xInitPos * xFlip, yInitPos, 1);
+						this.shipArray[i].mesh.position.set( xInitPos * xFlip, yInitPos, 1);
 						 // xflip to the other side of x = 0 
 						xFlip *= -1;
 					}
@@ -118,12 +118,12 @@ function cavalry(numShipsCavalry, numShipsCohort)
 					// for ships to the left of x = 0
 					if(xFlip < 0)
 					{
-						this.shipArray[i].position.set( xInitPos * xFlip, yInitPos, 1);
+						this.shipArray[i].mesh.position.set( xInitPos * xFlip, yInitPos, 1);
 						xFlip *= -1;	// xflip to the other side of x = 0
 					}
 					else // for ships to the right of x = 0
 					{
-						this.shipArray[i].position.set( xInitPos * xFlip, yInitPos, 1);
+						this.shipArray[i].mesh.position.set( xInitPos * xFlip, yInitPos, 1);
 						xFlip = xFlip * -1 - 1; // xflip to the other side of x = 0 and decrease by 1
 					}
 				}
@@ -136,7 +136,7 @@ function cavalry(numShipsCavalry, numShipsCohort)
 		// so the run() function slides them into view
 		for(var i = 0; i < this.shipArray.length; i++)
 		{
-			this.shipArray[i].position.setX(this.shipArray[i].position.x - 1000);
+			this.shipArray[i].mesh.position.setX(this.shipArray[i].mesh.position.x - 1000);
 		
 		}
 		
@@ -155,10 +155,10 @@ function cavalry(numShipsCavalry, numShipsCohort)
 		{
 			for(var i = 0; i < this.numShips; i++)
 			{
-				this.shipArray[i].translateX(this.enemyShipSpeed * 3);
+				this.shipArray[i].mesh.translateX(this.enemyShipSpeed * 3);
 			}
 			
-			if(this.shipArray[this.numShipsCavalry].position.x > stoppingPoint)
+			if(this.shipArray[this.numShipsCavalry].mesh.position.x > stoppingPoint)
 			{
 					allShipsInPosition = true;
 					this.waveReady = true;

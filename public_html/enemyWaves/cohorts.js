@@ -49,12 +49,12 @@ function cohort(num)
 		// create numShips number of ships and add them to the scene
 		for(var i = 0; i < this.numShips; i++)
 		{
-			this.shipArray[i] = _Ship.prototype.makeShipSprite( smallShipGeometry, smallShipMaterial );
-			scene.add(this.shipArray[i]);
+			this.shipArray[i] = new enemyShip(pawn);//_Ship.prototype.makeShipSprite( smallShipGeometry, smallShipMaterial );
+			scene.add(this.shipArray[i].mesh);
 		}
 		
 		// set the position of the first ship
-		this.shipArray[0].position.set(xInitPos, yInitPos, 1);
+		this.shipArray[0].mesh.position.set(xInitPos, yInitPos, 1);
 		
 		for(var i = 1; i < this.numShips; i++)
 		{
@@ -65,11 +65,11 @@ function cohort(num)
 			}
 			
 			// set each ship relative to the position of the mainship
-			this.shipArray[i].position.set(xDelta, yDelta, 1);
+			this.shipArray[i].mesh.position.set(xDelta, yDelta, 1);
 			xDelta += 70;
 			
 			// add the ships as a child of the first ship
-			this.shipArray[0].add(this.shipArray[i]);
+			this.shipArray[0].mesh.add(this.shipArray[i].mesh);
 			
 		}
 		
@@ -85,13 +85,13 @@ function cohort(num)
 		if(this.allShipsInPosition == false)
 		{
 			// get the distance of the ships...
-			var distance = this.mainShip.position.distanceTo(this.targetPosition);
+			var distance = this.mainShip.mesh.position.distanceTo(this.targetPosition);
 			if(distance > 2)
 			{
 				var targetDirection = new THREE.Vector3();
-				targetDirection.subVectors(this.targetPosition, this.mainShip.position);
+				targetDirection.subVectors(this.targetPosition, this.mainShip.mesh.position);
 				targetDirection.normalize();
-				this.mainShip.translateOnAxis(targetDirection, 3);
+				this.mainShip.mesh.translateOnAxis(targetDirection, 3);
 				
 			}
 			else
@@ -101,9 +101,9 @@ function cohort(num)
 				{
 					//this.shipArray[0].remove(this.shipArray[i]);
 					var globalPos = new THREE.Vector3();
-					globalPos.setFromMatrixPosition( this.shipArray[i].matrixWorld );
-					this.shipArray[i].position.copy(globalPos);
-					scene.add(this.shipArray[i]);
+					globalPos.setFromMatrixPosition( this.shipArray[i].mesh.matrixWorld );
+					this.shipArray[i].mesh.position.copy(globalPos);
+					scene.add(this.shipArray[i].mesh);
 				}
 				this.waveReady = true;
 			}

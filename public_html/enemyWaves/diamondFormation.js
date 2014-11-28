@@ -37,9 +37,9 @@ function diamondFormation()
 			
 		this.bossShipMaterial = new THREE.MeshBasicMaterial( { map: pawnShipSprite, transparent: true, side : THREE.DoubleSide } );
 		
-		this.bossShipMesh = _Ship.prototype.makeShipSprite(this.bossShipGeometry, this.bossShipMaterial);
-		this.bossShipMesh.position.set(0, 110, 1);
-		scene.add(this.bossShipMesh);
+		this.bossShipMesh = new enemyShip(centurion);//_Ship.prototype.makeShipSprite(this.bossShipGeometry, this.bossShipMaterial);
+		this.bossShipMesh.mesh.position.set(0, 110, 1);
+		scene.add(this.bossShipMesh.mesh);
 		this.shipArray[this.numShips++] = this.bossShipMesh;
 		
 
@@ -47,12 +47,12 @@ function diamondFormation()
 		for(var i = 0; i < 4; i++)
 		{
 			this.diamondPoints[i] = new THREE.Vector3();
-			this.diamondPoints[i].copy(this.bossShipMesh.position);
+			this.diamondPoints[i].copy(this.bossShipMesh.mesh.position);
 		}
-		this.diamondPoints[0].setX(this.bossShipMesh.position.x + 150);
-		this.diamondPoints[1].setY(this.bossShipMesh.position.y - 150);
-		this.diamondPoints[2].setX(this.bossShipMesh.position.x - 150);
-		this.diamondPoints[3].setY(this.bossShipMesh.position.y + 150);
+		this.diamondPoints[0].setX(this.bossShipMesh.mesh.position.x + 150);
+		this.diamondPoints[1].setY(this.bossShipMesh.mesh.position.y - 150);
+		this.diamondPoints[2].setX(this.bossShipMesh.mesh.position.x - 150);
+		this.diamondPoints[3].setY(this.bossShipMesh.mesh.position.y + 150);
 		
 		this.testBox0 = new THREE.Mesh( this.testBoxGeometry, this.testBoxMaterial );
 		this.testBox1 = new THREE.Mesh( this.testBoxGeometry, this.testBoxMaterial );
@@ -83,10 +83,10 @@ function diamondFormation()
 		// create pawn ship array and assign positions
 		for( var i = 0; i < 4; i++)
 		{
-			this.pawnShipArray[i] = _Ship.prototype.makeShipSprite(this.pawnShipGeometry, this.pawnShipMaterial);
-			scene.add(this.pawnShipArray[i] );
+			this.pawnShipArray[i] = new enemyShip(pawn);//_Ship.prototype.makeShipSprite(this.pawnShipGeometry, this.pawnShipMaterial);
+			scene.add(this.pawnShipArray[i].mesh );
 			this.shipArray[this.numShips++] = this.pawnShipArray[i];
-			this.pawnShipArray[i].position.copy(this.diamondPoints[i]);//50, -60 * (i + 1), 0);
+			this.pawnShipArray[i].mesh.position.copy(this.diamondPoints[i]);//50, -60 * (i + 1), 0);
 			
 		}
 		
@@ -118,13 +118,13 @@ function diamondFormation()
 			
 		// Set triangle's X and Y positions
 		if(this.bossShipMesh)
-			this.mainShip.translateX(this.enemyShipSpeed);
+			this.mainShip.mesh.translateX(this.enemyShipSpeed);
 		
 		// Check if triangle is past the border
-		if(this.mainShip.position.x > this.xMax || this.mainShip.position.x < this.xMin )	
+		if(this.mainShip.mesh.position.x > this.xMax || this.mainShip.mesh.position.x < this.xMin )	
 		{
 				this.enemyShipSpeed *= -1;
-				this.mainShip.translateX(this.enemyShipSpeed);
+				this.mainShip.mesh.translateX(this.enemyShipSpeed);
 		}
 		
 		// update diamond points
@@ -136,16 +136,16 @@ function diamondFormation()
 		// update  movement for pawnShips
 		for(var i = 0; i < 4; i++)
 		{
-			this.pawnShipArray[i].targetDirection.subVectors(this.diamondPoints[this.pawnShipArray[i].destLerpPoint],  this.pawnShipArray[i].position);
+			this.pawnShipArray[i].targetDirection.subVectors(this.diamondPoints[this.pawnShipArray[i].destLerpPoint],  this.pawnShipArray[i].mesh.position);
 			this.pawnShipArray[i].targetDirection.normalize();	
 				
-			this.pawnShipArray[i].translateX(this.enemyShipSpeed);
-			this.pawnShipArray[i].translateOnAxis(this.pawnShipArray[i].targetDirection, 2);
+			this.pawnShipArray[i].mesh.translateX(this.enemyShipSpeed);
+			this.pawnShipArray[i].mesh.translateOnAxis(this.pawnShipArray[i].targetDirection, 2);
 			
 		}
 		
 		// test the distance to the diamond points with the first pawnShip
-		var len = this.diamondPoints[this.pawnShipArray[0].destLerpPoint].distanceTo(this.pawnShipArray[0].position);
+		var len = this.diamondPoints[this.pawnShipArray[0].destLerpPoint].distanceTo(this.pawnShipArray[0].mesh.position);
 		len = Math.sqrt(Math.sqrt(len));
 		if(len < 1.2)
 		{
@@ -162,7 +162,7 @@ function diamondFormation()
 			var randomNumber = Math.floor(Math.random() * this.shipArray.length);
 			var shootingShip = 	this.shipArray[randomNumber];
 			var globalPos = new THREE.Vector3();
-			globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
+			globalPos.setFromMatrixPosition( shootingShip.mesh.matrixWorld );
 			_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
 			this.shootTimer = 0;
 		}
@@ -176,10 +176,10 @@ function diamondFormation()
 	// where the corners of the diamond path should be
 	this.updateDiamondPointPositions = function()
 	{
-		this.diamondPoints[0].setX(this.bossShipMesh.position.x+ 150);
-		this.diamondPoints[1].setX(this.bossShipMesh.position.x);
-		this.diamondPoints[2].setX(this.bossShipMesh.position.x - 150);
-		this.diamondPoints[3].setX(this.bossShipMesh.position.x);
+		this.diamondPoints[0].setX(this.bossShipMesh.mesh.position.x+ 150);
+		this.diamondPoints[1].setX(this.bossShipMesh.mesh.position.x);
+		this.diamondPoints[2].setX(this.bossShipMesh.mesh.position.x - 150);
+		this.diamondPoints[3].setX(this.bossShipMesh.mesh.position.x);
 
 	};
 	
@@ -206,19 +206,21 @@ function diamondFormation()
 	// clean up after one's self
 	this.cleanup = function()
 	{
-		scene.remove(this.bossShipMesh);
-		scene.remove(this.pawnShipArray[0] );
-		scene.remove(this.pawnShipArray[1] );
-		scene.remove(this.pawnShipArray[2] );
-		scene.remove(this.pawnShipArray[3] );
-		
-		// set ship meshes to null for garbage collection
-		this.bossShipMesh = null;
-		for(var i = 0; i < this.pawnShipArray.length; i++)
+		if(this.shipArray.length > 0)
 		{
-			this.pawnShipArray[i] = null;
+			scene.remove(this.bossShipMesh.mesh);
+			scene.remove(this.pawnShipArray[0].mesh );
+			scene.remove(this.pawnShipArray[1].mesh );
+			scene.remove(this.pawnShipArray[2].mesh );
+			scene.remove(this.pawnShipArray[3].mesh );
+			
+			// set ship meshes to null for garbage collection
+			this.bossShipMesh = null;
+			for(var i = 0; i < this.pawnShipArray.length; i++)
+			{
+				this.pawnShipArray[i] = null;
+			}
 		}
-		
 		// remove projectiles from scene
 		for(var i = 0; i < enemyProject.length; i++)
 		{

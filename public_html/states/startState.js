@@ -13,10 +13,17 @@ function startMode()
 	
 	this.scene.add(this.logoMesh);
 	drawBackground(this.scene);
+	var startText = "Press ENTER to Play";
+	var startTextGeometry = new THREE.TextGeometry( startText, { size: 12, height: 25, font: 'press start k' });
+	var startTextMaterial = new THREE.MeshBasicMaterial({color: 0x46BF40});
+	var startTextMesh = new THREE.Mesh( startTextGeometry ,startTextMaterial);
+	
 	this.init = function()
 	{
 		scene = this.scene;
 		camera = this.camera;
+		scene.add(startTextMesh);
+		startTextMesh.position.set(-150, -200, 1);
 	}
 	
 	this.run = function()

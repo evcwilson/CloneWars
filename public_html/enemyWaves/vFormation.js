@@ -37,16 +37,20 @@ function vFormation()
 		// Make three ships
 		for(var i = 0; i < 3; i++)
 		{
-			this.shipArray[i] = _Ship.prototype.makeShipSprite(vFormGeometry, vFormMaterial);
-			scene.add(this.shipArray[i]);
-			this.shipArray[i].position.set( -100, 400, 1 );
+			if(i == 0)
+				this.shipArray[i] = new enemyShip(centurion);//_Ship.prototype.makeShipSprite(vFormGeometry, vFormMaterial);
+			else
+				this.shipArray[i] = new enemyShip(pawn);
+				
+			scene.add(this.shipArray[i].mesh);
+			this.shipArray[i].mesh.position.set( -100, 400, 1 );
 		}
 		
 		
 		this.numShips = this.shipArray.length;
 		
 		
-		this.startPosition = this.shipArray[0].position;
+		this.startPosition = this.shipArray[0].mesh.position;
 		this.targetPosition = testBox.position;
 		
 		var xFlip = 1;
@@ -65,7 +69,7 @@ function vFormation()
 			xFlip = xFlip * -1.25;
 		}
 		
-		this.targetDirection.subVectors(this.targetPositions[this.currentMovingShip], this.shipArray[this.currentMovingShip].position);
+		this.targetDirection.subVectors(this.targetPositions[this.currentMovingShip], this.shipArray[this.currentMovingShip].mesh.position);
 		this.targetDirection.normalize();
 		
 		this.mainShip = this.shipArray[0];
@@ -78,10 +82,10 @@ function vFormation()
 		if(this.allShipsInPosition == false)
 		{
 			// get the distance of the ships...
-			var distance = this.shipArray[this.currentMovingShip].position.distanceTo(this.targetPositions[this.currentMovingShip]);
+			var distance = this.shipArray[this.currentMovingShip].mesh.position.distanceTo(this.targetPositions[this.currentMovingShip]);
 			if(distance > 2)
 			{
-				this.shipArray[this.currentMovingShip].translateOnAxis(this.targetDirection, 3);
+				this.shipArray[this.currentMovingShip].mesh.translateOnAxis(this.targetDirection, 3);
 				
 			}
 			else
@@ -98,7 +102,7 @@ function vFormation()
 				}
 				else
 				{
-						this.targetDirection.subVectors(this.targetPositions[this.currentMovingShip], this.shipArray[this.currentMovingShip].position);
+						this.targetDirection.subVectors(this.targetPositions[this.currentMovingShip], this.shipArray[this.currentMovingShip].mesh.position);
 						this.targetDirection.normalize();	
 				}
 			}
