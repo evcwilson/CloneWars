@@ -33,6 +33,9 @@ var numStates = 0;
 
 var gamePaused = false;
 var gameRestart = false;
+var gameOver = false;
+var playerWon = false;
+var playerLost = false;
 
 // SCORE STUFF
 var hud = new hudObject();
@@ -47,6 +50,7 @@ function initializeGame()
 	registerState(new startMode());
 	registerState(new gameMode());
 	registerState(new pausedMode() );
+	registerState(new gameOverMode() );
 	// registerState(new creditsState() );		// for future use
 	
 	pushState(stateRegister[0]);
@@ -64,6 +68,7 @@ function updateGame()
 	stateStack[currentState].run();
 	
 	// if something triggers the game to proceed to the next State
+	
 	if( stateStack[currentState].nextState() == true)
 	{
 		nextState();
@@ -146,9 +151,18 @@ function popState()
 
 function nextState()
 {
+	var currentStateName = stateStack[currentState].constructor.name;
 	var stackLength = stateStack.length - 1;
 	popState();
-	pushState(stateRegister[++statePointer]);
+	
+	switch(currentStateName)
+	{
+		case "startMode":
+			pushState(stateRegister[++statePointer]);
+			break;
+		default:
+			pushState(stateRegister[stateRegister.length - 1]);
+	}
 	stateStack[stackLength].init();
 }
 

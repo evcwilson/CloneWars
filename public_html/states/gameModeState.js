@@ -29,7 +29,7 @@ function gameMode()
 	var numLevels = 0;
 	
 	
-	this.gameOver = false;
+	var gameOver = false;
 	
 	// functions Declarations/Definitions
 	
@@ -37,12 +37,17 @@ function gameMode()
 	this.init = function()
 	{
 		// Add levels to the game
+		
+		// to test the game over state, only add 1 level with 1 ships
+		addLevel(new cohort(1) );
+		
+		/*
 		addLevel(new cohort(5), 		new cavalry(2,6), 		new chargingCohort(8));
 		addLevel(new cohort(10), 		new cavalry(2,8), 		new chargingCohort(16));
 		addLevel(new cavalry(4, 10), 	new cohort(15), 		new vFormation());
 		addLevel(new cavalry(6, 16), 	new diamondFormation(), new cohort(20) );
 		addLevel(new cavalry(8, 25), 	new cohort(25), 		new chargingCohort(40) );
-		
+		*/
 		
 		scene = this.scene;
 		camera = this.camera;
@@ -50,7 +55,9 @@ function gameMode()
 		scene.add(playerMesh);
 		playerMesh.position.set(0,-250,0);
 		_Ship.prototype.resetPlayerScore();
-		
+		gameOver = false;
+		playerWon = false;
+		playerLost = false;
 		levels[currentLevel].initNextEnemyWave();
 		hud.addToScene(scene);
 	}
@@ -60,7 +67,8 @@ function gameMode()
 		// check if player has health remaining
         if(playerHealth <= 0)
 		{
-			this.gameOver = true;
+			playerLost = true;
+			gameOver = true;
 			return;
 		}
 		// check if all enemies are defeated in the current enemyWave
@@ -83,7 +91,8 @@ function gameMode()
 				if(checkLastLevel() == true)
 				{
 					//if not, game is over and go to the next state
-					this.gameOver = true;
+					playerWon = true;
+					gameOver = true;
 					return;
 				}
 				else
@@ -119,8 +128,9 @@ function gameMode()
 		levels.length = 0;
 		currentLevel = 0;
 		numLevels = 0;
-		this.gameOver = false;
+		
 		scene.remove(particleSystem);
+		hud.reset();
 	}
 	
 	this.paused = function()
@@ -134,13 +144,21 @@ function gameMode()
 	
 	}
 	
+	this.nextState = function()
+	{
+		if(playerWon == true || playerLost == true)
+		{
+			this.cleanupState();
+			return true;
+		}
+	}
+	
 	this.exit = function()
 	{
 		// check if something occurred to end the game
-		if(this.gameOver == true)
+		if(gameOver == true)
 		{
 			this.cleanupState();	
-			hud.reset();
 			return true;
 		}
 	}
