@@ -17,6 +17,7 @@ function startMode()
 	var startTextGeometry = new THREE.TextGeometry( startText, { size: 12, height: 25, font: 'press start k' });
 	var startTextMaterial = new THREE.MeshBasicMaterial({color: 0x46BF40});
 	var startTextMesh = new THREE.Mesh( startTextGeometry ,startTextMaterial);
+        
 	
 	this.init = function()
 	{

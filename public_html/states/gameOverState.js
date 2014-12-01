@@ -32,12 +32,14 @@ function gameOverMode()
 		drawBackground(this.scene);
 		
 		if(playerWon == true)
-		{
+		{       
+                        stopBackgroundMusic();
 			statusMesh = youWinTextMesh;
 			//VictoryMusic();
 		}
 		else if(playerLost == true)
 		{
+                        stopBackgroundMusic();
 			statusMesh = youLoseTextMesh;
 			//GameOverMusic();
 		}

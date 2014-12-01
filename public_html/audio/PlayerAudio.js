@@ -55,9 +55,9 @@ function initSound(){
 }
 
 function finishedLoading(bufferList){
-    menuMusic = context.createBufferSource();
+    
    
-    menuMusic.buffer = bufferList[0];
+    BufferL["menuMusic"] = bufferList[0];
     BufferL["player_fire"] = bufferList[1];
     BufferL["enemy_fire"] = bufferList[2];
     BufferL["enemy_fire2"] = bufferList[3];
@@ -66,7 +66,7 @@ function finishedLoading(bufferList){
     BufferL["game_over"] = bufferList[5];
     BufferL["victory_music"] = bufferList[6];
     
-    menuMusic.connect(context.destination);
+ 
     
     
     startMenuMusic();
@@ -74,7 +74,9 @@ function finishedLoading(bufferList){
 }
         
 function startMenuMusic(){
-                    
+        menuMusic = context.createBufferSource();
+        menuMusic.buffer = BufferL["menuMusic"];
+        menuMusic.connect(context.destination);
         menuMusic.loop = true; 
         menuMusic.start(0);
 }
