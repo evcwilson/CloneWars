@@ -20,11 +20,9 @@ canvas{
 }
 
 .title{
-    color: red;
-    font-family: serif;
-    font-size: 20px;
-    font-weight: bold;
-    
+    left: 50%;
+    transform: translate(-50%);
+    position: absolute;
 }
 .centered{
     position:fixed; 
@@ -48,7 +46,9 @@ a:visited{
 
 .header{
     font-size: xx-large;
-    color: black;
+    color: #33ff33;
+    text-align: center;
+    font-family: "Segoe UI", fantasy;
 }
 
 .keys{
@@ -77,4 +77,40 @@ a:visited{
     text-align: center; 
     z-index: 1001; 
     vertical-align: middle; 
+}
+
+#AboutUs{
+    position: fixed;
+    top:150px;
+    right:200px;
+    height:600px;
+    width:400px; 
+    font-family: "Franklin Gothic Book", fantasy;
+}
+#HighScores{
+    position: fixed; 
+    top:150px;
+    left: 200px; 
+    height: 600px;
+    width: 400px; 
+    font-family: "Franklin Gothic Book", fantasy;
+}
+
+#Instructions{
+    position:fixed;
+    top:725px;
+    left:50%;
+    transform: translate(-50%);
+    height: 200px; 
+    width: 600px;
+    font-family: "Franklin Gothic Book", fantasy;
+}
+
+.Keys{
+    width: 200px;
+    height: 300px; 
+}
+
+#spacebar{
+    vertical-align: bottom;
 }

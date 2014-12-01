@@ -12,8 +12,17 @@ and open the template in the editor.
         <link rel="stylesheet" href="style.css" type="text/css">
     </head>
     <body>
-        <div class="title" id="Title" align="center">
-            <h1>Clone Wars</h1>
+        <div class="title">
+            <img src="Sprites/clonewarstitle.png" style="width:400px;height:100px" alt="Clone Wars">
+        </div>
+        
+        <div id="HighScores">
+             <div class="header">
+                High Scores
+            </div>
+            <?php
+            echo "test";
+            ?>
         </div>
         <div class="centered" id="WebGLCanvas">
         
@@ -52,6 +61,23 @@ and open the template in the editor.
 	<script src="game.js"></script>
 	<script src="main.js"></script>
          </div>  
+        <div id="Instructions">
+             <div class="header">
+                How To Play
+            </div>
+            <table><tr>
+                    <td><img id="Keys" src="Sprites\wasd.gif" style="width:300px;height:150px" alt="Keys"></td>
+                    <td id="spacebar"><img src="Sprites\spacebar.gif" style="width:300px;height:75px" alt="Spacebar"></td>
+            </tr>
+            </table>
+            
+        </div>
         
+        <div id="AboutUs" >
+            <div class="header">
+                About Us
+            </div>
+            <p>Test</p>
+        </div>
     </body>
 </html>
