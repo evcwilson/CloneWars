@@ -42,6 +42,7 @@ function pausedMode()
 
 	this.init = function()
 	{
+                stopBackgroundMusic();
 		this.scene = stateStack[currentState].scene;
 		this.camera = stateStack[currentState].camera;
 		this.scene.add(this.pausedMesh);
@@ -97,10 +98,15 @@ function pausedMode()
 			this.scene.remove(this.pausedMesh);
 			this.scene.remove(this.resumeMesh);
 			this.scene.remove(this.exitMesh);
-			if(choice == 1)
+                        if(choice == 0)
+                        {
+                            resumeBackgroundMusic();
+                        }               
+                        else if(choice == 1)
 			{
 				gameRestart = true;
 				hud.reset();
+                                startMenuMusic(); 
 			}
 			escapePressed = false;
 			keyPressedEnter = false;
