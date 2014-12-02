@@ -128,36 +128,24 @@ function EnemyExplosion(){
 }
 
 function BackgroundMusic(){
-   // background_music.gainNode = null; 
-    
-   // this.gainNode = context.createGain(); 
     backgroundTimer = new Date().getTime() /1000;
     
     background_music = context.createBufferSource(); 
     background_music.buffer = BufferL["background_music"];
-    
-   // background_music.connect(this.gainNode);
     background_music.connect(context.destination);
     background_music.loop = true; 
-   // background_music.gain.value = 0.5; 
     background_music.playbackRate.value = 1; 
     background_music.start(0);
 }
 
 function resumeBackgroundMusic(){
-   // background_music.gainNode = null; 
-    
-   // this.gainNode = context.createGain(); 
     background_music = context.createBufferSource(); 
     background_music.buffer = BufferL["background_music"];
     
-   // background_music.connect(this.gainNode);
     background_music.connect(context.destination);
     background_music.loop = true; 
-   // background_music.gain.value = 0.5; 
     background_music.playbackRate.value = 1; 
     background_music.start(0, musicOffset);
-   // alert(musicOffset);
 }
 
 function stopBackgroundMusic(){

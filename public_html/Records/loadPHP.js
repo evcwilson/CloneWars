@@ -4,4 +4,6 @@
  * and open the template in the editor.
  */
 
-$("#HighScores").load("test.php");
+$("#Scores").load("test.php", function(){ 
+    alert("Load was performed");
+});
