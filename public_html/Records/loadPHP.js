@@ -4,6 +4,6 @@
  * and open the template in the editor.
  */
 
-$("#Scores").load("test.php", function(){ 
-    alert("Load was performed");
-});
+//$("#Scores").load("test.php", function(){ 
+//    alert("Load was performed");
+//});

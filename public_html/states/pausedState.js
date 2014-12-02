@@ -98,14 +98,16 @@ function pausedMode()
 			this.scene.remove(this.pausedMesh);
 			this.scene.remove(this.resumeMesh);
 			this.scene.remove(this.exitMesh);
-			if(choice == 1)
+                        if(choice == 0)
+                        {
+                            resumeBackgroundMusic();
+                        }               
+                        else if(choice == 1)
 			{
 				gameRestart = true;
 				hud.reset();
-                                stopBackgroundMusic(); 
                                 startMenuMusic(); 
 			}
-                        resumeBackgroundMusic();
 			escapePressed = false;
 			keyPressedEnter = false;
 			return true;
