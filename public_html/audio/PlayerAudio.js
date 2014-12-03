@@ -6,7 +6,8 @@
 
 
 var backgroundTime = 0.0,
-    musicOffset = 0.0; 
+    musicOffset = 0.0,
+    firstPlay = true; 
 
 var file = 'audio/Sounds/pacman_beginning.wav',
         player_fire_file = 'audio/Sounds/scifi002.mp3',
@@ -128,25 +129,29 @@ function EnemyExplosion(){
 }
 
 function BackgroundMusic(){
-    backgroundTimer = new Date().getTime() /1000;
+    
+    if(firstPlay){
+        backgroundTimer = new Date().getTime() /1000;
+        firstPlay = false;
+    }
     
     background_music = context.createBufferSource(); 
     background_music.buffer = BufferL["background_music"];
-    background_music.connect(context.destination);
-    background_music.loop = true; 
-    background_music.playbackRate.value = 1; 
-    background_music.start(0);
-}
-
-function resumeBackgroundMusic(){
-    background_music = context.createBufferSource(); 
-    background_music.buffer = BufferL["background_music"];
-    
     background_music.connect(context.destination);
     background_music.loop = true; 
     background_music.playbackRate.value = 1; 
     background_music.start(0, musicOffset);
 }
+
+//function resumeBackgroundMusic(){
+//    background_music = context.createBufferSource(); 
+//    background_music.buffer = BufferL["background_music"];
+//    
+//    background_music.connect(context.destination);
+//    background_music.loop = true; 
+//    background_music.playbackRate.value = 1; 
+//    background_music.start(0, musicOffset);
+//}
 
 function stopBackgroundMusic(){
     musicOffset = (new Date().getTime() / 1000) - backgroundTimer;  

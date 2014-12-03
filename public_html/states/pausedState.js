@@ -100,7 +100,8 @@ function pausedMode()
 			this.scene.remove(this.exitMesh);
                         if(choice == 0)
                         {
-                            resumeBackgroundMusic();
+                            
+                    BackgroundMusic();
                         }               
                         else if(choice == 1)
 			{
