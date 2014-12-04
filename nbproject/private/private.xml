@@ -2,13 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
-        <group/>
-=======
         <group>
+            <file>file:/D:/Users/Wilsons/Documents/GitHub/CloneWars/public_html/states/pausedState.js</file>
+            <file>file:/D:/Users/Wilsons/Documents/GitHub/CloneWars/public_html/Records/loadPHP.js</file>
+            <file>file:/D:/Users/Wilsons/Documents/GitHub/CloneWars/public_html/index.html</file>
+            <file>file:/D:/Users/Wilsons/Documents/GitHub/CloneWars/public_html/states/gameModeState.js</file>
+            <file>file:/D:/Users/Wilsons/Documents/GitHub/CloneWars/public_html/audio/PlayerAudio.js</file>
             <file>file:/D:/Users/Wilsons/Documents/GitHub/CloneWars/public_html/player.js</file>
             <file>file:/D:/Users/Wilsons/Documents/GitHub/CloneWars/public_html/style.css</file>
+            <file>file:/D:/Users/Wilsons/Documents/GitHub/CloneWars/public_html/states/state.js</file>
+            <file>file:/D:/Users/Wilsons/Documents/GitHub/CloneWars/public_html/states/gameOverState.js</file>
         </group>
->>>>>>> origin/master
     </open-files>
 </project-private>

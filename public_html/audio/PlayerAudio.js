@@ -15,6 +15,9 @@ var file = 'audio/Sounds/pacman_beginning.wav',
         enemy_fire_file2 = 'audio/Sounds/Photon1.mp3',
         enemy_explosion_file = null, 
         background_music_file = 'audio/Sounds/ChandelierBackgroundAudio.mp3', 
+        laserWarmup_file = null, 
+        laserShoot_file = null, 
+        blackHoleSound_file = null,
         game_over_file = null, 
         victory_music_file = null; 
         
@@ -27,7 +30,10 @@ var menuMusic,
         player_fire,
         enemy_fire,
         enemy_explosion,
-         background_music, 
+        background_music,
+        laser_warmup,
+        laser_shoot,
+        black_hole_sound,
         game_over,
         victory_music;
 
@@ -44,6 +50,9 @@ function initSound(){
                 enemy_fire_file2,
                // enemy_explosion_file,
                   background_music_file, 
+                 // laserWarmup_file, 
+               // laserShoot_file, 
+               // blackHoleSound_file,
 //                game_over,
 //                victory_music
             ],
@@ -67,8 +76,11 @@ function finishedLoading(bufferList){
     BufferL["enemy_fire2"] = bufferList[3];
     //BufferL["enemy_explosion"] = bufferList[3];      
     BufferL["background_music"] = bufferList[4];      
-    BufferL["game_over"] = bufferList[5];
-    BufferL["victory_music"] = bufferList[6];
+    BufferL["laser_warmup"] = bufferList[5];      
+    BufferL["laser_shoot"] = bufferList[6];      
+    BufferL["black_hole_sound"] = bufferList[7];      
+    BufferL["game_over"] = bufferList[8];
+    BufferL["victory_music"] = bufferList[9];
     
  
     
@@ -143,19 +155,36 @@ function BackgroundMusic(){
     background_music.start(0, musicOffset);
 }
 
-//function resumeBackgroundMusic(){
-//    background_music = context.createBufferSource(); 
-//    background_music.buffer = BufferL["background_music"];
-//    
-//    background_music.connect(context.destination);
-//    background_music.loop = true; 
-//    background_music.playbackRate.value = 1; 
-//    background_music.start(0, musicOffset);
-//}
-
 function stopBackgroundMusic(){
     musicOffset = (new Date().getTime() / 1000) - backgroundTimer;  
     background_music.stop(0);
+}
+
+function laserWarmup(){
+    laser_warmup = context.createBufferSource(); 
+    laser_warmup.buffer = BufferL["laser_warmup"];
+    laser_warmup.connect(context.destination);
+    laser_warmup.loop = false; 
+    laser_warmup.playbackRate.value = 1; 
+        laser_warmup.start(0);
+}
+
+function laserShoot(){
+    laser_shoot = context.createBufferSource(); 
+    laser_shoot.buffer = BufferL["laser_shoot"];
+    laser_shoot.connect(context.destination);
+    laser_shoot.loop = false; 
+    laser_shoot.playbackRate.value = 1; 
+        laser_shoot.start(0);
+}
+
+function blackHoleSound(){
+    black_hole_sound = context.createBufferSource(); 
+    black_hole_sound.buffer = BufferL["black_hole_sound"];
+    black_hole_sound.connect(context.destination);
+    black_hole_sound.loop = false; 
+    black_hole_sound.playbackRate.value = 1; 
+        black_hole_sound.start(0);
 }
 
 function GameOverMusic(){
@@ -175,3 +204,4 @@ function VictoryMusic(){
     victory_music.playbackRate.value = 1; 
         victory_music.start(0);
 }
+
