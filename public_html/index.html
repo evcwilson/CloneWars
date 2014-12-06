@@ -12,71 +12,66 @@ and open the template in the editor.
         <link rel="stylesheet" href="style.css" type="text/css">
     </head>
     <body>
-        <div class="title">
-            <img src="Sprites/clonewarstitle.png" style="width:400px;height:100px" alt="Clone Wars">
-        </div>
-        
-        <div id="HighScores">
-             <div class="header">
-                High Scores
-            </div>
-            <div id="Scores">
-            </div>
-        </div>
-        <div class="centered" id="WebGLCanvas">
-        
-            <canvas id="canvas" width="500" height="600">
-            Your browser does not support WebGl!!
-        </canvas> 
-        
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        
-        <script src="audio/buffer-loader.js"></script>
-        <script src="audio/PlayerAudio.js"></script>
-        
-        <script src="Records/loadPHP.js"></script>
-        
-	<script src="three.min.js"></script>
-	<script src="arkitech_medium_medium.typeface.js"></script>
-	<script src="press_start_k_regular.typeface.js"></script>
-	<script src="enemyWaves/enemyWave.js"></script>
-	<script src="enemyWaves/cohorts.js"></script>
-	<script src="enemyWaves/chargingCohort.js"></script>
-	<script src="enemyWaves/cavalry.js"></script>
-	<script src="enemyWaves/diamondFormation.js"></script>
-	<script src="enemyWaves/vFormation.js"></script>
-	<script src="states/state.js"></script>
-	<script src="states/startState.js"></script>
-	<script src="states/pausedState.js"></script>
-	<script src="states/gameOverState.js"></script>
-	<script src="states/gameModeState.js"></script>
-	<script src="level.js"></script>
-        <script src="player.js"></script>
-	<script src="enemyShip.js"></script>
-        <script src="background.js"></script>
-	<script src="render.js"></script>
-	<script src="events.js"></script>
-	<script src="hud.js"></script>
-	<script src="game.js"></script>
-	<script src="main.js"></script>
-         </div>  
-        <div id="Instructions">
-             <div class="header">
-                How To Play
-            </div>
-            <table><tr>
-                    <td><img id="Keys" src="Sprites\wasd.gif" style="width:300px;height:150px" alt="Keys"></td>
-                    <td id="spacebar"><img src="Sprites\spacebar.gif" style="width:300px;height:75px" alt="Spacebar"></td>
+        <table> 
+            <tr id="title">
+                <td colspan="4"><img src="Sprites/clonewarstitle.png" alt="CloneWars" height="100" width="600"></td>
             </tr>
-            </table>
-            
-        </div>
-        
-        <div id="AboutUs" >
-            <div class="header">
-                About Us
-            </div>
-            <p>Test</p>
-        </div>
+            <tr><td class="header">High Scores</td><td colspan="2" width="500"></td><td class="header">About Us</td></tr>
+            <tr id="pageBody">
+                <td id="HighScores">
+                    This is a test to see what this will look like. 
+                </td> 
+                <td colspan="2" id="canvaswrap">
+                    <div id="WebGLCanvas">
+
+                        <canvas id="canvas" width="500" height="600">
+                            Your browser does not support WebGl!!
+                        </canvas> 
+
+                        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+                        <script src="audio/buffer-loader.js"></script>
+                        <script src="audio/PlayerAudio.js"></script>
+
+                        <script src="Records/loadPHP.js"></script>
+
+                        <script src="three.min.js"></script>
+                        <script src="arkitech_medium_medium.typeface.js"></script>
+                        <script src="press_start_k_regular.typeface.js"></script>
+                        <script src="enemyWaves/enemyWave.js"></script>
+                        <script src="enemyWaves/cohorts.js"></script>
+                        <script src="enemyWaves/chargingCohort.js"></script>
+                        <script src="enemyWaves/cavalry.js"></script>
+                        <script src="enemyWaves/diamondFormation.js"></script>
+                        <script src="enemyWaves/vFormation.js"></script>
+                        <script src="states/state.js"></script>
+                        <script src="states/startState.js"></script>
+                        <script src="states/pausedState.js"></script>
+                        <script src="states/gameOverState.js"></script>
+                        <script src="states/gameModeState.js"></script>
+                        <script src="level.js"></script>
+                        <script src="player.js"></script>
+                        <script src="enemyShip.js"></script>
+                        <script src="background.js"></script>
+                        <script src="render.js"></script>
+                        <script src="events.js"></script>
+                        <script src="hud.js"></script>
+                        <script src="game.js"></script>
+                        <script src="main.js"></script>
+                    </div>  
+                </td>
+                <td id="AboutUs">
+                    This is a test to see what this looks like
+                </td>
+            </tr>
+            <tr>
+                <td> </td> <td colspan="2" class="header"> How to Play</td><td></td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><img id="Keys" src="Sprites\wasd.gif" style="width:275px;height:150px" alt="Keys"></td>
+                <td id="spacebar" colspan="2"><img src="Sprites\spacebar.gif" style="width:275px;height:75px" alt="Spacebar"></td>
+            </tr>
+        </table> 
     </body>
 </html>

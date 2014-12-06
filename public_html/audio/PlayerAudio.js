@@ -90,6 +90,8 @@ function finishedLoading(bufferList){
 }
         
 function startMenuMusic(){
+        firstPlay = true; 
+        musicOffset = 0.0;
         menuMusic = context.createBufferSource();
         menuMusic.buffer = BufferL["menuMusic"];
         menuMusic.connect(context.destination);

@@ -108,6 +108,7 @@ function pausedMode()
 				gameRestart = true;
 				hud.reset();
                                 startMenuMusic(); 
+                                
 			}
 			escapePressed = false;
 			keyPressedEnter = false;
