@@ -7,7 +7,8 @@
 
 var backgroundTime = 0.0,
     musicOffset = 0.0,
-    firstPlay = true; 
+    firstPlay = true,
+    menuMusicPlaying = false; 
 
 var file = 'audio/Sounds/pacman_beginning.wav',
         player_fire_file = 'audio/Sounds/scifi002.mp3',
@@ -91,6 +92,7 @@ function finishedLoading(bufferList){
         
 function startMenuMusic(){
         firstPlay = true; 
+        menuMusicPlaying = true; 
         musicOffset = 0.0;
         menuMusic = context.createBufferSource();
         menuMusic.buffer = BufferL["menuMusic"];

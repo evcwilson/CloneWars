@@ -45,19 +45,22 @@ function startMode()
 	
 	this.nextState = function()
 	{
-		if(keyPressedEnter == true)
-		{
-			keyPressedEnter = false;
-                        stopMenuMusic();
-                        BackgroundMusic();
-			//scene.remove(particleSystem);
-			//hud.removeFromScene();
-			return true;
-		}
-		if(keyPressedLeft == true)
-		{
-			
-		}
+		
+            if (menuMusicPlaying){
+                if(keyPressedEnter == true)
+                    {
+                            keyPressedEnter = false;
+                            stopMenuMusic();
+                            BackgroundMusic();
+                            //scene.remove(particleSystem);
+                            //hud.removeFromScene();
+                            return true;
+                    }
+                    if(keyPressedLeft == true)
+                    {
+
+                    }
+            }
 	
 	}
 
