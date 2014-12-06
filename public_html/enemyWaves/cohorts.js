@@ -49,7 +49,7 @@ function cohort(num)
 		// create numShips number of ships and add them to the scene
 		for(var i = 0; i < this.numShips; i++)
 		{
-			this.shipArray[i] = new enemyShip(pawn);//_Ship.prototype.makeShipSprite( smallShipGeometry, smallShipMaterial );
+			this.shipArray[i] = new enemyShip( { shipRank: centurion} );
 			scene.add(this.shipArray[i].mesh);
 		}
 		
@@ -78,9 +78,10 @@ function cohort(num)
 		this.targetPosition.setX(xInitPos)
 		
 	}
-	
-	this.run = function()
+	var pos = new THREE.Vector3(200, 200, 1);
+	this.run = function(game)
 	{
+	
 		// move the ships in formation to the target position....
 		if(this.allShipsInPosition == false)
 		{

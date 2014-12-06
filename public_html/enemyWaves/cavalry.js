@@ -45,13 +45,12 @@ function cavalry(numShipsCavalry, numShipsCohort)
 									
 		var shipMaterialCavalry = new THREE.MeshBasicMaterial( { map: pawnShipSprite, side : THREE.DoubleSide, transparent: true } );
 		var shipGeometryCohort = [50,50];
-		//var shipMaterialCohort  = new THREE.MeshBasicMaterial( { color: "red", side : THREE.DoubleSide } );
 		var shipMaterialCohort  = new THREE.MeshBasicMaterial( { map: pawnShipSprite, side : THREE.DoubleSide, transparent: true } );
 									
 		
 		for(var i = 0; i < this.numShipsCavalry; i++)
 		{
-			this.shipArray[i] = new enemyShip(centurion);// _Ship.prototype.makeShipSprite(shipGeometryCavalry, shipMaterialCavalry);
+			this.shipArray[i] = new enemyShip( {shipRank: centurion } );
 			scene.add(this.shipArray[i].mesh);
 			if( i > 0 && i % 2 == 0)
 				yInitPos -= 75;
@@ -72,7 +71,7 @@ function cavalry(numShipsCavalry, numShipsCohort)
 		var counter = 0;
 		for(var i = this.numShipsCavalry, xFlip = -1; i < this.numShips; i++ )
 		{
-			this.shipArray[i] = new enemyShip(pawn);//_Ship.prototype.makeShipSprite(shipGeometryCohort, shipMaterialCohort);
+			this.shipArray[i] = new enemyShip( {shipRank: pawn } );
 			scene.add(this.shipArray[i].mesh);
 			
 			// set the x-position of the first ship

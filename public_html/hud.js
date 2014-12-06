@@ -5,6 +5,10 @@
 	hudObject displays text and such.
 	
 */
+
+var playerLivesTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.gif');
+
+
 function hudObject()
 {
 	// material for hud texts
@@ -369,7 +373,6 @@ function hudObject()
 		
 		var playerLivesMesh;
 		var playerLivesGeometry = new THREE.PlaneGeometry(36,36,32);
-		var playerLivesTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.gif');
 		
 		
 		// creates new player lives meshes 
@@ -395,5 +398,18 @@ function hudObject()
 			playerLivesArray.length = size;
 			playerLivesNum--;
 		}
+	}
+	
+	this.addPlayerLife = function()
+	{
+		var size = playerLivesArray.length;
+		var playerLivesGeometry = new THREE.PlaneGeometry(36,36,32);
+		
+		playerLivesMesh = new THREE.Mesh( playerLivesGeometry, new THREE.MeshBasicMaterial({transparent: true, map: playerLivesTexture}) );
+		playerLivesArray[size] = playerLivesMesh;
+		scene.add(playerLivesArray[size]);
+		playerLivesArray[size].position.copy(playerLivesPosition);
+		playerLivesArray[size].position.setX(playerLivesPosition.x - (45 * (size))); 
+		playerLivesNum++;
 	}
 }

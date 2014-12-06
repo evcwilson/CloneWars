@@ -54,7 +54,7 @@ function chargingCohort(num)
 		// create numShips number of ships and add them to the scene
 		for(var i = 0; i < this.numShips; i++)
 		{
-			this.shipArray[i] = new enemyShip(pawn);//_Ship.prototype.makeShipSprite( smallShipGeometry, smallShipMaterial );
+			this.shipArray[i] = new enemyShip( { shipRank: pawn } );//_Ship.prototype.makeShipSprite( smallShipGeometry, smallShipMaterial );
 			scene.add(this.shipArray[i].mesh);
 		}
 		

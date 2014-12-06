@@ -37,7 +37,7 @@ function diamondFormation()
 			
 		this.bossShipMaterial = new THREE.MeshBasicMaterial( { map: pawnShipSprite, transparent: true, side : THREE.DoubleSide } );
 		
-		this.bossShipMesh = new enemyShip(centurion);//_Ship.prototype.makeShipSprite(this.bossShipGeometry, this.bossShipMaterial);
+		this.bossShipMesh = new enemyShip( { shipRank: centurion } );//_Ship.prototype.makeShipSprite(this.bossShipGeometry, this.bossShipMaterial);
 		this.bossShipMesh.mesh.position.set(0, 110, 1);
 		scene.add(this.bossShipMesh.mesh);
 		this.shipArray[this.numShips++] = this.bossShipMesh;
@@ -83,10 +83,10 @@ function diamondFormation()
 		// create pawn ship array and assign positions
 		for( var i = 0; i < 4; i++)
 		{
-			this.pawnShipArray[i] = new enemyShip(pawn);//_Ship.prototype.makeShipSprite(this.pawnShipGeometry, this.pawnShipMaterial);
+			this.pawnShipArray[i] = new enemyShip( { shipRank: pawn } );//_Ship.prototype.makeShipSprite(this.pawnShipGeometry, this.pawnShipMaterial);
 			scene.add(this.pawnShipArray[i].mesh );
 			this.shipArray[this.numShips++] = this.pawnShipArray[i];
-			this.pawnShipArray[i].mesh.position.copy(this.diamondPoints[i]);//50, -60 * (i + 1), 0);
+			this.pawnShipArray[i].mesh.position.copy(this.diamondPoints[i]);
 			
 		}
 		
@@ -95,8 +95,8 @@ function diamondFormation()
 		for(var i = 0, lp = 3; i < 4; i++)
 		{
 		
-			this.pawnShipArray[i].sourceLerpPoint = 0;//lp;
-			this.pawnShipArray[i].destLerpPoint = (i + 1) % 4;//1;//((lp++) % 4);
+			this.pawnShipArray[i].sourceLerpPoint = 0;
+			this.pawnShipArray[i].destLerpPoint = (i + 1) % 4;
 		}
 		
 		// assigns target direction for each pawn ship
@@ -164,6 +164,7 @@ function diamondFormation()
 			var globalPos = new THREE.Vector3();
 			globalPos.setFromMatrixPosition( shootingShip.mesh.matrixWorld );
 			_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
+			EnemyFire2();
 			this.shootTimer = 0;
 		}
 		

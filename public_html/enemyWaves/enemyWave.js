@@ -32,7 +32,7 @@ function enemyWave()
 	this.numShips = 0;
 	this.shipArray = [];
 	this.mainShip; 
-	
+	this.laserOn = false;
 	// 
 	this.enemyShipSpeed = 0;
 	
@@ -106,6 +106,7 @@ function enemyWave()
 			var globalPos = new THREE.Vector3();
 			globalPos.setFromMatrixPosition( shootingShip.matrixWorld );
 			_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
+			EnemyFire2();
 			this.shootTimer = 0;
 		}
 
@@ -142,23 +143,37 @@ function enemyWave()
 		return this.numShips == 0;
 	}
 	
-	this.checkCollision = function()
+	this.checkCollision = function(game)
 	{	
 		// if a projectile exists
-		if(projectile && this.waveReady == true)
+		if(projPresent == true && this.waveReady == true)
 		{
 			//loop through each ship and check if projectile is within distance
 			for(var i = 0; i < this.shipArray.length; i++)
 			{
 				var ship = this.shipArray[i];
 				if(Math.abs(ship.mesh.position.y - projectile.position.y) < 20
-					&& Math.abs(ship.mesh.position.x - projectile.position.x) < 20)
+					&& Math.abs(ship.mesh.position.x - projectile.position.x) < 20) 
 				{
-					
+					if(ship.shield != null)
+					{
+						if(ship.shield.active == true)
+						return;
+					}
+					if(ship.laserBeam != null)
+					{
+						if(ship.laserBeam.active == true)
+						return;
+					}
 					ship.damage();
 					
 					if(ship.getHealth() <= 0)
 					{
+						var randomNumber = Math.floor(Math.random() * 11);
+						
+						if(randomNumber < 5)
+							game.addPowerup(healthPowerup, ship.mesh.position);
+							
 						// remove ship from scene and shipArray
 						scene.remove(ship.mesh);
 						hud.updateScore(ship.getKillPoints());
@@ -184,7 +199,15 @@ function enemyWave()
 						break;
 					
 				}
+				
+				// if ship has shield, check collision
+				if(ship.shield != null)
+				{
+					ship.shield.checkCollision();
+				}
 			}
+			
+			
 		}
 	}
 	
@@ -197,6 +220,12 @@ function enemyWave()
 				_Ship.prototype.moveEneProjectile(i);
 			}
 		}
+	}
+	
+	this.checkLaser = function()
+	{
+		
+		return false;
 	}
 
 }

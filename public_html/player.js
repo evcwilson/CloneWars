@@ -10,6 +10,7 @@ var playerImage,
     playerHealth = 3,
     speed = 2.5,
     powerup = false; 
+
 	
 var resetPlayerHealthNum = 3;	
 
@@ -17,6 +18,8 @@ var projGeo,
     projMaterial,
     projectile,
     projPresent = false;
+	
+var projVelocity = new THREE.Vector3(0, 9, 1);
     
 var enemyProjectGeo,
     enemyHealth, 
@@ -34,8 +37,8 @@ function initPlayer(){
     
 var player = [50,50];
 var playerTexture = new THREE.ImageUtils.loadTexture('Sprites/player_ship.gif');
-playerMesh = _Ship.prototype.makeShipSprite(player, new THREE.MeshBasicMaterial({transparent: true, map: playerTexture}));
-playerMesh.position.set(0,-250,0);
+playerMesh = _Ship.prototype.makeShipSprite(player, new THREE.MeshBasicMaterial({transparent: true, map: playerTexture, alphaTest: 0.5}));
+playerMesh.position.set(0,-250,-10000);
 //scene.add(playerMesh);
    
 }
@@ -56,6 +59,7 @@ function playerUpdate(){
         _Ship.prototype.playerProjectile(playerMesh.position.x,
         playerMesh.position.y + 10, new THREE.MeshBasicMaterial({color:'white'}));
     }
+	
     
 
 }
@@ -106,7 +110,7 @@ _Ship.prototype ={
        scene.add(projectile);
     },
     //Checks for collisions with the enemy ship. 
-    checkEnemyCollision: function(){
+    checkEnemyCollision: function(game){
         if (enemyProjectCount > 0)
         {
             for(var x = 0; x < enemyProjectCount; x++)
@@ -124,6 +128,39 @@ _Ship.prototype ={
                                 }
             }
         }
+		
+		if( game.levels[game.currentLevel].checkLaser() == true)
+		{
+			playerHealth = _Ship.prototype.health(playerHealth, 1, playerMesh);
+			hud.removePlayerLife();
+		}
+		
+		
+		if(game.powerups.length >= 0)
+		{
+			
+			var size = game.powerups.length;
+			for(var i = 0; i < size; i++)
+			{
+				if(Math.abs(playerMesh.position.x - game.powerups[i].mesh.position.x) < 40 && Math.abs(playerMesh.position.y - game.powerups[i].mesh.position.y) < 40 )
+				{
+					switch(game.powerups[i].constructor.name)
+					{
+						case "healthPowerup":
+						{
+							if(playerHealth < resetPlayerHealthNum)
+							{
+								playerHealth++;
+								hud.addPlayerLife();
+								game.removePowerup(game.powerups[i], i);
+								break;
+							}
+						}
+						
+					}
+				}
+			}
+		}
     },
     //Creates the enemy projectile
     enemyProjectile: function(x,y,mat){
@@ -150,10 +187,12 @@ _Ship.prototype ={
     //Moves player Projectile. 
     moveProjectile: function(){
         
-           projectile.position.y += 9;
-        if (projectile.position.y > 285){
+           projectile.position.add(projVelocity); //projectile.position.y += 9;
+        if (projectile.position.y > 285 || projectile.position.y < -285 || projectile.position.x > 255 || projectile.position.x < -255  )
+		{
            scene.remove(projectile);
            projPresent = false; 
+		   _Ship.prototype.resetProjVelocity();
        }
     },
 	
@@ -162,6 +201,16 @@ _Ship.prototype ={
 		// resets the health back to the default resetPlayerHealthNum, 
 		// since playerHealth decreases after every damage
 		playerHealth = resetPlayerHealthNum;
-	}
+	},
+	
+	setProjVelocity: function(v)
+	{
+		projVelocity.copy(v);
+	},
+	
+	resetProjVelocity: function()
+	{
+		projVelocity.set(0,9,0);
+	},
        
 };

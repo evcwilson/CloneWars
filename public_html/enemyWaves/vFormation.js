@@ -38,9 +38,9 @@ function vFormation()
 		for(var i = 0; i < 3; i++)
 		{
 			if(i == 0)
-				this.shipArray[i] = new enemyShip(centurion);//_Ship.prototype.makeShipSprite(vFormGeometry, vFormMaterial);
+				this.shipArray[i] = new enemyShip( { shipRank: centurion });//_Ship.prototype.makeShipSprite(vFormGeometry, vFormMaterial);
 			else
-				this.shipArray[i] = new enemyShip(pawn);
+				this.shipArray[i] = new enemyShip( { shipRank: pawn } );
 				
 			scene.add(this.shipArray[i].mesh);
 			this.shipArray[i].mesh.position.set( -100, 400, 1 );
