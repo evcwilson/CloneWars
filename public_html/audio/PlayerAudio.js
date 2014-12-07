@@ -20,7 +20,10 @@ var file = 'audio/Sounds/pacman_beginning.wav',
         laserShoot_file = 'audio/Sounds/laserShoot.mp3',
         blackHoleSound_file = null,
         game_over_file = null, 
-        victory_music_file = null; 
+        victory_music_file = null,
+        sw_shoot_file = null,
+        sw_warmup_file = null, 
+        sw_travel_file = null; 
         
     var bufferLoader,
         context, 
@@ -36,7 +39,10 @@ var menuMusic,
         laser_shoot,
         black_hole_sound,
         game_over,
-        victory_music;
+        victory_music,
+        sw_shoot,
+        sw_warmup, 
+        sw_travel;
 
 function initSound(){
     try{
@@ -52,7 +58,10 @@ function initSound(){
                // enemy_explosion_file,
                   background_music_file, 
                   laserWarmup_file, 
-                laserShoot_file, 
+                laserShoot_file,
+                sw_shoot_file,
+                sw_warmup_file, 
+                sw_travel_file, 
                // blackHoleSound_file,
 //                game_over,
 //                victory_music
@@ -79,9 +88,12 @@ function finishedLoading(bufferList){
     BufferL["background_music"] = bufferList[4];      
     BufferL["laser_warmup"] = bufferList[5];      
     BufferL["laser_shoot"] = bufferList[6];      
-    BufferL["black_hole_sound"] = bufferList[7];      
-    BufferL["game_over"] = bufferList[8];
-    BufferL["victory_music"] = bufferList[9];
+    BufferL["sw_shoot"] = bufferList[7];      
+    BufferL["sw_warmup"] = bufferList[8];      
+    BufferL["sw_travel"] = bufferList[9];      
+    BufferL["black_hole_sound"] = bufferList[10];      
+    BufferL["game_over"] = bufferList[11];
+    BufferL["victory_music"] = bufferList[12];
     
  
     
@@ -209,3 +221,29 @@ function VictoryMusic(){
         victory_music.start(0);
 }
 
+function swWarmup(){
+    sw_warmup = context.createBufferSource(); 
+    sw_warmup.buffer = BufferL["sw_warmup"];
+    sw_warmup.connect(context.destination);
+    sw_warmup.loop = true; 
+    sw_warmup.playbackRate.value = 1; 
+        sw_warmup.start(0);
+}
+
+function swShoot(){
+    sw_shoot = context.createBufferSource(); 
+    sw_shoot.buffer = BufferL["sw_shoot"];
+    sw_shoot.connect(context.destination);
+    sw_shoot.loop = true; 
+    sw_shoot.playbackRate.value = 1; 
+        sw_shoot.start(0);
+}
+
+function swTravel(){
+    sw_travel = context.createBufferSource(); 
+    sw_travel.buffer = BufferL["sw_travel"];
+    sw_travel.connect(context.destination);
+    sw_travel.loop = true; 
+    sw_travel.playbackRate.value = 1; 
+        sw_travel.start(0);
+}
