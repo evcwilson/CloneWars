@@ -33,12 +33,11 @@ function vFormation()
 	// function methods
 	this.init = function()
 	{
-
 		// Make three ships
-		for(var i = 0; i < 3; i++)
+		for(var i = 0; i < 7; i++)
 		{
 			if(i == 0)
-				this.shipArray[i] = new enemyShip( { shipRank: centurion });//_Ship.prototype.makeShipSprite(vFormGeometry, vFormMaterial);
+				this.shipArray[i] = new enemyShip( { shipRank: centurion, shield: true });
 			else
 				this.shipArray[i] = new enemyShip( { shipRank: pawn } );
 				
@@ -56,17 +55,22 @@ function vFormation()
 		var xFlip = 1;
 		this.targetPositions[0] = new THREE.Vector3();
 		this.targetPositions[0].copy(testBox.position);
-		
+		var yOffset = 50;
 		// set position of targetPositions with the position of test boxes (test boxes may not be visible in scene)
 		for(var i = 1; i < this.numShips; i++)
 		{
 			this.targetPositions[i] = new THREE.Vector3();
 			this.targetPositions[i].copy(testBox.position);
-			this.targetPositions[i].setX((testBox.position.x + 125) * xFlip);
+			this.targetPositions[i].setX((testBox.position.x + 65) * xFlip);
 			
 			if(i > 0)
-				this.targetPositions[i].setY(this.targetPositions[i].y + 50);
+				this.targetPositions[i].setY(this.targetPositions[i].y + yOffset );
 			xFlip = xFlip * -1.25;
+			
+			if(i % 2 == 0)
+			{
+				yOffset += 50;
+			}
 		}
 		
 		this.targetDirection.subVectors(this.targetPositions[this.currentMovingShip], this.shipArray[this.currentMovingShip].mesh.position);
@@ -112,6 +116,7 @@ function vFormation()
 		{
 			// run the default enemyWave run() function. add more after function call if necessary
 			vFormation.prototype.run.call(this);
+			
 			
 		}
 

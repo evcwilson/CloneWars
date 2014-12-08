@@ -10,7 +10,7 @@
 */
 
 
-function cohort(num)
+function cohort(num, shipType, hasShield)
 {
 	// call parent class's constructor
 	enemyWave.call(this);
@@ -49,7 +49,7 @@ function cohort(num)
 		// create numShips number of ships and add them to the scene
 		for(var i = 0; i < this.numShips; i++)
 		{
-			this.shipArray[i] = new enemyShip( { shipRank: centurion} );
+			this.shipArray[i] = new enemyShip( { shipRank: shipType, shield: hasShield } );
 			scene.add(this.shipArray[i].mesh);
 		}
 		

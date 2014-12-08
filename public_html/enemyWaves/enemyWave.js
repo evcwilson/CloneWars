@@ -59,18 +59,7 @@ function enemyWave()
 				
 	this.run = function() 
 	{
-		/*
-		// move the ships initially....
-		this.bouncePoint.translateX(this.enemyShipSpeed);
 		
-		// but, if bouncePoint is past limit...
-		if(this.bouncePoint.position.x > this.xMax || this.bouncePoint.position.x < this.xMin)
-		{
-			//reverse movement speed and move bouncePoint back...
-			this.enemyShipSpeed *= -1;
-			this.bouncePoint.translateX(this.enemyShipSpeed);
-		}
-		*/
 		// ...then move the ships
 		for(var j = 0; j < this.shipArray.length; j++)
 		{
@@ -84,7 +73,9 @@ function enemyWave()
 			if(this.shipArray[j].mesh.position.x > 225 || this.shipArray[j].mesh.position.x < -225)
 			{
 				passedBorder = true;
+				
 			}
+			
 		}
 		
 		if(passedBorder == true)
@@ -95,6 +86,7 @@ function enemyWave()
 			{
 				this.shipArray[j].mesh.translateX(this.enemyShipSpeed);
 			}
+			this.toggleShields();
 		}
 		
 		// fire projectiles randomly
@@ -112,6 +104,9 @@ function enemyWave()
 
 		// move the projectiles, if any
 		this.moveProjectiles();
+		
+		// update enemyShips
+		this.updateShips();
 	}
 										 
 	this.cleanup = function() 
@@ -132,9 +127,14 @@ function enemyWave()
 		enemyProjectCount = 0;
 		
 		// remove player's projectile from scene
-		scene.remove(projectile);
+		for(var p of playerAttacks)
+		{
+			scene.remove(p.mesh);
+		}
+		playerAttacks = [];
+		//scene.remove(projectile);
 		projPresent = false; 
-		projectile = null;
+		//projectile = null;
 	}
 	
 	
@@ -147,66 +147,79 @@ function enemyWave()
 	{	
 		// if a projectile exists
 		if(projPresent == true && this.waveReady == true)
-		{
+		{	
+			
 			//loop through each ship and check if projectile is within distance
 			for(var i = 0; i < this.shipArray.length; i++)
 			{
-				var ship = this.shipArray[i];
-				if(Math.abs(ship.mesh.position.y - projectile.position.y) < 20
-					&& Math.abs(ship.mesh.position.x - projectile.position.x) < 20) 
+				for(var j = 0; j < playerAttacks.length; j++)
 				{
+					var ship = this.shipArray[i];
+					if(playerAttacks[j].checkCollision(ship) == true)
+					{
+						
+						if(ship.shield != null)
+						{
+							if(ship.shield.active == true)
+							return;
+						}
+						if(ship.laserBeam != null)
+						{
+							if(ship.laserBeam.active == true)
+							return;
+						}
+						ship.damage();
+						
+						if(ship.getHealth() <= 0)
+						{
+							var randomNumber = Math.floor(Math.random() * 250);
+							
+							if(randomNumber < 5)
+							{
+								if(game.currentLevel >= 2)
+									game.addPickup(sonicWavePickup, ship.mesh.position);
+							}
+							else if(randomNumber < 10)
+								game.addPickup(rapidFirePickup, ship.mesh.position);
+							else if(randomNumber < 20)
+								game.addPickup(healthPickup, ship.mesh.position);
+								
+							// remove ship from scene and shipArray
+							scene.remove(ship.mesh);
+							hud.updateScore(ship.getKillPoints());
+							this.shipArray.splice(i,1);
+							this.numShips--;
+							
+							// increase enemyShipSpeed, if speedUp is true
+							if(this.speedUp == true)
+							{
+								if(this.enemyShipSpeed > 0)
+									this.enemyShipSpeed += this.deltaShipSpeed;
+								else
+									this.enemyShipSPeed -= this.deltaShipSpeed;
+							}
+							
+						}
+							// remove projectile from scene and set projectile flag to false
+							//scene.remove(projectile);
+							
+							//projPresent = false; 
+							//projectile = null;
+							if(playerAttacks[j].constructor.name != "playerSonicWave")
+								_Ship.prototype.removeProjectile(playerAttacks[j], j);
+							
+							break;
+						
+					}
+				
+					// if ship has shield, check collision
 					if(ship.shield != null)
 					{
-						if(ship.shield.active == true)
-						return;
+						ship.shield.checkCollision();
 					}
-					if(ship.laserBeam != null)
-					{
-						if(ship.laserBeam.active == true)
-						return;
-					}
-					ship.damage();
-					
-					if(ship.getHealth() <= 0)
-					{
-						var randomNumber = Math.floor(Math.random() * 11);
-						
-						if(randomNumber < 5)
-							game.addPowerup(healthPowerup, ship.mesh.position);
-							
-						// remove ship from scene and shipArray
-						scene.remove(ship.mesh);
-						hud.updateScore(ship.getKillPoints());
-						this.shipArray.splice(i,1);
-						this.numShips--;
-						
-						// increase enemyShipSpeed, if speedUp is true
-						if(this.speedUp == true)
-						{
-							if(this.enemyShipSpeed > 0)
-								this.enemyShipSpeed += this.deltaShipSpeed;
-							else
-								this.enemyShipSPeed -= this.deltaShipSpeed;
-						}
-						
-					}
-						// remove projectile from scene and set projectile flag to false
-						scene.remove(projectile);
-						projPresent = false; 
-						projectile = null;
-						
-						
-						break;
-					
 				}
-				
-				// if ship has shield, check collision
-				if(ship.shield != null)
-				{
-					ship.shield.checkCollision();
-				}
-			}
 			
+			}
 			
 		}
 	}
@@ -226,6 +239,25 @@ function enemyWave()
 	{
 		
 		return false;
+	}
+	
+	this.updateShips = function()
+	{
+		for(var ship of this.shipArray)
+		{
+			ship.update();
+		}
+	}
+	
+	this.toggleShields = function()
+	{
+		for(var ship of this.shipArray)
+		{
+			if(ship.shield != null)
+			{
+				ship.shield.toggleShield();
+			}
+		}
 	}
 
 }

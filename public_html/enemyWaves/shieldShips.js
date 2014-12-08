@@ -60,18 +60,33 @@ function shieldShips()
 			this.shipArray[i].mesh.position.copy(basePositionsCenturion[i-4]);
 		}
 		
+		for(var i = 0; i < this.shipArray.length; i++)
+		{
+			this.shipArray[i].mesh.position.y += 200;
+			var dir = new pattern();
+			if(i < 4)
+			dir.push_back( {dest: basePositionsPawn[i], speed: 2} );
+			else
+			dir.push_back( {dest: basePositionsCenturion[i-4], speed: 2} );
+			this.shipArray[i].pushPattern(dir, "0");
+		}
+		
+		
 		var dir = new pattern();
 		dir.push_back({ dest: new THREE.Vector3(-200, 125, 1),speed: 1} ); 
 		dir.push_back({ dest: new THREE.Vector3(-200,  75, 1),speed: 1} ); 
 		dir.push_back({ dest: new THREE.Vector3(-200,  25, 1),speed: 1} ); 
 		dir.push_back({ dest: new THREE.Vector3(-100, -25, 1),speed: 1.33} ); 
-		dir.push_back({ dest: new THREE.Vector3(-100, 225, 1),speed: 1} ); 
+		dir.push_back({ dest: new THREE.Vector3(-100, 225, 1),speed: 2} ); 
 		this.shipArray[0].pushPattern( dir, "1", function(ship){ 
 																if(ship.timer == 100) 
 																	ship.shield.deactivate(); 
 																	
 																if(ship.timer == 101)
 																	randomShoot(ship);  
+																if(ship.timer == 450) 
+																	ship.shield.activate(); 
+																
 																} );
 		
 		dir = new pattern()
@@ -84,7 +99,7 @@ function shieldShips()
 		dir.push_back({ dest: new THREE.Vector3(200,  75, 1),speed: 1} ); 
 		dir.push_back({ dest: new THREE.Vector3(200,  25, 1),speed: 1} ); 
 		dir.push_back({ dest: new THREE.Vector3(100, -25, 1),speed: 1.33} ); 
-		dir.push_back({ dest: new THREE.Vector3(100, 225, 1),speed: 1} ); 
+		dir.push_back({ dest: new THREE.Vector3(100, 225, 1),speed: 2} ); 
 		this.shipArray[1].pushPattern( dir, "1", function(ship){ 
 																if(ship.timer == 100) 
 																	ship.shield.deactivate(); 
@@ -94,6 +109,9 @@ function shieldShips()
 																	
 																if(ship.timer == 225)
 																	randomShoot(ship);
+																if(ship.timer == 450) 
+																	ship.shield.activate(); 
+																
 																});
 		
 		dir = new pattern()
@@ -106,11 +124,13 @@ function shieldShips()
 		dir.push_back({ dest: new THREE.Vector3( -30,  75, 1),speed: 1   });
 		dir.push_back({ dest: new THREE.Vector3(-100,  25, 1),speed: 1.68});
 		dir.push_back({ dest: new THREE.Vector3( -30, -25, 1),speed: 1   });
-		dir.push_back({ dest: new THREE.Vector3( -30, 150, 1),speed: 0.75});
+		dir.push_back({ dest: new THREE.Vector3( -30, 150, 1),speed: 2});
 		this.shipArray[2].pushPattern( dir, "1", function(ship){ if(ship.timer == 100) 
 																	ship.shield.deactivate(); 
 																if(ship.timer == 225)
 																	randomShoot(ship) 
+																if(ship.timer == 400) 
+																	ship.shield.activate(); 
 																} );
 		
 		dir = new pattern()
@@ -123,11 +143,14 @@ function shieldShips()
 		dir.push_back({ dest: new THREE.Vector3( 30,  75, 1),speed: 1});
 		dir.push_back({ dest: new THREE.Vector3(100,  25, 1),speed: 1.68});
 		dir.push_back({ dest: new THREE.Vector3( 30, -25, 1),speed: 1});
-		dir.push_back({ dest: new THREE.Vector3( 30, 150, 1),speed: 0.75});
+		dir.push_back({ dest: new THREE.Vector3( 30, 150, 1),speed: 2});
 		this.shipArray[3].pushPattern( dir, "1", function(ship){ if(ship.timer == 100) 
 																	ship.shield.deactivate(); 
 																if(ship.timer == 225)
 																	randomShoot(ship) 
+																if(ship.timer == 400) 
+																	ship.shield.activate(); 
+																
 																} );
 		
 		dir = new pattern()
@@ -135,111 +158,127 @@ function shieldShips()
 		dir.push_back({ dest: new THREE.Vector3( 30, 150, 1),speed: 0.375} ); 
 		this.shipArray[3].pushPattern( dir, "2" );
 		
-		this.waveReady = true;
+		
 		
 	};
 	
 	this.run = function()
 	{
-		this.patternTimer++
-		//if(keyPressedEnter == true)
-		if(this.patternTimer == 240)
+		
+		if(this.waveReady != true)
 		{
-			var randomNum = Math.floor(Math.random() * 5)
-			console.log(randomNum);
-			if(randomNum < 2)
-			{
-				var laserShipExists = false;
-				for(var ship of this.shipArray)
-				{
-					if(ship.laserBeam != null)			// before turning on laser attack, make sure there is a laser-shooting ship alive
-					{
-						laserShipExists = true;
-					}
-				}
-				
-				if(laserShipExists == true)
-				{
-					laserAttack = true;
-				}
-				else
-				{
-					moving = true;
-				}
-			}
-			else// if(randomNum == 1)
-				moving = true;
-			
 			for(var ship of this.shipArray)
 			{
-				ship.movementActive = true;
-			}
-			//keyPressedEnter = false;
-		}
-		
-		
-		if(moving == true)
-		{
-			
-			for(var ship of this.shipArray)
-			{
-				if(ship.updateMovement("1") == false)
+				if(ship.updateMovement("0") == false)
 				{
-					ship.movementActive = false;
 					count++;
 				}
 			}
-			if(count == this.numPawnShips)
+			
+			if(count == this.shipArray.length)
 			{
-				for(var ship of this.shipArray)
-				{
-				}
-				moving = false;
-				this.patternTimer = 0;
+				this.waveReady = true;
+				ship.movementActive = false;
 				count = 0;
 			}
+		
 		}
-		if(laserAttack == true)
+		else
 		{
-			this.laserTimer ++;	
-			for(var ship of this.shipArray)
+			this.patternTimer++;
+			if(this.patternTimer == 60)
 			{
-				if( ship.updateMovement("2") == false)
-					ship.movementActive = false;
+			
+				
+				var randomNum = Math.floor(Math.random() * 5)
+				console.log(randomNum);
+				if(randomNum < 2)
+				{
+					var laserShipExists = false;
+					for(var ship of this.shipArray)
+					{
+						if(ship.laserBeam != null)			// before turning on laser attack, make sure there is a laser-shooting ship alive
+							laserShipExists = true;
+					}
+					
+					if(laserShipExists == true)
+						laserAttack = true;
+					else
+						moving = true;
+				}
+				else				
+					moving = true;
+				
+				for(var ship of this.shipArray)
+				{
+					ship.movementActive = true;
+				}
+				//keyPressedEnter = false;
 			}
-			if(this.laserTimer == 200)
-			{
-				laserWarmup();
-				laserShoot();			// play laser sounds
-			}
-			if(this.laserTimer > 200 && this.laserTimer <= 550)
+			
+			
+			if(moving == true)
 			{
 				
 				for(var ship of this.shipArray)
 				{
-					if(ship.laserBeam != null)
-						ship.laserBeam.run();
-						
+					if(ship.updateMovement("1") == false)
+					{
+						ship.movementActive = false;
+						count++;
+					}
+				}
+				if(count == this.numPawnShips)
+				{
+					for(var ship of this.shipArray)
+					{
+					}
+					moving = false;
+					this.patternTimer = 0;
+					count = 0;
 				}
 			}
-			
-			if(this.laserTimer >= 800)
+			if(laserAttack == true)
 			{
-				this.laserTimer = 0;
-				laserAttack = false;
+				this.laserTimer ++;	
 				for(var ship of this.shipArray)
 				{
-					if(ship.shield != null)
-						ship.shield.activate();
-						this.patternTimer = 0;
-					//ship.movementActive = true;
+					if( ship.updateMovement("2") == false)
+						ship.movementActive = false;
 				}
+				if(this.laserTimer == 200)
+				{
+					laserWarmup();
+					laserShoot();			// play laser sounds
+				}
+				if(this.laserTimer > 200 && this.laserTimer <= 550)
+				{
+					
+					for(var ship of this.shipArray)
+					{
+						if(ship.laserBeam != null)
+							ship.laserBeam.run();
+							
+					}
+				}
+				
+				if(this.laserTimer >= 800)
+				{
+					this.laserTimer = 0;
+					laserAttack = false;
+					for(var ship of this.shipArray)
+					{
+						if(ship.shield != null)
+							ship.shield.activate();
+							this.patternTimer = 0;
+						//ship.movementActive = true;
+					}
+				}
+				
+				
+				
 			}
-			
-			
-			
 		}
-		
 		
 		if(hit == true)
 		{
@@ -261,6 +300,7 @@ function shieldShips()
 		this.numPawnShips = num;
 		
 		shieldShips.prototype.moveProjectiles.call(this);
+		shieldShips.prototype.updateShips.call(this);
 	};
 	
 	
@@ -307,7 +347,6 @@ function randomShoot(ship)
 		var globalPos = new THREE.Vector3();
 		globalPos.setFromMatrixPosition( ship.mesh.matrixWorld );
 		_Ship.prototype.enemyProjectile(globalPos.x, globalPos.y - 20, this.projectileMaterial);
-		EnemyFire2();
 		this.shootTimer = 0;
 	
 }

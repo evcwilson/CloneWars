@@ -28,7 +28,7 @@ function gameMode()
 	this.currentLevel = 0;
 	var numLevels = 0;
 	
-	this.powerups = [];
+	this.pickups = [];
 	
 	var gameOver = false;
 	
@@ -40,21 +40,20 @@ function gameMode()
 		// Add this.levels to the game
 		
 		// to test the game over state, only add 1 level with 1 ships
-		this.addLevel(new shieldShips() );
+		this.addLevel(new cohort(5, pawn), new cavalry(2,pawn, 4, pawn),  new cohort(10, pawn) );							// basic level
+		this.addLevel(new cavalry(2, centurion, 4, pawn), new cohort(5, centurion), new cavalry(4, centurion, 8, pawn) );	// introduce centurion ships
+		this.addLevel(new cohort(10, pawn, true), new vFormation(), new diamondFormation() ); 								// introduce shields
+		this.addLevel(new shieldShips(), new cohort(15, centurion, true), new shieldShips());								// introduce laser
+		this.addLevel(new sonicWave1() );																					// introduce scorpion ship
+		// introduce sonic wave
 		
-		/*
-		this.addLevel(new cohort(1), 		new cavalry(1,1), 		new chargingCohort(1));
-		this.addLevel(new cohort(1), 		new cavalry(1,1), 		new chargingCohort(16));
-		this.addLevel(new cavalry(4, 10), 	new cohort(15), 		new vFormation());
-		this.addLevel(new cavalry(6, 16), 	new diamondFormation(), new cohort(20) );
-		this.addLevel(new cavalry(8, 25), 	new cohort(25), 		new chargingCohort(40) );
-		*/
 		
 		scene = this.scene;
 		camera = this.camera;
 		drawBackground(this.scene);
 		scene.add(playerMesh);
-		playerMesh.position.set(0,-250,0);
+		playerMesh.position.set(0,-250,1);
+		_Ship.prototype.resetPlayer();
 		gameOver = false;
 		playerWon = false;
 		playerLost = false;
@@ -111,12 +110,12 @@ function gameMode()
 		
 		// update player data
 		 playerUpdate(); //Moves player, will add projectile firing call to this function 
-		  if (projPresent || powerup){
+		  //if (projPresent || powerup){
                             _Ship.prototype.moveProjectile();
         
-                }
+                //}
 				
-		this.updatePowerups();		
+		this.updatePickups();		
 				
 		// check for collision
 		this.checkPlayerProjectileCollision();
@@ -131,8 +130,7 @@ function gameMode()
 		this.levels[this.currentLevel].cleanup();
 		this.levels.length = 0;
 		this.currentLevel = 0;
-		this.removeAllPowerups();
-
+		this.removeAllPickups();
 		numLevels = 0;
 		_Ship.prototype.resetPlayerScore();
 		scene.remove(particleSystem);
@@ -188,40 +186,39 @@ function gameMode()
 		numLevels++;
 	}
 	
-	this.addPowerup = function(powerup, position)
+	this.addPickup = function(pickup, position)
 	{
-		var size = this.powerups.length;
-		this.powerups[size] = new powerup(position);
+		var size = this.pickups.length;
+		this.pickups[size] = new pickup(position);
 	}
 	
-	this.updatePowerups = function()
+	this.updatePickups = function()
 	{
-		var size = this.powerups.length;
+		var size = this.pickups.length;
 		for(var i = 0; i < size; i++)
 		{
-			if(this.powerups[i].mesh.position.y <= -350)
+			if(this.pickups[i].mesh.position.y <= -350)
 			{
-				this.removePowerup(this.powerups[i], i);
+				this.removePickup(this.pickups[i], i);
 				break;
 			}
-			this.powerups[i].update();
+			this.pickups[i].update();
 		}
 	}
 	
-	this.removePowerup = function(powerup, i)
+	this.removePickup = function(pickup, i)
 	{
-		scene.remove(powerup.mesh);
-		
-		this.powerups.splice(i, 1);
+		scene.remove(pickup.mesh);
+		this.pickups.splice(i, 1);
 	}
 	
-	this.removeAllPowerups = function()
+	this.removeAllPickups = function()
 	{
-		for(var p of this.powerups)
+		for(var p of this.pickups)
 		{
 			scene.remove(p.mesh);
 		}
-		this.powerups = [];
+		this.pickups = [];
 	}
 }
 

@@ -21,9 +21,9 @@ var file = 'audio/Sounds/pacman_beginning.wav',
         blackHoleSound_file = null,
         game_over_file = null, 
         victory_music_file = null,
-        sw_shoot_file = null,
-        sw_warmup_file = null, 
-        sw_travel_file = null; 
+        sw_shoot_file = 'audio/Sounds/sonicWaveShoot.mp3', 
+        sw_warmup_file = 'audio/Sounds/sonicWaveWarmup.mp3', 
+        sw_travel_file = 'audio/Sounds/sonicWaveTravel.mp3';
         
     var bufferLoader,
         context, 
@@ -225,7 +225,7 @@ function swWarmup(){
     sw_warmup = context.createBufferSource(); 
     sw_warmup.buffer = BufferL["sw_warmup"];
     sw_warmup.connect(context.destination);
-    sw_warmup.loop = true; 
+    sw_warmup.loop = false; 
     sw_warmup.playbackRate.value = 1; 
         sw_warmup.start(0);
 }
@@ -234,7 +234,7 @@ function swShoot(){
     sw_shoot = context.createBufferSource(); 
     sw_shoot.buffer = BufferL["sw_shoot"];
     sw_shoot.connect(context.destination);
-    sw_shoot.loop = true; 
+    sw_shoot.loop = false; 
     sw_shoot.playbackRate.value = 1; 
         sw_shoot.start(0);
 }
@@ -243,7 +243,7 @@ function swTravel(){
     sw_travel = context.createBufferSource(); 
     sw_travel.buffer = BufferL["sw_travel"];
     sw_travel.connect(context.destination);
-    sw_travel.loop = true; 
+    sw_travel.loop = false; 
     sw_travel.playbackRate.value = 1; 
         sw_travel.start(0);
 }

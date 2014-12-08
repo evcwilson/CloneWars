@@ -18,7 +18,7 @@
 	
 */
 
-function cavalry(numShipsCavalry, numShipsCohort)
+function cavalry(numShipsCavalry, shipType1, numShipsCohort, shipType2)
 {
 	enemyWave.call(this);
 	this.numShipsCavalry = numShipsCavalry;
@@ -50,7 +50,7 @@ function cavalry(numShipsCavalry, numShipsCohort)
 		
 		for(var i = 0; i < this.numShipsCavalry; i++)
 		{
-			this.shipArray[i] = new enemyShip( {shipRank: centurion } );
+			this.shipArray[i] = new enemyShip( {shipRank: shipType1 } );
 			scene.add(this.shipArray[i].mesh);
 			if( i > 0 && i % 2 == 0)
 				yInitPos -= 75;
@@ -71,7 +71,7 @@ function cavalry(numShipsCavalry, numShipsCohort)
 		var counter = 0;
 		for(var i = this.numShipsCavalry, xFlip = -1; i < this.numShips; i++ )
 		{
-			this.shipArray[i] = new enemyShip( {shipRank: pawn } );
+			this.shipArray[i] = new enemyShip( {shipRank: shipType2 } );
 			scene.add(this.shipArray[i].mesh);
 			
 			// set the x-position of the first ship

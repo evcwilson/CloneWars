@@ -21,7 +21,7 @@
 
 var pawnShipSprite = new THREE.ImageUtils.loadTexture("Sprites/EnemyShip1.gif");
 var centurionShipSprite = new THREE.ImageUtils.loadTexture("Sprites/EnemyShip2.gif");
-
+var scorpionShipSprite = new THREE.ImageUtils.loadTexture("Sprites/EnemyShip3.gif");
 //function enemyShip(shipRank, shield)
 function enemyShip(properties)
 {
@@ -45,7 +45,7 @@ function enemyShip(properties)
 	this.healthBar;					// will be a mesh created later on
 	this.healthBarColor;
 	this.healthBarMaterial;
-	this.healthBarPosition = new THREE.Vector3(0, 25, 1);
+	this.healthBarPosition = new THREE.Vector3(0, 25, 0.1);
 	this.damageAmount;				// will be set according to ship type
 	this.killPoints;					// will be set according to ship type
 
@@ -55,7 +55,7 @@ function enemyShip(properties)
 	this.rank;						// to keep track of what type of ship this is
 	
 	// array of all available ship ranks to use
-	var shipRanks = [pawn, centurion];
+	var shipRanks = [pawn, centurion, scorpion];
 	
 	// loop through shipRanks array to see if the passed-in ship type matches one in this class
 	for(var i = 0; i < shipRanks.length; i++)
@@ -89,18 +89,13 @@ function enemyShip(properties)
 		this.mesh.add(this.laserBeam.mesh);
 		this.laserBeam.mesh.position.setY(-25);
 	}
-	/*if(this.hasShield == true)
-	{
-		this.shield = new shieldObject();
-		this.mesh.add(this.shield.line);
-		
-	}*/
 	
 	// adding health bar 
-	this.healthBarMaterial = new THREE.MeshBasicMaterial( {color: this.healthBarColor, side: THREE.DoubleSide } );
+	this.healthBarMaterial = new THREE.MeshBasicMaterial( {color: this.healthBarColor, side: THREE.DoubleSide, transparent: true, opacity: 0 } );
 	this.healthBar = new THREE.Mesh(healthBarGeometry[this.health], this.healthBarMaterial);			// create health bar for this ship	
 	//scene.add(this.healthBar);																	// add it to scene
 	this.healthBar.position.copy(this.healthBarPosition);
+	//this.healthBar.material.opacity = 0;
 	this.mesh.add(this.healthBar);
 	
 	this.patterns = [];
@@ -114,20 +109,19 @@ function enemyShip(properties)
 		this.patterns[size].func = func;
 	}
 	
-	this.movementActive = false;
 	this.dirIndex = 0;
-	
+	this.movementActive = true;
 	this.timer = 0;
 	this.updateMovement = function(name)
 	{
-		this.timer++;
+		
 		for(var p of this.patterns)
 		{
 			if(p.name == name)
 			{
 				if(this.movementActive == true)
 				{
-					
+					this.timer++;
 					var currentPath = p.list[this.dirIndex];
 					var dirVector = new THREE.Vector3();
 					dirVector.subVectors(currentPath.dest, this.mesh.position);
@@ -142,8 +136,11 @@ function enemyShip(properties)
 						{
 							this.dirIndex = 0;
 							this.timer = 0;
-							if(this.shield != null)
-								this.shield.activate();
+							
+							//if(this.shield != null)
+								//this.shield.activate();
+							
+							this.movementActive = false;
 							return false;
 						}
 					}
@@ -176,7 +173,10 @@ function enemyShip(properties)
 	{
 		var oldHealth = this.health;
 		this.health -= this.damageAmount;
-		
+		this.hit = true;
+		this.healthBar.material.opacity = 1;
+		this.healthBarTimer = 500;
+		this.healthBarFadeStep = 0;
 		// update health bar mesh if health remains
 		if(this.health >= 0)			
 		{
@@ -201,43 +201,46 @@ function enemyShip(properties)
 	{
 		return this.killPoints;
 	}
-	
+	this.hit = false;
+	this.healthBarTimer = 500;
+	this.healthBarFadeStep = 0;
+	this.update = function()
+	{
+		if(this.hit == true)
+		{
+			this.healthBarTimer--;
+			
+			if(this.healthBarTimer == 400)
+			{
+				//console.log("!!!!!");
+				this.healthBarFadeStep = 0.051;
+			}
+			if(this.healthBarTimer == 200)
+			{
+				this.healthBarFadeStep = 0.081;
+			}
+			/*if(this.healthBarTimer == 65)
+			{
+				this.healthBarFadeStep = 0;
+			}*/
+			
+			this.healthBar.material.opacity -= this.healthBarFadeStep;
+			
+			
+			
+			if(this.healthBar.material.opacity == 0)
+			{
+				this.healthBarTimer = 500;
+				this.hit = false;
+				this.healthBarFadeStep = 0;
+			}
+		}
+	}
 	
 	return this;
 }
 
-function pattern(name)
-{
-	this.list = [];
-	this.name = name;
-	this.push_back = function(properties)
-	{
-		var size = this.list.length;
-		this.list[size] = properties;
-	
-	}
-	
-	this.run = function()
-	{
-		var dirVector = new THREE.Vector3();
-		dirVector.subVectors(this.list[this.patternIndex].dest, this.mesh.position);
-		dirVector.normalize();
-		this.mesh.translateOnAxis(dirVector, this.list[this.patternIndex].speed);
-		if(this.mesh.position.distanceTo(this.list[this.patternIndex].dest) < 1)
-		{
-					this.patternIndex = this.patternIndex + 1;
-					if(this.patternIndex % this.list.length == 0)
-					{
-						this.patternIndex = 0;
-						
-						if(this.shield != null)
-							this.shield.activate();
-						return false;
-					}
-		}
-	}
 
-}
 
 // SHIP TYPES!!
 function pawn()
@@ -261,6 +264,17 @@ function centurion()
 	
 }
 
+function scorpion()
+{
+	this.health = 10;
+	this.healthBarColor = 0xFF7878;
+	this.damageAmount = 2;
+	this.killPoints = 100;
+	this.geometry = new THREE.PlaneGeometry(50,50);
+	this.material = new THREE.MeshBasicMaterial( { map: scorpionShipSprite, side : THREE.DoubleSide, transparent: true } );
+
+}
+
 
 
 function shieldObject()
@@ -276,39 +290,47 @@ function shieldObject()
 	{
 		if(this.active == true)
 		{
-			var respectiveProjectilePosition = new THREE.Vector3();
-			var dotResult;
-			
-			this.line.parent.updateMatrixWorld();
-			var vector = new THREE.Vector3();
-			vector.setFromMatrixPosition( this.line.matrixWorld );
-			
-			var r = new THREE.Vector3(vector.x + 30, vector.y, 1);
-			var c = new THREE.Vector3(vector.x, vector.y - 45, 1);
-			var l = new THREE.Vector3(vector.x - 30, vector.y, 1);
-			respectiveProjectilePosition.subVectors(projectile.position, r)
-			
-			var wall = new THREE.Vector3(vector.x + 30, vector.y - 45, 1);
-			wall.subVectors(c,r);
-			wall.normalize();
-			var normal = new THREE.Vector3(-wall.y, wall.x);
-			normal.normalize();
-			dotResult = normal.dot(respectiveProjectilePosition)
-			if(projectile.position.x >= vector.x && projectile.position.x <= (vector.x + 25) && dotResult < 0)
+			for(var pAttack of playerAttacks)
 			{
-				_Ship.prototype.setProjVelocity( new THREE.Vector3(4.2426,-4.2426,0));
-			}
-			
-			var wall = new THREE.Vector3(vector.x - 30, vector.y -45, 1);
-			wall.subVectors(c, l);
-			wall.normalize();
-			var normal = new THREE.Vector3(wall.y, -wall.x);
-			normal.normalize();
-			dotResult = normal.dot(respectiveProjectilePosition)
-			if(projectile.position.x < vector.x && projectile.position.x >= (vector.x -25) && 
-				projectile.position.y < vector.y && dotResult < 45)
-			{
-				_Ship.prototype.setProjVelocity( new THREE.Vector3(-4.2426,-4.2426,0));
+				var respectiveProjectilePosition = new THREE.Vector3();
+				var dotResult;
+				
+				this.line.parent.updateMatrixWorld();
+				var vector = new THREE.Vector3();
+				vector.setFromMatrixPosition( this.line.matrixWorld );
+				
+				var r = new THREE.Vector3(vector.x + 30, vector.y, 1);
+				var c = new THREE.Vector3(vector.x, vector.y - 45, 1);
+				var l = new THREE.Vector3(vector.x - 30, vector.y, 1);
+				respectiveProjectilePosition.subVectors(pAttack.mesh.position, r)
+				
+				var wall = new THREE.Vector3(vector.x + 30, vector.y - 45, 1);
+				wall.subVectors(c,r);
+				wall.normalize();
+				var normal = new THREE.Vector3(-wall.y, wall.x);
+				normal.normalize();
+				dotResult = normal.dot(respectiveProjectilePosition)
+				if(pAttack.mesh.position.x >= vector.x && pAttack.mesh.position.x <= (vector.x + 25) 
+					&& pAttack.mesh.position.y < vector.y + 25 &&  dotResult < 0)
+				{
+					pAttack.setVelocity( new THREE.Vector3(4.2426,-4.2426,0));
+					//pAttack.mesh.rotation.z = -135 * Math.PI/180;
+					pAttack.rotateZ(-135 * Math.PI/180);
+				}
+				
+				var wall = new THREE.Vector3(vector.x - 30, vector.y -45, 1);
+				wall.subVectors(c, l);
+				wall.normalize();
+				var normal = new THREE.Vector3(wall.y, -wall.x);
+				normal.normalize();
+				dotResult = normal.dot(respectiveProjectilePosition)
+				if(pAttack.mesh.position.x < vector.x && pAttack.mesh.position.x >= (vector.x -25) && 
+					pAttack.mesh.position.y < vector.y + 25 && dotResult < 45)
+				{
+					pAttack.setVelocity( new THREE.Vector3(-4.2426,-4.2426,0));
+					pAttack.rotateZ(135 * Math.PI/180);
+					//pAttack.mesh.rotation.z = 135 * Math.PI/180 ;
+				}
 			}
 		}
 	}
@@ -319,6 +341,7 @@ function shieldObject()
 		while(op >= 0){ op -= 0.1 };
 		this.line.material.opacity = op;
 		this.active = false;
+		console.log("DEAC");
 	}
 	
 	this.activate = function()
@@ -327,6 +350,14 @@ function shieldObject()
 		while(op <= 1){ op += 0.1 };
 		this.line.material.opacity = op;
 		this.active = true;
+	}
+	
+	this.toggleShield = function()
+	{
+		if(this.active == false)
+			this.activate();
+		else
+			this.deactivate();
 	}
 	
 	function setupShieldPoints(obj)
