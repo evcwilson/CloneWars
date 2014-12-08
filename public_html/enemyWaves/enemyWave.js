@@ -90,8 +90,8 @@ function enemyWave()
 		}
 		
 		// fire projectiles randomly
-		this.shootTimer += deltaTime;
-		if(this.shootTimer >= this.secondsToShoot)
+		this.shootTimer ++;//= deltaTime;
+		if(this.shootTimer >= 120)
 		{
 			var randomNumber = Math.floor(Math.random() * this.shipArray.length);
 			var shootingShip = 	this.shipArray[randomNumber].mesh;
