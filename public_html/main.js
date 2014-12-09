@@ -55,7 +55,7 @@ initSound();
 initPlayer(); 
 
 // setup key inputs
-//setupInputKeys();
+setupInputKeys();
 
 }
 // Game Loop

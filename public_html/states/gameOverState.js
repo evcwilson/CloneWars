@@ -75,8 +75,9 @@ function gameOverMode()
 	
 	this.exit = function()
 	{
-		if(timer >= 30)
+		if(timer >= 30 || keyPressedEnter == true)
 		{
+			keyPressedEnter = false;
 			timer = 0;
 			gameRestart = true;
 			scene.remove(particleSystem);
