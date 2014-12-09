@@ -14,8 +14,8 @@
 function state()
 {
 	// Logo stuff
-	var logoSprite = new THREE.ImageUtils.loadTexture("Sprites/clonewars.png");
-	var logoGeometry = new THREE.PlaneGeometry(600, 380);
+	var logoSprite = new THREE.ImageUtils.loadTexture("Sprites/Cosmic-Lancer-Logo.gif");
+	var logoGeometry = new THREE.PlaneGeometry(440, 300);
 	var logoMaterial = new THREE.MeshBasicMaterial( {map: logoSprite, transparent: true});
 	this.logoMesh = new THREE.Mesh(logoGeometry,logoMaterial);
 	
