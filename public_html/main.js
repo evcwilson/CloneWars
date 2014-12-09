@@ -27,17 +27,21 @@ var fps = 0;
 
 //JQuery Function, waits for the game overlay to be clicked before moving to the next page. 
 //Very simple, will update later. 
+
 $(document).ready(function(){
     $.ajax({
         url:'audio/Sounds/ChandelierBackgroundAudio.mp3' ,
         success: function(){
-            init();
+                init();
 		//setInterval(drawRadar, 1000);
 		gameLoop();
         }
 	});
 });
 
+//$("#canvas").attr("tabindex", "0")
+//            .mousedown(function(e){ $(this).focus(); return false; })
+//            .keydown(function(e){ setupInputKeys(); });
 
 //puts all the initializers into a function to be called
 //when the "start menu" is clicked. 
@@ -51,7 +55,7 @@ initSound();
 initPlayer(); 
 
 // setup key inputs
-setupInputKeys();
+//setupInputKeys();
 
 }
 // Game Loop

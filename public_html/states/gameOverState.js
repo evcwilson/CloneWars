@@ -34,12 +34,14 @@ function gameOverMode()
 		if(playerWon == true)
 		{       
                         stopBackgroundMusic();
+                        VictoryMusic();
 			statusMesh = youWinTextMesh;
 			//VictoryMusic();
 		}
 		else if(playerLost == true)
 		{
                         stopBackgroundMusic();
+                        GameOverMusic();
 			statusMesh = youLoseTextMesh;
 			//GameOverMusic();
 		}
@@ -73,13 +75,20 @@ function gameOverMode()
 	
 	this.exit = function()
 	{
-		if(timer >= 7)
+		if(timer >= 30)
 		{
 			timer = 0;
 			gameRestart = true;
 			scene.remove(particleSystem);
 			scene.remove(gameOverTextMesh);
 			// stop music here
+                        if (GOMusicPlaying){
+                        stopGameOverMusic();
+                        }else
+                        {
+                            stopVictoryMusic();
+                        }
+                        startMenuMusic();
 			return true;
 		}
 	}

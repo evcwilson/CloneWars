@@ -8,9 +8,10 @@
 var backgroundTime = 0.0,
     musicOffset = 0.0,
     firstPlay = true,
-    menuMusicPlaying = false; 
+    menuMusicPlaying = false, 
+    GOMusicPlaying = false; 
 
-var file = 'audio/Sounds/pacman_beginning.wav',
+var file = 'audio/Sounds/ImperialDeathMarch.ogg',
         player_fire_file = 'audio/Sounds/scifi002.mp3',
         enemy_fire_file = 'audio/Sounds/science_fiction_laser_gun_or_beam_fire_version_3 (1).mp3',
         enemy_fire_file2 = 'audio/Sounds/Photon1.mp3',
@@ -19,8 +20,8 @@ var file = 'audio/Sounds/pacman_beginning.wav',
         laserWarmup_file = 'audio/Sounds/laserWarmup.mp3',
         laserShoot_file = 'audio/Sounds/laserShoot.mp3',
         blackHoleSound_file = null,
-        game_over_file = null, 
-        victory_music_file = null,
+        game_over_file = 'audio/Sounds/SomberMusicInstrumental.ogg', 
+        victory_music_file = 'audio/Sounds/HappyBackgroundAudio.ogg',
         sw_shoot_file = 'audio/Sounds/sonicWaveShoot.mp3', 
         sw_warmup_file = 'audio/Sounds/sonicWaveWarmup.mp3', 
         sw_travel_file = 'audio/Sounds/sonicWaveTravel.mp3';
@@ -63,8 +64,8 @@ function initSound(){
                 sw_warmup_file, 
                 sw_travel_file, 
                // blackHoleSound_file,
-//                game_over,
-//                victory_music
+                game_over_file,
+                victory_music_file
             ],
             finishedLoading
                     );
@@ -91,9 +92,9 @@ function finishedLoading(bufferList){
     BufferL["sw_shoot"] = bufferList[7];      
     BufferL["sw_warmup"] = bufferList[8];      
     BufferL["sw_travel"] = bufferList[9];      
-    BufferL["black_hole_sound"] = bufferList[10];      
-    BufferL["game_over"] = bufferList[11];
-    BufferL["victory_music"] = bufferList[12];
+   // BufferL["black_hole_sound"] = bufferList[10];      
+    BufferL["game_over"] = bufferList[10];
+    BufferL["victory_music"] = bufferList[11];
     
  
     
@@ -204,6 +205,7 @@ function blackHoleSound(){
 }
 
 function GameOverMusic(){
+    GOMusicPlaying = true; 
     game_over = context.createBufferSource(); 
     game_over.buffer = BufferL["game_over"];
     game_over.connect(context.destination);
@@ -212,13 +214,22 @@ function GameOverMusic(){
         game_over.start(0);
 }
 
+function stopGameOverMusic(){
+    GOMusicPlaying = false; 
+    game_over.stop(); 
+}
+
 function VictoryMusic(){
     victory_music = context.createBufferSource(); 
     victory_music.buffer = BufferL["victory_music"];
     victory_music.connect(context.destination);
     victory_music.loop = true; 
     victory_music.playbackRate.value = 1; 
-        victory_music.start(0);
+        victory_music.start(0, 2);
+}
+
+function stopVictoryMusic(){
+    victory_music.stop();
 }
 
 function swWarmup(){

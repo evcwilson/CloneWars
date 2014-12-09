@@ -40,11 +40,12 @@ function gameMode()
 		// Add this.levels to the game
 		
 		// to test the game over state, only add 1 level with 1 ships
+                this.addLevel(new cohort(1,pawn));
 		this.addLevel(new cohort(5, pawn), new cavalry(2,pawn, 4, pawn),  new cohort(10, pawn) );							// basic level
 		this.addLevel(new cavalry(2, centurion, 4, pawn), new cohort(5, centurion), new cavalry(4, centurion, 8, pawn) );	// introduce centurion ships
 		this.addLevel(new cohort(10, pawn, true), new vFormation(), new diamondFormation() ); 								// introduce shields
 		this.addLevel(new shieldShips(), new cohort(15, centurion, true), new shieldShips());								// introduce laser
-		this.addLevel(new sonicWave1() );																					// introduce scorpion ship
+		this.addLevel(new sonicWave1() );																				// introduce scorpion ship
 		// introduce sonic wave
 		
 		

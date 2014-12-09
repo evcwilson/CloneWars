@@ -110,6 +110,11 @@ h1{
     font-family: "Franklin Gothic Book", fantasy;
 }
 
+#MusicCredits{
+    font-family: "Franklin Gothic Book", fantasy;
+    vertical-align: top;
+    text-align: left; 
+}
 .Keys{
     width: 200px;
     height: 300px; 
