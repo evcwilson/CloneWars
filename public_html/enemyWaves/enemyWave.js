@@ -174,14 +174,14 @@ function enemyWave()
 						{
 							var randomNumber = Math.floor(Math.random() * 250);
 							
-							if(randomNumber < 5)
+							if(randomNumber < 10)
 							{
 								if(game.currentLevel >= 2)
 									game.addPickup(sonicWavePickup, ship.mesh.position);
 							}
-							else if(randomNumber < 10)
+							else if(randomNumber < 30)
 								game.addPickup(rapidFirePickup, ship.mesh.position);
-							else if(randomNumber < 20)
+							else if(randomNumber < 50)
 								game.addPickup(healthPickup, ship.mesh.position);
 								
 							// remove ship from scene and shipArray
